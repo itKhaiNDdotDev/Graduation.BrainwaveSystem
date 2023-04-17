@@ -11,7 +11,7 @@
 using System;
 using System.Reflection;
 
-[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("49d89754-9c10-4b9b-aa5b-43ad9539ee01")]
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("451fc280-893b-4a2e-8dc1-ffea17498be2")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("Graduation.BrainwaveSystem.APIs")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
