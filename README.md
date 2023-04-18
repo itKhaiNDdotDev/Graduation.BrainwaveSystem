@@ -28,4 +28,4 @@ This is a system with many components, the entire source code is organized into 
 .............----------------
 
 ## About:
-Develop By: Nguyễn Duy Khai - [GitHub](https://github.com/itKhaiNDdotDev) - [GMail]() - <khaind2000@outlook/com>
+Develop By: Nguyễn Duy Khai - [GitHub](https://github.com/itKhaiNDdotDev) - [GMail]() - <khaind2000@outlook.com>
