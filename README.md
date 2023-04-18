@@ -1,5 +1,5 @@
 # Graduation.BrainwaveSystem
-University Graduation Project with majoring in information Technology - Computer Engineering at Hanoi University of Science and Technology (Vietnam), that develops a system collects, stores, monitors and analyzes brainwave data.
+University Graduation Project with majoring in information Technology - Computer Engineering at [SoICT](https://soict.hust.edu.vn/) - [HUST](https://hust.edu.vn/) (A top technical University in Vietnam), that develops a system collects, stores, monitors and analyzes brainwave data.
 
 ## Application Architecture:
 This is a system with many components, the entire source code is organized into layers (or tiers, base on N-Tier Architecture) from bottom to top:
