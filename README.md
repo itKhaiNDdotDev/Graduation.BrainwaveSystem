@@ -30,8 +30,8 @@ This is a system with many components, the entire source code is organized into 
 ## About:
 - Version: 1.0.0
 
-Develop By: **Nguyễn Duy Khai** - [GitHub](https://github.com/itKhaiNDdotDev) - <khai12345678t@gmail.com> - <khaind2000@outlook.com>  
-At: [School of Information and Communication Technology _**(SoICT)**](https://soict.hust.edu.vn/)_ - [Hanoi University of ScientCe and Technology _**(HUST)**_](https://hust.edu.vn/). 
+Develop By: **Nguyễn Duy Khai** - [GitHub](https://github.com/itKhaiNDdotDev) - <khai12345678t@gmail.com> - <khaind2000@outlook.com>.    
+At: [School of Information and Communication Technology _**(SoICT)**](https://soict.hust.edu.vn/)_ - [Hanoi University of ScientCe and Technology _**(HUST)**_](https://hust.edu.vn/).
 
 Hanoi, VietNam - April 2023.</center
 
