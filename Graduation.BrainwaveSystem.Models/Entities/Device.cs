@@ -21,7 +21,8 @@ namespace Graduation.BrainwaveSystem.Models.Entities
         public bool IsActive { get; set; }
 
         /// <summary>
-        /// Thời gian lần bắt đầu hoạt động (khởi động) gần nhất.
+        /// Thời gian lần bắt đầu hoạt động (khởi động) gần nhất nếu đang Active.
+        /// Thời gian.lần cuối cùng Active cho đến hiện tại nếu đang không Active.
         /// </summary>
         public DateTime ActiveTime { get; set; }
     }

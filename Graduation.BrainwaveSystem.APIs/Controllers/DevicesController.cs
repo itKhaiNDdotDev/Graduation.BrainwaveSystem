@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Graduation.BrainwaveSystem.Models;
 using Graduation.BrainwaveSystem.Models.Entities;
+using Graduation.BrainwaveSystem.Services.Device;
+using Graduation.BrainwaveSystem.Models.DTOs;
 
 namespace Graduation.BrainwaveSystem.APIs.Controllers
 {
@@ -14,40 +16,40 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
     [ApiController]
     public class DevicesController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly IDeviceService _service;
 
-        public DevicesController(DataContext context)
+        public DevicesController(IDeviceService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: api/Devices
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Device>>> GetDevice()
         {
-          if (_context.Devices == null)
-          {
-              return NotFound();
-          }
-            return await _context.Devices.ToListAsync();
+            var results = _service.GetAll();
+            return results != null ? Ok(results) : NotFound();
         }
 
         // GET: api/Devices/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Device>> GetDevice(Guid id)
         {
-          if (_context.Devices == null)
-          {
-              return NotFound();
-          }
-            var device = await _context.Devices.FindAsync(id);
+            var result = _service.GetById(id);
+            return result != null ? Ok(result) : NotFound();
+        }
 
-            if (device == null)
-            {
-                return NotFound();
-            }
+        // POST: api/Devices
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Device>> PostDevice(DeviceRequest request)
+        {
+            var result = _service.Create(request);
+            if (result == -2)
+                return Problem("Entity set 'DataContext.Device'  is null.");
 
-            return device;
+            //return CreatedAtAction("GetDevice", new { id = result.Id }, result);
+            return Created("Done", result);
         }
 
         // PUT: api/Devices/5
@@ -79,21 +81,6 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
             }
 
             return NoContent();
-        }
-
-        // POST: api/Devices
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Device>> PostDevice(Device device)
-        {
-          if (_context.Devices == null)
-          {
-              return Problem("Entity set 'DataContext.Device'  is null.");
-          }
-            _context.Devices.Add(device);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetDevice", new { id = device.Id }, device);
         }
 
         // DELETE: api/Devices/5
