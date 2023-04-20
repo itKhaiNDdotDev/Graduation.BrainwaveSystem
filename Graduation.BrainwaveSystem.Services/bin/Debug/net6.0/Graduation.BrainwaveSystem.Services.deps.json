@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "Graduation.BrainwaveSystem.Services/1.0.0": {
+        "dependencies": {
+          "Graduation.BrainwaveSystem.Models": "1.0.0"
+        },
+        "runtime": {
+          "Graduation.BrainwaveSystem.Services.dll": {}
+        }
+      },
+      "Graduation.BrainwaveSystem.Models/1.0.0": {
+        "runtime": {
+          "Graduation.BrainwaveSystem.Models.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Graduation.BrainwaveSystem.Services/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Graduation.BrainwaveSystem.Models/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

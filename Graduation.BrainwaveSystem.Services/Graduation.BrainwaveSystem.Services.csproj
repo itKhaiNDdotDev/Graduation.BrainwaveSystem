@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Graduation.BrainwaveSystem.Models\Graduation.BrainwaveSystem.Models.csproj" />
+  </ItemGroup>
+
 </Project>

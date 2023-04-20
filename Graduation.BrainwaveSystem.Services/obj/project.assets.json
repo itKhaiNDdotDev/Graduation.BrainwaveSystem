@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net6.0": {}
+    "net6.0": {
+      "Graduation.BrainwaveSystem.Models/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/Graduation.BrainwaveSystem.Models.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Graduation.BrainwaveSystem.Models.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Graduation.BrainwaveSystem.Models/1.0.0": {
+      "type": "project",
+      "path": "../Graduation.BrainwaveSystem.Models/Graduation.BrainwaveSystem.Models.csproj",
+      "msbuildProject": "../Graduation.BrainwaveSystem.Models/Graduation.BrainwaveSystem.Models.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net6.0": []
+    "net6.0": [
+      "Graduation.BrainwaveSystem.Models >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\khain\\.nuget\\packages\\": {},
@@ -39,7 +58,11 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Models\\Graduation.BrainwaveSystem.Models.csproj": {
+              "projectPath": "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Models\\Graduation.BrainwaveSystem.Models.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
