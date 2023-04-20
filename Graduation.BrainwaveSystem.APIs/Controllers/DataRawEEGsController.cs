@@ -25,22 +25,22 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DataRawEEG>>> GetDataRawEEG()
         {
-          if (_context.DataRawEEG == null)
+          if (_context.DataRawEEGs == null)
           {
               return NotFound();
           }
-            return await _context.DataRawEEG.ToListAsync();
+            return await _context.DataRawEEGs.ToListAsync();
         }
 
         // GET: api/DataRawEEGs/5
         [HttpGet("{id}")]
         public async Task<ActionResult<DataRawEEG>> GetDataRawEEG(Guid id)
         {
-          if (_context.DataRawEEG == null)
+          if (_context.DataRawEEGs == null)
           {
               return NotFound();
           }
-            var dataRawEEG = await _context.DataRawEEG.FindAsync(id);
+            var dataRawEEG = await _context.DataRawEEGs.FindAsync(id);
 
             if (dataRawEEG == null)
             {
@@ -86,11 +86,11 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult<DataRawEEG>> PostDataRawEEG(DataRawEEG dataRawEEG)
         {
-          if (_context.DataRawEEG == null)
+          if (_context.DataRawEEGs == null)
           {
               return Problem("Entity set 'DataContext.DataRawEEG'  is null.");
           }
-            _context.DataRawEEG.Add(dataRawEEG);
+            _context.DataRawEEGs.Add(dataRawEEG);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetDataRawEEG", new { id = dataRawEEG.Id }, dataRawEEG);
@@ -100,17 +100,17 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDataRawEEG(Guid id)
         {
-            if (_context.DataRawEEG == null)
+            if (_context.DataRawEEGs == null)
             {
                 return NotFound();
             }
-            var dataRawEEG = await _context.DataRawEEG.FindAsync(id);
+            var dataRawEEG = await _context.DataRawEEGs.FindAsync(id);
             if (dataRawEEG == null)
             {
                 return NotFound();
             }
 
-            _context.DataRawEEG.Remove(dataRawEEG);
+            _context.DataRawEEGs.Remove(dataRawEEG);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -118,7 +118,7 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
 
         private bool DataRawEEGExists(Guid id)
         {
-            return (_context.DataRawEEG?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.DataRawEEGs?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

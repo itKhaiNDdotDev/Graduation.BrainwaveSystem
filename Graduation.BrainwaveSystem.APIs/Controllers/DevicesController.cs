@@ -25,22 +25,22 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Device>>> GetDevice()
         {
-          if (_context.Device == null)
+          if (_context.Devices == null)
           {
               return NotFound();
           }
-            return await _context.Device.ToListAsync();
+            return await _context.Devices.ToListAsync();
         }
 
         // GET: api/Devices/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Device>> GetDevice(Guid id)
         {
-          if (_context.Device == null)
+          if (_context.Devices == null)
           {
               return NotFound();
           }
-            var device = await _context.Device.FindAsync(id);
+            var device = await _context.Devices.FindAsync(id);
 
             if (device == null)
             {
@@ -86,11 +86,11 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult<Device>> PostDevice(Device device)
         {
-          if (_context.Device == null)
+          if (_context.Devices == null)
           {
               return Problem("Entity set 'DataContext.Device'  is null.");
           }
-            _context.Device.Add(device);
+            _context.Devices.Add(device);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetDevice", new { id = device.Id }, device);
@@ -100,17 +100,17 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDevice(Guid id)
         {
-            if (_context.Device == null)
+            if (_context.Devices == null)
             {
                 return NotFound();
             }
-            var device = await _context.Device.FindAsync(id);
+            var device = await _context.Devices.FindAsync(id);
             if (device == null)
             {
                 return NotFound();
             }
 
-            _context.Device.Remove(device);
+            _context.Devices.Remove(device);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -118,7 +118,7 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
 
         private bool DeviceExists(Guid id)
         {
-            return (_context.Device?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Devices?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
