@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace Graduation.BrainwaveSystem.Models.Entities
 {
     /// <summary>
-    /// Định nghĩa các thông tin Thiết bị lưu trong Database
+    /// Định nghĩa các thông tin Thiết bị lưu trong Database.
     /// </summary>
-    /// Author: KhaiND (20/04/2023)
+    /// Author: KhaiND (20/04/2023).
     public class Device : BaseEntity
     {
         public Guid Id { get; set; }
@@ -21,7 +21,7 @@ namespace Graduation.BrainwaveSystem.Models.Entities
         public bool IsActive { get; set; }
 
         /// <summary>
-        /// Thời gian lần bắt đầu hoạt động (khởi động) gần nhất
+        /// Thời gian lần bắt đầu hoạt động (khởi động) gần nhất.
         /// </summary>
         public DateTime ActiveTime { get; set; }
     }

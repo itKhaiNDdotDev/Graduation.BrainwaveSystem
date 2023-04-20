@@ -7,14 +7,17 @@ using System.Threading.Tasks;
 namespace Graduation.BrainwaveSystem.Models.Entities
 {
     /// <summary>
-    /// Định nghĩa các thông tin dùng chung cho các Entity
+    /// Định nghĩa các thông tin dùng chung cho các Entity.
     /// </summary>
-    /// Author: KhaiND (20/04/2023)
+    /// Author: KhaiND (20/04/2023).
     public class BaseEntity
     {
         public DateTime CreatedTime { get; set; }
+
         public string CreatedBy { get; set; }
+
         public DateTime LastModifiedTime { get; set; }
+
         public string LastModifiedBy { get; set; }
     }
 }

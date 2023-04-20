@@ -10,7 +10,7 @@ namespace Graduation.BrainwaveSystem.Models.Entities
     /// Các giá trị raw trong 1 bản ghi dữ liệu thô thu được ở DeviceData.
     /// Quan hệ n-1 đến DeviceData.
     /// </summary>
-    /// Author: KhaiND (20/04/2023)
+    /// Author: KhaiND (20/04/2023).
     public class DataRawEEG
     {
         public Guid Id { get; set; }
@@ -18,10 +18,13 @@ namespace Graduation.BrainwaveSystem.Models.Entities
         public int Value { get; set; }
 
         ///// <summary>
-        ///// Thứ tự của giá trị raw trong 1 bản ghi DeviceData
+        ///// Thứ tự của giá trị raw trong 1 bản ghi DeviceData.
         ///// </summary>
         //public int Sequence { get; set; }
 
+        /// <summary>
+        /// ID của bản ghi dữ liệu tổng quan tương ứng làm khóa ngoại liên kết với DeviceData.
+        /// </summary>
         public Guid DeviceDataId { get; set; }
     }
 }

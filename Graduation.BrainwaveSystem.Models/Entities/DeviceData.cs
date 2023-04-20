@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace Graduation.BrainwaveSystem.Models.Entities
 {
     /// <summary>
-    /// Các thông tin cơ bản thu được từ một bản ghi dữ liệu thô
+    /// Các thông tin cơ bản thu được từ một bản ghi dữ liệu từ thiết bị.
+    /// Quan hệ n-1 đến Device.
     /// </summary>
     /// Author: KhaiND (20/04/2023)
     public class DeviceData : BaseEntity
@@ -15,22 +16,22 @@ namespace Graduation.BrainwaveSystem.Models.Entities
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Dữ liệu chất lượng thấp thu được tính từ 0 đến 255
+        /// Dữ liệu chất lượng thấp thu được tính giá trị từ 0 đến 255.
         /// </summary>
         public int PoorQuality { get; set; }
 
         /// <summary>
-        /// Dữ liệu mức độ tập trung thu được tính giá trị tư 0 đến 255
+        /// Dữ liệu mức độ tập trung thu được tính giá trị tư 0 đến 255.
         /// </summary>
         public int Attention { get; set; }
 
         /// <summary>
-        /// Dữ liệu mức độ thư giãn (thiền) tính giá trị tư 0 đến 255
+        /// Dữ liệu mức độ thư giãn (thiền) thu được tính giá trị tư 0 đến 255.
         /// </summary>
         public int Meditation { get; set; }
 
         /// <summary>
-        /// ID của thiết bị làm khóa ngoại liên kết với Device
+        /// ID của thiết bị làm khóa ngoại liên kết với Device.
         /// </summary>
         public Guid DeviceId { get; set; }
     }

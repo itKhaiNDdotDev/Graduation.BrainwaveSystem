@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace Graduation.BrainwaveSystem.Models.Entities
 {
+    /// <summary>
+    /// Dữ liệu 8 dải (cột) sóng não mà thiết bị tổng hợp được.
+    /// Quan hệ 1-1 đến DeviceData.
+    /// </summary>
+    /// Author: KhaiND (20/04/2023).
     public class Data8BandsEEG : BaseEntity
     {
         public Guid Id { get; set; }
@@ -25,10 +30,13 @@ namespace Graduation.BrainwaveSystem.Models.Entities
         public int Gamma { get; set; }
 
         /// <summary>
-        /// Ultra-high frequency Gamma
+        /// Ultra-high frequency Gamma.
         /// </summary>
         public int UHFGamma { get; set; }
 
+        /// <summary>
+        /// ID của bản ghi dữ liệu tổng quan tương ứng làm khóa ngoại liên kết với DeviceData.
+        /// </summary>
         public Guid DeviceDataId { get; set; }
     }
 }
