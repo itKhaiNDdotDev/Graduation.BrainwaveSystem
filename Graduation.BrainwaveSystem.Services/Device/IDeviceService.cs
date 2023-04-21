@@ -14,16 +14,16 @@ namespace Graduation.BrainwaveSystem.Services.Device
     /// Author: KhaiND (20/04/2023).
     public interface IDeviceService
     {
-        public List<Models.Entities.Device>? GetAll();
+        public Task<List<Models.Entities.Device>> GetAll();
 
-        public Models.Entities.Device? GetById(Guid id);
+        public Task<Models.Entities.Device> GetById(Guid id);
 
-        public int Create(DeviceRequest request);
+        public Task<Guid>/*int*/ Create(DeviceRequest request);
 
-        public int Update(Guid id, DeviceRequest request);
+        public Task<int> Update(Guid id, DeviceRequest request);
 
-        public int Delete(Guid id);
+        public Task<int> Delete(Guid id);
 
-        public int DeleteForever(Guid id);
+        public Task<int> DeleteForever(Guid id);
     }
 }

@@ -23,37 +23,35 @@ namespace Graduation.BrainwaveSystem.Services.Device
             _context = context;
         }
 
-        public List<Models.Entities.Device>? GetAll()
+        public async Task<List<Models.Entities.Device>> GetAll()
         {
             if (_context.Devices == null)
             {
-                return null;
+                throw new Exception("404 - Not Found: Entity set 'DataContext.Device' is null.");
             }
-            //return await _context.Devices.ToListAsync();
-            return _context.Devices.ToList();
+            return await _context.Devices.ToListAsync();
         }
 
-        public Models.Entities.Device? GetById(Guid id)
+        public async Task<Models.Entities.Device> GetById(Guid id)
         {
             if (_context.Devices == null)
             {
-                return null;
+                throw new Exception("404 - Not Found: Entity set 'DataContext.Device' is null.");
             }
-            //var device = await _context.Devices.FindAsync(id);
-            var device = _context.Devices.FirstOrDefault(x => x.Id == id);
+            var device = await _context.Devices.FindAsync(id);
 
             if (device == null)
             {
-                return null;
+                throw new Exception($"404 - Not Found: Device with id [{id}] is not exist.");
             }
             return device;
         }
 
-        public int Create(DeviceRequest request)
+        public async Task<Guid> Create(DeviceRequest request)
         {
             if (_context.Devices == null)
             {
-                return -2; //Problem("Entity set 'DataContext.Device'  is null.");
+                throw new Exception("404 - Not Found: Entity set 'DataContext.Device' is null.");
             }
 
             var device = new Models.Entities.Device()
@@ -61,6 +59,7 @@ namespace Graduation.BrainwaveSystem.Services.Device
                 Id = new Guid(),
                 Name = request.Name,
                 Description = request.Description,
+                UserId = Guid.Empty, // Cần thay thế bằng Id tương ứng Profile khi có Authentication.
                 IsActive = request.IsActive.HasValue ? request.IsActive.Value : true,
                 ActiveTime = DateTime.Now,
                 IsDeleted = false,
@@ -70,16 +69,15 @@ namespace Graduation.BrainwaveSystem.Services.Device
                 LastModifiedBy = "KhaiND" // Cần thay thế bằng tên tương ứng Profile khi có Authentication.
             };
             _context.Devices.Add(device);
-            //await _context.SaveChangesAsync();
-            return _context.SaveChanges();
+
+            await _context.SaveChangesAsync();
+            return device.Id;
         }
 
-        public int Update(Guid id, DeviceRequest request)
+        public async Task<int> Update(Guid id, DeviceRequest request)
         {
             //_context.Entry(device).State = EntityState.Modified;
-            var device = GetById(id);
-            if(device == null)
-                return -1; // Record not exist
+            var device = GetById(id).Result;
             device.Name = request.Name;
             device.Description = request.Description;
             if(request.IsActive.HasValue)
@@ -96,73 +94,58 @@ namespace Graduation.BrainwaveSystem.Services.Device
             device.LastModifiedTime = DateTime.Now;
             device.LastModifiedBy = "KhaiND"; // Cần thay thế bằng tên tương ứng Profile khi có Authentication.
 
-            _context.Devices.Update(device); // Có thể dùng Entry.Modified như trên
+            // Có thể dùng Entry.Modified như trên
+            _context.Devices.Update(device);
             try
             {
-                //await _context.SaveChangesAsync();
-                return _context.SaveChanges();
+                return await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                //if (!DeviceExists(id))
-                //{
-                //    return NotFound();
-                //}
-                //else
-                //{
-                //    throw;
-                //}
-                throw;
+                if (!DeviceExists(id))
+                {
+                    throw new Exception($"404 - Not Found: Device with id [{id}] is not exist.");
+                }
+                else
+                {
+                    throw;
+                }
             }
         }
 
-        public int Delete(Guid id)
+        public async Task<int> Delete(Guid id)
         {
-            var device = GetById(id);
-            if (device == null)
-                return -1; // Record not exist
-
+            var device = GetById(id).Result;
             device.ActiveTime = DateTime.Now;
             device.IsDeleted = true;
             device.LastModifiedTime = DateTime.Now;
             device.LastModifiedBy = "KhaiND"; // Cần thay thế bằng tên tương ứng Profile khi có Authentication.
 
-            _context.Devices.Update(device); // Có thể dùng Entry.Modified như trên
+            // Có thể dùng Entry.Modified như trên ví dụ Update
+            _context.Devices.Update(device);
             try
             {
-                //await _context.SaveChangesAsync();
-                return _context.SaveChanges();
+                return await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                //if (!DeviceExists(id))
-                //{
-                //    return NotFound();
-                //}
-                //else
-                //{
-                //    throw;
-                //}
-                throw;
+                if (!DeviceExists(id))
+                {
+                    throw new Exception($"404 - Not Found: Device with id [{id}] is not exist.");
+                }
+                else
+                {
+                    throw;
+                }
             }
         }
 
-        public int DeleteForever(Guid id)
+        public async Task<int> DeleteForever(Guid id)
         {
-            if (_context.Devices == null)
-            {
-                return -2; //Problem("Entity set 'DataContext.Device'  is null.");
-            }
-            //var device = await _context.Devices.FindAsync(id);
-            var device = GetById(id);
-            if (device == null)
-            {
-                return -1;
-            }
+            var device = GetById(id).Result;
 
             _context.Devices.Remove(device);
-            //await _context.SaveChangesAsync();
-            return _context.SaveChanges();
+            return await _context.SaveChangesAsync();
         }
 
         private bool DeviceExists(Guid id)

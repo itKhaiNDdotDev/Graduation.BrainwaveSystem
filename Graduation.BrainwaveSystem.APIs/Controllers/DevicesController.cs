@@ -27,16 +27,16 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Device>>> GetDevice()
         {
-            var results = _service.GetAll();
-            return results != null ? Ok(results) : NotFound();
+            var results = await _service.GetAll();
+            return Ok(results);
         }
 
         // GET: api/Devices/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Device>> GetDevice(Guid id)
         {
-            var result = _service.GetById(id);
-            return result != null ? Ok(result) : NotFound();
+            var result = await _service.GetById(id);
+            return Ok(result);
         }
 
         // POST: api/Devices
@@ -44,14 +44,11 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult<Device>> PostDevice(DeviceRequest request)
         {
-            var result = _service.Create(request);
-            if (result == -2)
-                return Problem("Entity set 'DataContext.Device'  is null.");
-            if (result == 0)
-                return Problem("Insert failed!");
+            var result = await _service.Create(request);
+            if (result == Guid.Empty)
+                return Problem("Insert failed! Please contact KhaiND to check problem.");
 
-            //return CreatedAtAction("GetDevice", new { id = result.Id }, result);
-            return Created("Done", result);
+            return CreatedAtAction("GetDevice", new { id = result }, result);
         }
 
         // PUT: api/Devices/5
@@ -59,25 +56,24 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDevice(Guid id, DeviceRequest request)
         {
-            var result = _service.Update(id, request);
-            if(result == -1)
-                return NotFound();
+            var result = await _service.Update(id, request);
             if (result == 0)
-                return Problem("Update failed!");
+                return Problem("Update failed! Please contact KhaiND to check problem.");
 
-            return Ok("Updated " + result + (result > 1 ? " records." : " record."));
-
+            return Ok(new
+            {
+                Message = "Updated " + result + (result > 1 ? " records." : " record."),
+                UpdatedRecord = await _service.GetById(id)
+            });
         }
 
         // DELETE: api/Devices/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDevice(Guid id)
         {
-            var result = _service.Delete(id);
-            if (result == -1)
-                return NotFound();
+            var result = await _service.Delete(id);
             if (result == 0)
-                return Problem("Delete failed!");
+                return Problem("Update failed! Please contact KhaiND to check problem.");
 
             return Ok("Deleted " + result + (result > 1 ? " records." : " record.") + " in system.");
         }
@@ -86,15 +82,11 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
         [HttpDelete("{id}/delete-forever")]
         public async Task<IActionResult> DeleteForever(Guid id)
         {
-            var result = _service.DeleteForever(id);
-            if( result == -2)
-                return Problem("Entity set 'DataContext.Device'  is null.");
-            if (result == -1)
-                return NotFound();
+            var result = await _service.DeleteForever(id);
             if (result == 0)
                 return Problem("Delete failed!");
 
-            return Ok("Deleted " + result + (result > 1 ? " records." : " record.") + " in system.");
+            return Ok("Deleted forever " + result + (result > 1 ? " records." : " record.") + " in database.");
         }
     }
 }
