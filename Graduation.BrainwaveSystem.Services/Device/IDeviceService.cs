@@ -23,5 +23,7 @@ namespace Graduation.BrainwaveSystem.Services.Device
         public int Update(Guid id, DeviceRequest request);
 
         public int Delete(Guid id);
+
+        public int DeleteForever(Guid id);
     }
 }

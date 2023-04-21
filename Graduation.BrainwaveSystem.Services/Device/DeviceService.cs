@@ -63,6 +63,7 @@ namespace Graduation.BrainwaveSystem.Services.Device
                 Description = request.Description,
                 IsActive = request.IsActive.HasValue ? request.IsActive.Value : true,
                 ActiveTime = DateTime.Now,
+                IsDeleted = false,
                 CreatedTime = DateTime.Now,
                 CreatedBy = "KhaiND", // Cần thay thế bằng tên tương ứng Profile khi có Authentication.
                 LastModifiedTime = DateTime.Now,
@@ -92,8 +93,10 @@ namespace Graduation.BrainwaveSystem.Services.Device
                     device.ActiveTime = DateTime.Now;
                 }   
             }
-            _context.Devices.Update(device); // Có thể dùng Entry.Modified như trên
+            device.LastModifiedTime = DateTime.Now;
+            device.LastModifiedBy = "KhaiND"; // Cần thay thế bằng tên tương ứng Profile khi có Authentication.
 
+            _context.Devices.Update(device); // Có thể dùng Entry.Modified như trên
             try
             {
                 //await _context.SaveChangesAsync();
@@ -115,7 +118,56 @@ namespace Graduation.BrainwaveSystem.Services.Device
 
         public int Delete(Guid id)
         {
-            throw new NotImplementedException();
+            var device = GetById(id);
+            if (device == null)
+                return -1; // Record not exist
+
+            device.ActiveTime = DateTime.Now;
+            device.IsDeleted = true;
+            device.LastModifiedTime = DateTime.Now;
+            device.LastModifiedBy = "KhaiND"; // Cần thay thế bằng tên tương ứng Profile khi có Authentication.
+
+            _context.Devices.Update(device); // Có thể dùng Entry.Modified như trên
+            try
+            {
+                //await _context.SaveChangesAsync();
+                return _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                //if (!DeviceExists(id))
+                //{
+                //    return NotFound();
+                //}
+                //else
+                //{
+                //    throw;
+                //}
+                throw;
+            }
+        }
+
+        public int DeleteForever(Guid id)
+        {
+            if (_context.Devices == null)
+            {
+                return -2; //Problem("Entity set 'DataContext.Device'  is null.");
+            }
+            //var device = await _context.Devices.FindAsync(id);
+            var device = GetById(id);
+            if (device == null)
+            {
+                return -1;
+            }
+
+            _context.Devices.Remove(device);
+            //await _context.SaveChangesAsync();
+            return _context.SaveChanges();
+        }
+
+        private bool DeviceExists(Guid id)
+        {
+            return (_context.Devices?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

@@ -47,6 +47,8 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
             var result = _service.Create(request);
             if (result == -2)
                 return Problem("Entity set 'DataContext.Device'  is null.");
+            if (result == 0)
+                return Problem("Insert failed!");
 
             //return CreatedAtAction("GetDevice", new { id = result.Id }, result);
             return Created("Done", result);
@@ -55,57 +57,44 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
         // PUT: api/Devices/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDevice(Guid id, Device device)
+        public async Task<IActionResult> PutDevice(Guid id, DeviceRequest request)
         {
-            if (id != device.Id)
-            {
-                return BadRequest();
-            }
+            var result = _service.Update(id, request);
+            if(result == -1)
+                return NotFound();
+            if (result == 0)
+                return Problem("Update failed!");
 
-            _context.Entry(device).State = EntityState.Modified;
+            return Ok("Updated " + result + (result > 1 ? " records." : " record."));
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DeviceExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
         }
 
         // DELETE: api/Devices/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDevice(Guid id)
         {
-            if (_context.Devices == null)
-            {
+            var result = _service.Delete(id);
+            if (result == -1)
                 return NotFound();
-            }
-            var device = await _context.Devices.FindAsync(id);
-            if (device == null)
-            {
-                return NotFound();
-            }
+            if (result == 0)
+                return Problem("Delete failed!");
 
-            _context.Devices.Remove(device);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok("Deleted " + result + (result > 1 ? " records." : " record.") + " in system.");
         }
 
-        private bool DeviceExists(Guid id)
+        // DELETE: api/Devices/5/delete-forever
+        [HttpDelete("{id}/delete-forever")]
+        public async Task<IActionResult> DeleteForever(Guid id)
         {
-            return (_context.Devices?.Any(e => e.Id == id)).GetValueOrDefault();
+            var result = _service.DeleteForever(id);
+            if( result == -2)
+                return Problem("Entity set 'DataContext.Device'  is null.");
+            if (result == -1)
+                return NotFound();
+            if (result == 0)
+                return Problem("Delete failed!");
+
+            return Ok("Deleted " + result + (result > 1 ? " records." : " record.") + " in system.");
         }
     }
 }

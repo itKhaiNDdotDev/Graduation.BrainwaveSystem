@@ -12,6 +12,8 @@ namespace Graduation.BrainwaveSystem.Models.Entities
     /// Author: KhaiND (20/04/2023).
     public class BaseEntity
     {
+        public bool IsDeleted { get; set; }
+
         public DateTime CreatedTime { get; set; }
 
         public string CreatedBy { get; set; }
