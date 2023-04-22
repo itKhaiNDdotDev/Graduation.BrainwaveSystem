@@ -12,31 +12,15 @@ using Graduation.BrainwaveSystem.Models.DTOs;
 
 namespace Graduation.BrainwaveSystem.APIs.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
     [ApiController]
-    public class DevicesController : ControllerBase
+    public class DevicesController : BasesController<Device>//ControllerBase
     {
         private readonly IDeviceService _service;
 
-        public DevicesController(IDeviceService service)
+        public DevicesController(IDeviceService service) : base(service)
         {
             _service = service;
-        }
-
-        // GET: api/Devices
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Device>>> GetDevice()
-        {
-            var results = await _service.GetAll();
-            return Ok(results);
-        }
-
-        // GET: api/Devices/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Device>> GetDevice(Guid id)
-        {
-            var result = await _service.GetById(id);
-            return Ok(result);
         }
 
         // POST: api/Devices
@@ -48,7 +32,7 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
             if (result == Guid.Empty)
                 return Problem("Insert failed! Please contact KhaiND to check problem.");
 
-            return CreatedAtAction("GetDevice", new { id = result }, result);
+            return CreatedAtAction("Get", new { id = result }, result);
         }
 
         // PUT: api/Devices/5
@@ -76,17 +60,6 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
                 return Problem("Update failed! Please contact KhaiND to check problem.");
 
             return Ok("Deleted " + result + (result > 1 ? " records." : " record.") + " in system.");
-        }
-
-        // DELETE: api/Devices/5/delete-forever
-        [HttpDelete("{id}/delete-forever")]
-        public async Task<IActionResult> DeleteForever(Guid id)
-        {
-            var result = await _service.DeleteForever(id);
-            if (result == 0)
-                return Problem("Delete failed!");
-
-            return Ok("Deleted forever " + result + (result > 1 ? " records." : " record.") + " in database.");
         }
     }
 }

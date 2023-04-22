@@ -18,17 +18,17 @@ namespace Graduation.BrainwaveSystem.Models.Entities
         /// <summary>
         /// Dữ liệu chất lượng thấp thu được tính giá trị từ 0 đến 255.
         /// </summary>
-        public int PoorQuality { get; set; }
+        public int? PoorQuality { get; set; }
 
         /// <summary>
         /// Dữ liệu mức độ tập trung thu được tính giá trị tư 0 đến 255.
         /// </summary>
-        public int Attention { get; set; }
+        public int? Attention { get; set; }
 
         /// <summary>
         /// Dữ liệu mức độ thư giãn (thiền) thu được tính giá trị tư 0 đến 255.
         /// </summary>
-        public int Meditation { get; set; }
+        public int? Meditation { get; set; }
 
         /// <summary>
         /// ID của thiết bị làm khóa ngoại liên kết với Device.

@@ -7,118 +7,59 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Graduation.BrainwaveSystem.Models;
 using Graduation.BrainwaveSystem.Models.Entities;
+using Graduation.BrainwaveSystem.Services.DeviceData;
+using Graduation.BrainwaveSystem.Models.DTOs;
 
 namespace Graduation.BrainwaveSystem.APIs.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
     [ApiController]
-    public class DeviceDatasController : ControllerBase
+    public class DeviceDatasController : BasesController<DeviceData>//ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly IDeviceDataService _service;
 
-        public DeviceDatasController(DataContext context)
+        public DeviceDatasController(IDeviceDataService service) : base(service)
         {
-            _context = context;
-        }
-
-        // GET: api/DeviceDatas
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<DeviceData>>> GetDeviceData()
-        {
-          if (_context.DeviceDatas == null)
-          {
-              return NotFound();
-          }
-            return await _context.DeviceDatas.ToListAsync();
-        }
-
-        // GET: api/DeviceDatas/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<DeviceData>> GetDeviceData(Guid id)
-        {
-          if (_context.DeviceDatas == null)
-          {
-              return NotFound();
-          }
-            var deviceData = await _context.DeviceDatas.FindAsync(id);
-
-            if (deviceData == null)
-            {
-                return NotFound();
-            }
-
-            return deviceData;
-        }
-
-        // PUT: api/DeviceDatas/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutDeviceData(Guid id, DeviceData deviceData)
-        {
-            if (id != deviceData.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(deviceData).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DeviceDataExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            _service = service;
         }
 
         // POST: api/DeviceDatas
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<DeviceData>> PostDeviceData(DeviceData deviceData)
+        public async Task<ActionResult<DeviceData>> PostDeviceData(DeviceDataRequest request)
         {
-          if (_context.DeviceDatas == null)
-          {
-              return Problem("Entity set 'DataContext.DeviceData'  is null.");
-          }
-            _context.DeviceDatas.Add(deviceData);
-            await _context.SaveChangesAsync();
+            var result = await _service.Create(request);
+            if (result == Guid.Empty)
+                return Problem("Insert failed! Please contact KhaiND to check problem.");
 
-            return CreatedAtAction("GetDeviceData", new { id = deviceData.Id }, deviceData);
+            return CreatedAtAction("Get", new { id = result }, result);
+        }
+
+        // PUT: api/DeviceDatas/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutDeviceData(Guid id, DeviceDataRequest request)
+        {
+            var result = await _service.Update(id, request);
+            if (result == 0)
+                return Problem("Update failed! Please contact KhaiND to check problem.");
+
+            return Ok(new
+            {
+                Message = "Updated " + result + (result > 1 ? " records." : " record."),
+                UpdatedRecord = await _service.GetById(id)
+            });
         }
 
         // DELETE: api/DeviceDatas/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDeviceData(Guid id)
         {
-            if (_context.DeviceDatas == null)
-            {
-                return NotFound();
-            }
-            var deviceData = await _context.DeviceDatas.FindAsync(id);
-            if (deviceData == null)
-            {
-                return NotFound();
-            }
+            var result = await _service.Delete(id);
+            if (result == 0)
+                return Problem("Update failed! Please contact KhaiND to check problem.");
 
-            _context.DeviceDatas.Remove(deviceData);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool DeviceDataExists(Guid id)
-        {
-            return (_context.DeviceDatas?.Any(e => e.Id == id)).GetValueOrDefault();
+            return Ok("Deleted " + result + (result > 1 ? " records." : " record.") + " in system.");
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Graduation.BrainwaveSystem.Models;
 using Graduation.BrainwaveSystem.Models.DTOs;
 using Graduation.BrainwaveSystem.Models.Entities;
+using Graduation.BrainwaveSystem.Services.Base;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,44 +15,20 @@ namespace Graduation.BrainwaveSystem.Services.Device
     /// Xây dựng các phương thức CRUD đơn giản nhất cho thông tin Device.
     /// </summary>
     /// Author: KhaiND (20/04/2023).
-    public class DeviceService : IDeviceService
+    public class DeviceService : BaseService<Models.Entities.Device>, IDeviceService
     {
         private readonly DataContext _context;
 
-        public DeviceService(DataContext context)
+        public DeviceService(DataContext context) : base(context)
         {
             _context = context;
-        }
-
-        public async Task<List<Models.Entities.Device>> GetAll()
-        {
-            if (_context.Devices == null)
-            {
-                throw new Exception("404 - Not Found: Entity set 'DataContext.Device' is null.");
-            }
-            return await _context.Devices.ToListAsync();
-        }
-
-        public async Task<Models.Entities.Device> GetById(Guid id)
-        {
-            if (_context.Devices == null)
-            {
-                throw new Exception("404 - Not Found: Entity set 'DataContext.Device' is null.");
-            }
-            var device = await _context.Devices.FindAsync(id);
-
-            if (device == null)
-            {
-                throw new Exception($"404 - Not Found: Device with id [{id}] is not exist.");
-            }
-            return device;
         }
 
         public async Task<Guid> Create(DeviceRequest request)
         {
             if (_context.Devices == null)
             {
-                throw new Exception("404 - Not Found: Entity set 'DataContext.Device' is null.");
+                throw new Exception("404 - Not Found: Entity set 'DataContext.Devices' is null.");
             }
 
             var device = new Models.Entities.Device()
@@ -77,7 +54,7 @@ namespace Graduation.BrainwaveSystem.Services.Device
         public async Task<int> Update(Guid id, DeviceRequest request)
         {
             //_context.Entry(device).State = EntityState.Modified;
-            var device = GetById(id).Result;
+            var device = await GetById(id);
             device.Name = request.Name;
             device.Description = request.Description;
             if(request.IsActive.HasValue)
@@ -104,7 +81,7 @@ namespace Graduation.BrainwaveSystem.Services.Device
             {
                 if (!DeviceExists(id))
                 {
-                    throw new Exception($"404 - Not Found: Device with id [{id}] is not exist.");
+                    throw new Exception($"404 - Not Found: Device record with id [{id}] is not exist.");
                 }
                 else
                 {
@@ -115,7 +92,7 @@ namespace Graduation.BrainwaveSystem.Services.Device
 
         public async Task<int> Delete(Guid id)
         {
-            var device = GetById(id).Result;
+            var device = await GetById(id);
             device.ActiveTime = DateTime.Now;
             device.IsDeleted = true;
             device.LastModifiedTime = DateTime.Now;
@@ -131,21 +108,13 @@ namespace Graduation.BrainwaveSystem.Services.Device
             {
                 if (!DeviceExists(id))
                 {
-                    throw new Exception($"404 - Not Found: Device with id [{id}] is not exist.");
+                    throw new Exception($"404 - Not Found: Device record with id [{id}] is not exist.");
                 }
                 else
                 {
                     throw;
                 }
             }
-        }
-
-        public async Task<int> DeleteForever(Guid id)
-        {
-            var device = GetById(id).Result;
-
-            _context.Devices.Remove(device);
-            return await _context.SaveChangesAsync();
         }
 
         private bool DeviceExists(Guid id)

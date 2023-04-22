@@ -10,8 +10,4 @@
     <ProjectReference Include="..\Graduation.BrainwaveSystem.Models\Graduation.BrainwaveSystem.Models.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DeviceData\" />
-  </ItemGroup>
-
 </Project>
