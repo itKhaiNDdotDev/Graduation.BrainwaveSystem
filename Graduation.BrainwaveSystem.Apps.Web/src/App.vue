@@ -1,15 +1,20 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <KLineChart />
+  <KAreaChart />
+  <TestGrd/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import KLineChart from './components/KLineChart.vue'
+import KAreaChart from './components/KAreaChart.vue'
+import TestGrd from './components/TestGrd.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    KLineChart,
+    KAreaChart,
+    TestGrd
   }
 }
 </script>
