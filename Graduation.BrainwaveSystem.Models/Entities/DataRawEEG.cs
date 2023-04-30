@@ -11,7 +11,7 @@ namespace Graduation.BrainwaveSystem.Models.Entities
     /// Quan hệ n-1 đến DeviceData.
     /// </summary>
     /// Author: KhaiND (20/04/2023).
-    public class DataRawEEG
+    public class DataRawEEG : BaseEntity
     {
         public Guid Id { get; set; }
 

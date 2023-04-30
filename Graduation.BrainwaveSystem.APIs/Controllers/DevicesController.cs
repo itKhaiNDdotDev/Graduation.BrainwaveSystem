@@ -7,14 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Graduation.BrainwaveSystem.Models;
 using Graduation.BrainwaveSystem.Models.Entities;
-using Graduation.BrainwaveSystem.Services.Device;
 using Graduation.BrainwaveSystem.Models.DTOs;
+using Graduation.BrainwaveSystem.Services.DeviceServices;
 
 namespace Graduation.BrainwaveSystem.APIs.Controllers
 {
     //[Route("api/[controller]")]
     [ApiController]
-    public class DevicesController : BasesController<Device>//ControllerBase
+    public class DevicesController : BasesController<Device, DeviceRequest>//ControllerBase
     {
         private readonly IDeviceService _service;
 
@@ -23,43 +23,43 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
             _service = service;
         }
 
-        // POST: api/Devices
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Device>> PostDevice(DeviceRequest request)
-        {
-            var result = await _service.Create(request);
-            if (result == Guid.Empty)
-                return Problem("Insert failed! Please contact KhaiND to check problem.");
+        //// POST: api/Devices
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPost]
+        //public async Task<ActionResult<Device>> PostDevice(DeviceRequest request)
+        //{
+        //    var result = await _service.Create(request);
+        //    if (result == Guid.Empty)
+        //        return Problem("Insert failed! Please contact KhaiND to check problem.");
 
-            return CreatedAtAction("Get", new { id = result }, result);
-        }
+        //    return CreatedAtAction("Get", new { id = result }, result);
+        //}
 
-        // PUT: api/Devices/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutDevice(Guid id, DeviceRequest request)
-        {
-            var result = await _service.Update(id, request);
-            if (result == 0)
-                return Problem("Update failed! Please contact KhaiND to check problem.");
+        //// PUT: api/Devices/5
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutDevice(Guid id, DeviceRequest request)
+        //{
+        //    var result = await _service.Update(id, request);
+        //    if (result == 0)
+        //        return Problem("Update failed! Please contact KhaiND to check problem.");
 
-            return Ok(new
-            {
-                Message = "Updated " + result + (result > 1 ? " records." : " record."),
-                UpdatedRecord = await _service.GetById(id)
-            });
-        }
+        //    return Ok(new
+        //    {
+        //        Message = "Updated " + result + (result > 1 ? " records." : " record."),
+        //        UpdatedRecord = await _service.GetById(id)
+        //    });
+        //}
 
-        // DELETE: api/Devices/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDevice(Guid id)
-        {
-            var result = await _service.Delete(id);
-            if (result == 0)
-                return Problem("Update failed! Please contact KhaiND to check problem.");
+        //// DELETE: api/Devices/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteDevice(Guid id)
+        //{
+        //    var result = await _service.Delete(id);
+        //    if (result == 0)
+        //        return Problem("Update failed! Please contact KhaiND to check problem.");
 
-            return Ok("Deleted " + result + (result > 1 ? " records." : " record.") + " in system.");
-        }
+        //    return Ok("Deleted " + result + (result > 1 ? " records." : " record.") + " in system.");
+        //}
     }
 }
