@@ -13,5 +13,7 @@ namespace Graduation.BrainwaveSystem.Models.DTOs
         public int? Attention { get; set; }
 
         public int? Meditation { get; set; }
+
+        public Guid? DeviceId { get; set; }
     }
 }
