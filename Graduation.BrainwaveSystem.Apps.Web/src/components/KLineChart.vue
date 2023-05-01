@@ -44,10 +44,13 @@ export default {
           {
             data: this.propDatas,
             label: "Hee hee",
-            backgroundColor: '#f87979',
+            backgroundColor: 'transparent',
+            pointBackgroundColor: 'transparent',
             borderColor: "#000000",
-            pointBackgroundColor: "rgba(171, 71, 188, 1)",
-            tension: 0.2,
+            borderWidth: 1,
+            //pointBackgroundColor: "rgba(171, 71, 188, 1)",
+            tension: 0.5,
+            pointBorderWidth: 0
           },
           // {
           //   data: [
@@ -76,3 +79,6 @@ export default {
   }
 };
 </script>
+
+<style>
+</style>
