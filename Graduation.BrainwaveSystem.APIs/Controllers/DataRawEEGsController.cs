@@ -7,118 +7,127 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Graduation.BrainwaveSystem.Models;
 using Graduation.BrainwaveSystem.Models.Entities;
+using Graduation.BrainwaveSystem.Models.DTOs;
+using Graduation.BrainwaveSystem.Services.DataRawEEGServices;
 
 namespace Graduation.BrainwaveSystem.APIs.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
     [ApiController]
-    public class DataRawEEGsController : ControllerBase
+    public class DataRawEEGsController : BasesController<DataRawEEG, DataRawEEGRequest>// : ControllerBase
     {
-        private readonly DataContext _context;
+        public readonly IDataRawEEGService _service;
 
-        public DataRawEEGsController(DataContext context)
+        public DataRawEEGsController(IDataRawEEGService service) : base(service)
         {
-            _context = context;
+            _service = service;
         }
 
-        // GET: api/DataRawEEGs
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<DataRawEEG>>> GetDataRawEEG()
-        {
-          if (_context.DataRawEEGs == null)
-          {
-              return NotFound();
-          }
-            return await _context.DataRawEEGs.ToListAsync();
-        }
+        //private readonly DataContext _context;
 
-        // GET: api/DataRawEEGs/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<DataRawEEG>> GetDataRawEEG(Guid id)
-        {
-          if (_context.DataRawEEGs == null)
-          {
-              return NotFound();
-          }
-            var dataRawEEG = await _context.DataRawEEGs.FindAsync(id);
+        //public DataRawEEGsController(DataContext context)
+        //{
+        //    _context = context;
+        //}
 
-            if (dataRawEEG == null)
-            {
-                return NotFound();
-            }
+        //// GET: api/DataRawEEGs
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<DataRawEEG>>> GetDataRawEEG()
+        //{
+        //  if (_context.DataRawEEGs == null)
+        //  {
+        //      return NotFound();
+        //  }
+        //    return await _context.DataRawEEGs.ToListAsync();
+        //}
 
-            return dataRawEEG;
-        }
+        //// GET: api/DataRawEEGs/5
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<DataRawEEG>> GetDataRawEEG(Guid id)
+        //{
+        //  if (_context.DataRawEEGs == null)
+        //  {
+        //      return NotFound();
+        //  }
+        //    var dataRawEEG = await _context.DataRawEEGs.FindAsync(id);
 
-        // PUT: api/DataRawEEGs/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutDataRawEEG(Guid id, DataRawEEG dataRawEEG)
-        {
-            if (id != dataRawEEG.Id)
-            {
-                return BadRequest();
-            }
+        //    if (dataRawEEG == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            _context.Entry(dataRawEEG).State = EntityState.Modified;
+        //    return dataRawEEG;
+        //}
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DataRawEEGExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //// PUT: api/DataRawEEGs/5
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutDataRawEEG(Guid id, DataRawEEG dataRawEEG)
+        //{
+        //    if (id != dataRawEEG.Id)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            return NoContent();
-        }
+        //    _context.Entry(dataRawEEG).State = EntityState.Modified;
 
-        // POST: api/DataRawEEGs
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<DataRawEEG>> PostDataRawEEG(DataRawEEG dataRawEEG)
-        {
-          if (_context.DataRawEEGs == null)
-          {
-              return Problem("Entity set 'DataContext.DataRawEEG'  is null.");
-          }
-            _context.DataRawEEGs.Add(dataRawEEG);
-            await _context.SaveChangesAsync();
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!DataRawEEGExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return CreatedAtAction("GetDataRawEEG", new { id = dataRawEEG.Id }, dataRawEEG);
-        }
+        //    return NoContent();
+        //}
 
-        // DELETE: api/DataRawEEGs/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDataRawEEG(Guid id)
-        {
-            if (_context.DataRawEEGs == null)
-            {
-                return NotFound();
-            }
-            var dataRawEEG = await _context.DataRawEEGs.FindAsync(id);
-            if (dataRawEEG == null)
-            {
-                return NotFound();
-            }
+        //// POST: api/DataRawEEGs
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPost]
+        //public async Task<ActionResult<DataRawEEG>> PostDataRawEEG(DataRawEEG dataRawEEG)
+        //{
+        //  if (_context.DataRawEEGs == null)
+        //  {
+        //      return Problem("Entity set 'DataContext.DataRawEEG'  is null.");
+        //  }
+        //    _context.DataRawEEGs.Add(dataRawEEG);
+        //    await _context.SaveChangesAsync();
 
-            _context.DataRawEEGs.Remove(dataRawEEG);
-            await _context.SaveChangesAsync();
+        //    return CreatedAtAction("GetDataRawEEG", new { id = dataRawEEG.Id }, dataRawEEG);
+        //}
 
-            return NoContent();
-        }
+        //// DELETE: api/DataRawEEGs/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteDataRawEEG(Guid id)
+        //{
+        //    if (_context.DataRawEEGs == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var dataRawEEG = await _context.DataRawEEGs.FindAsync(id);
+        //    if (dataRawEEG == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-        private bool DataRawEEGExists(Guid id)
-        {
-            return (_context.DataRawEEGs?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
+        //    _context.DataRawEEGs.Remove(dataRawEEG);
+        //    await _context.SaveChangesAsync();
+
+        //    return NoContent();
+        //}
+
+        //private bool DataRawEEGExists(Guid id)
+        //{
+        //    return (_context.DataRawEEGs?.Any(e => e.Id == id)).GetValueOrDefault();
+        //}
     }
 }

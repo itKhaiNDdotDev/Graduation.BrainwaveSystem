@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Graduation.BrainwaveSystem.Models\Graduation.BrainwaveSystem.Models.csproj" />
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DeviceData\" />
+    <ProjectReference Include="..\Graduation.BrainwaveSystem.Models\Graduation.BrainwaveSystem.Models.csproj" />
   </ItemGroup>
 
 </Project>

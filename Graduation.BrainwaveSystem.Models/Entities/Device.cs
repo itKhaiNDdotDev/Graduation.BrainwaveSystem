@@ -18,6 +18,8 @@ namespace Graduation.BrainwaveSystem.Models.Entities
 
         public string Description { get; set; }
 
+        public Guid UserId { get; set; }
+
         public bool IsActive { get; set; }
 
         /// <summary>
