@@ -1,0 +1,15 @@
+K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.Services\bin\Debug\net6.0\Graduation.BrainwaveSystem.Services.deps.json
+K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.Services\bin\Debug\net6.0\Graduation.BrainwaveSystem.Services.dll
+K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.Services\bin\Debug\net6.0\Graduation.BrainwaveSystem.Services.pdb
+K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.Services\bin\Debug\net6.0\Graduation.BrainwaveSystem.Models.dll
+K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.Services\bin\Debug\net6.0\Graduation.BrainwaveSystem.Models.pdb
+K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.Services\obj\Debug\net6.0\Graduation.BrainwaveSystem.Services.csproj.AssemblyReference.cache
+K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.Services\obj\Debug\net6.0\Graduation.BrainwaveSystem.Services.GeneratedMSBuildEditorConfig.editorconfig
+K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.Services\obj\Debug\net6.0\Graduation.BrainwaveSystem.Services.AssemblyInfoInputs.cache
+K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.Services\obj\Debug\net6.0\Graduation.BrainwaveSystem.Services.AssemblyInfo.cs
+K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.Services\obj\Debug\net6.0\Graduation.BrainwaveSystem.Services.csproj.CoreCompileInputs.cache
+K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.Services\obj\Debug\net6.0\Graduation.BrainwaveSystem.Services.csproj.CopyComplete
+K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.Services\obj\Debug\net6.0\Graduation.BrainwaveSystem.Services.dll
+K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.Services\obj\Debug\net6.0\refint\Graduation.BrainwaveSystem.Services.dll
+K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.Services\obj\Debug\net6.0\Graduation.BrainwaveSystem.Services.pdb
+K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.Services\obj\Debug\net6.0\ref\Graduation.BrainwaveSystem.Services.dll
