@@ -23,6 +23,12 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
             _service = service;
         }
 
+        [HttpGet("{deviceId}/last5min")]
+        public async Task<ActionResult<DataRawEEGResponse[]>> GetLast5Min(Guid deviceId)
+        {
+            return Ok(await _service.GetLast300DataRecords(deviceId));
+        }
+
         //private readonly DataContext _context;
 
         //public DataRawEEGsController(DataContext context)

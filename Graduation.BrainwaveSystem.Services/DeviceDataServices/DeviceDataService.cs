@@ -29,6 +29,7 @@ public class DeviceDataService : BaseService<DeviceData, DeviceDataRequest>, IDe
         //Thêm DeviceData
         if(request.General == null)
             request.General = new DeviceDataRequest(); // Nếu không có các extraction thì vẫn add 1 bản ghi ma để ánh xạ Raw
+        request.General.DeviceId = deviceId;
         var dataId = await base.Create(request.General);
         if (deviceId == Guid.Empty)
             throw new Exception("Insert failed! Please contact KhaiND to check problem.");

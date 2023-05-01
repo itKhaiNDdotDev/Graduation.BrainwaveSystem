@@ -11,5 +11,6 @@ namespace Graduation.BrainwaveSystem.Services.DataRawEEGServices
 {
     public interface IDataRawEEGService : IBaseService<DataRawEEG, DataRawEEGRequest>
     {
+        public Task<DataRawEEGResponse[]> GetLast300DataRecords(Guid deviceId);
     }
 }
