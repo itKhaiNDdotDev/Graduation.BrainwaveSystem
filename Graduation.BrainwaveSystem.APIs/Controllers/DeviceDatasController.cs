@@ -23,6 +23,13 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
             _service = service;
         }
 
+        [HttpGet("{deviceId}/last5mins")]
+        public async Task<ActionResult<TgamExtractionList>> GetLast300Records(Guid deviceId)
+        {
+            var result = await _service.GetLast300Records(deviceId);
+            return Ok(new TgamExtractionList() { Generals = result.GeneralExtractions, Data8Bands = result.Data8Bands });
+        }
+
        [HttpPost("{deviceId}")]
         public async Task<ActionResult<DeviceData>> Post([FromRoute] Guid deviceId, DataDeviceSendRequest request)
         {

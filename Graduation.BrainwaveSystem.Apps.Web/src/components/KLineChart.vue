@@ -44,10 +44,22 @@ export default {
           {
             data: this.propDatas,
             label: "Hee hee",
-            backgroundColor: 'transparent',
+            //backgroundColor: '#000000',
+            backgroundColor: (ctx) => { // định màu area
+              const canvas = ctx.chart.ctx;
+              const gradient = canvas.createLinearGradient(0,0,0,160);
+
+              gradient.addColorStop(0, 'green');
+              gradient.addColorStop(.5, 'cyan');
+              gradient.addColorStop(1, "rgba(0, 231, 255, 0.3)");
+
+              return gradient;
+            },
             pointBackgroundColor: 'transparent',
             borderColor: "#000000",
             borderWidth: 1,
+            fill: true,
+            radius: 0,
             //pointBackgroundColor: "rgba(171, 71, 188, 1)",
             tension: 0.5,
             pointBorderWidth: 0
@@ -74,6 +86,7 @@ export default {
       },
       chartOptions: {
         responsive: true,
+        maintainAspectRatio: true
       },
     };
   }

@@ -17,6 +17,8 @@ namespace Graduation.BrainwaveSystem.Services.DeviceDataServices
 
         //public Task<int> Delete(Guid id);
 
+        public Task<(List<DeviceData> GeneralExtractions, List<Data8BandsEEG> Data8Bands)> GetLast300Records(Guid deviceId);
+
         public Task<Guid> Create(Guid deviceId, DataDeviceSendRequest request);
     }
 }

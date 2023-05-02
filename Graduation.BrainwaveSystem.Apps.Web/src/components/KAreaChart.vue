@@ -10,21 +10,18 @@ export default {
     Line
   },
 
+  props: {
+    propLabels: Array,
+    propDatas: Array
+  },
+
   data() {
     return {
       gradient: null,
       gradient2: null,
 
       chartData: {
-        labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-        ],
+        labels: this.propLabels,
         datasets: [
           {
             label: "Data One",
@@ -46,16 +43,25 @@ export default {
             tension: 0.25, // bo tròn line
             fill: true, // dùng area fill
             radius: 0,
-            data: [40, 39, 10, 40, 39, 80, 40],
+            data: this.propDatas[0],
           },
           {
             label: "Data Two",
             borderColor: "#05CBE1",
-            pointBackgroundColor: "white",
-            pointBorderColor: "white",
+            pointBackgroundColor: "blue",
+            pointBorderColor: "blue",
+            backgroundColor: "blue",
             borderWidth: 1,
             //backgroundColor: this.gradient2,
-            data: [60, 55, 32, 10, 2, 12, 53],
+            data: this.propDatas[1],
+            fill: true
+          },
+          {
+            label: "One",
+            data: [40, 20, 12, 3, 4, 5, 1],
+            fill: true,
+            tension: 1,
+            backgroundColor: "#FF002244",
           },
         ],
       },
@@ -78,3 +84,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.chart-container .chartjs-render-monitor {
+  background-color: rgba(75, 192, 192, 0.2);
+}
+</style>
