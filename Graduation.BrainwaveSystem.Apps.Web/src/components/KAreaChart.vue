@@ -1,25 +1,43 @@
 <template>
   <Line :options="chartOptions" :data="chartData" />
+  <v-btn @click="onClickRefresh">Refresh</v-btn>
 </template>
 
 <script>
 import { Line } from "vue-chartjs";
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  Filler,
+  PointElement,
+  LineElement,
+  CategoryScale,
+  LinearScale,
+} from "chart.js";
+ChartJS.register(
+  Title,
+  Tooltip,
+  Legend,
+  Filler,
+  PointElement,
+  LineElement,
+  CategoryScale,
+  LinearScale
+);
 
 export default {
-  components: {
-    Line
-  },
+  name: "KAreaChart",
+  components: { Line },
 
   props: {
     propLabels: Array,
-    propDatas: Array
+    propDatas: Array,
   },
 
   data() {
     return {
-      gradient: null,
-      gradient2: null,
-
       chartData: {
         labels: this.propLabels,
         datasets: [
@@ -29,13 +47,13 @@ export default {
             pointBackgroundColor: "white",
             borderWidth: 1,
             pointBorderColor: "white",
-            //backgroundColor: this.gradient,
-            backgroundColor: (ctx) => { // định màu area
+            backgroundColor: (ctx) => {
+              // định màu area
               const canvas = ctx.chart.ctx;
-              const gradient = canvas.createLinearGradient(0,0,0,160);
+              const gradient = canvas.createLinearGradient(0, 0, 0, 160);
 
-              gradient.addColorStop(0, 'green');
-              gradient.addColorStop(.5, 'cyan');
+              gradient.addColorStop(0, "green");
+              gradient.addColorStop(0.5, "cyan");
               gradient.addColorStop(1, "rgba(0, 231, 255, 0.3)");
 
               return gradient;
@@ -54,7 +72,7 @@ export default {
             borderWidth: 1,
             //backgroundColor: this.gradient2,
             data: this.propDatas[1],
-            fill: true
+            fill: true,
           },
           {
             label: "One",
@@ -66,8 +84,40 @@ export default {
         ],
       },
 
-      chartOptions: { responsive: true, maintainAspectRatio: true }
+      chartOptions: { responsive: true, maintainAspectRatio: true },
     };
+  },
+
+  methods: {
+    onClickRefresh() {
+      this.updateChartData();
+    },
+
+    updateChartData() {
+      var tmpDatasets = [];
+      this.propDatas.forEach((propData) => {
+        var tmp = {
+          label: propData.lblName,
+          backgroundColor: propData.bgColor + "44",
+          borderWidth: 1,
+          fill: true,
+          tension: 0.5,
+          data: propData.data,
+          borderColor: propData.bgColor,
+          pointRadius: 0, // loại bỏ hiển thị điểm
+        };
+        tmpDatasets.push(tmp);
+      });
+      this.chartData = {
+        ...this.chartData,
+        datasets: tmpDatasets,
+      };
+    },
+  },
+
+  created() {
+    this.$emit("onLoadData");
+    console.log("Before Mount");
   },
 
   mounted() {
@@ -81,6 +131,26 @@ export default {
     // this.gradient2.addColorStop(0, "rgba(0, 231, 255, 0.9)");
     // this.gradient2.addColorStop(0.5, "rgba(0, 231, 255, 0.25)");
     // this.gradient2.addColorStop(1, "rgba(0, 231, 255, 0)");
+    var tmpDatasets = [];
+    this.propDatas.forEach((propData) => {
+      var tmp = {
+        label: propData.lblName,
+        backgroundColor: propData.bgColor + "88",
+        borderWidth: 1,
+        fill: true,
+        tension: 0.5,
+        data: propData.data,
+        borderColor: propData.bgColor,
+        pointRadius: 0, // loại bỏ hiển thị điểm
+        pointWidth: 4,
+      };
+      tmpDatasets.push(tmp);
+    });
+    this.chartData = {
+      ...this.chartData,
+      datasets: tmpDatasets,
+    };
+    console.log("Mounted");
   },
 };
 </script>

@@ -23,14 +23,28 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
             _service = service;
         }
 
-        [HttpGet("{deviceId}/last5mins")]
-        public async Task<ActionResult<TgamExtractionList>> GetLast300Records(Guid deviceId)
+        [HttpGet("{deviceId}/Last5Mins")]
+        public async Task<ActionResult<TgamExtractionList>> GetLast5MinsRecords(Guid deviceId)
         {
-            var result = await _service.GetLast300Records(deviceId);
+            var result = await _service.GetLastNRecords(deviceId, 300);
             return Ok(new TgamExtractionList() { Generals = result.GeneralExtractions, Data8Bands = result.Data8Bands });
         }
 
-       [HttpPost("{deviceId}")]
+        [HttpGet("{deviceId}/LastMin")]
+        public async Task<ActionResult<TgamExtractionList>> GetLastMinRecords(Guid deviceId)
+        {
+            var result = await _service.GetLastNRecords(deviceId, 60);
+            return Ok(new TgamExtractionList() { Generals = result.GeneralExtractions, Data8Bands = result.Data8Bands });
+        }
+
+        [HttpGet("{deviceId}/LastSec")]
+        public async Task<ActionResult<TgamExtractionList>> GetLastSecRecords(Guid deviceId)
+        {
+            var result = await _service.GetLastNRecords(deviceId);
+            return Ok(new TgamExtractionList() { Generals = result.GeneralExtractions, Data8Bands = result.Data8Bands });
+        }
+
+        [HttpPost("{deviceId}")]
         public async Task<ActionResult<DeviceData>> Post([FromRoute] Guid deviceId, DataDeviceSendRequest request)
         {
             var result = await _service.Create(deviceId, request);

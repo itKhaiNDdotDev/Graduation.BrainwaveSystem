@@ -27,16 +27,36 @@
     <v-list v-model:opened="open" color="transparent" density="compact" nav>
       <v-list-item prepend-icon="mdi-home" title="Home"></v-list-item>
 
-      <v-list-group value="Users">
+      <v-list-group value="KhaiND Test">
         <template v-slot:activator="{ props }">
           <v-list-item
             v-bind="props"
             prepend-icon="mdi-account-circle"
-            title="Users"
+            title="KhaiND Test"
           ></v-list-item>
         </template>
 
-        <v-list-group value="Admin">
+        <v-list-item
+            title="General"
+            :prepend-icon="icon"
+            :value="title"
+          ></v-list-item>
+          <v-list-item
+            title="TGAM Extraction"
+            :prepend-icon="icon"
+            :value="title"
+          ></v-list-item>
+          <v-list-item
+            title="Raw EEG Data"
+            :prepend-icon="icon"
+            :value="title"
+          ></v-list-item>
+          <v-list-item
+            title="Models result"
+            :prepend-icon="icon"
+            :value="title"
+          ></v-list-item>
+        <!-- <v-list-group value="General">
           <template v-slot:activator="{ props }">
             <v-list-item v-bind="props" title="Admin"></v-list-item>
           </template>
@@ -50,7 +70,7 @@
           ></v-list-item>
         </v-list-group>
 
-        <v-list-group value="Actions">
+        <v-list-group value="TGAM Extraction">
           <template v-slot:activator="{ props }">
             <v-list-item v-bind="props" title="Actions"></v-list-item>
           </template>
@@ -62,13 +82,13 @@
             :title="title"
             :prepend-icon="icon"
           ></v-list-item>
-        </v-list-group>
+        </v-list-group> -->
       </v-list-group>
     </v-list>
 
     <template v-slot:append>
       <div class="pa-2">
-        <v-btn block> Logout </v-btn>
+        <v-btn block> Settings </v-btn>
       </div>
     </template>
   </v-navigation-drawer>

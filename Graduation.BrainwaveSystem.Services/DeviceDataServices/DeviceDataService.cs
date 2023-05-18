@@ -23,13 +23,13 @@ public class DeviceDataService : BaseService<DeviceData, DeviceDataRequest>, IDe
         _context = context;
     }
 
-    public async Task<(List<DeviceData> GeneralExtractions, List<Data8BandsEEG> Data8Bands)> GetLast300Records(Guid deviceId)
+    public async Task<(List<DeviceData> GeneralExtractions, List<Data8BandsEEG> Data8Bands)> GetLastNRecords(Guid deviceId, int n = 1)
     {
         if (_context.DeviceDatas == null)
             throw new Exception("Entity DeviceDatas is not exist. Please check and try again.");
         var dataRecords = await _context.DeviceDatas.Where(x => x.DeviceId == deviceId)
             .OrderByDescending(x => x.CreatedTime)
-            .Take(300).ToListAsync();
+            .Take(n).ToListAsync();
 
         if (_context.Data8BandsEEGs == null)
             throw new Exception("Entity Data8BandsEEGs is not exist. Please check and try again.");

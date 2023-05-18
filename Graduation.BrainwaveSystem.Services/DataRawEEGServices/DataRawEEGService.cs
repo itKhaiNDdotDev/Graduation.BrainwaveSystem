@@ -21,18 +21,18 @@ namespace Graduation.BrainwaveSystem.Services.DataRawEEGServices
             _context = context;
         }
 
-        public async Task<DataRawEEGResponse[]> GetLast300DataRecords(Guid deviceId)
+        public async Task<DataRawEEGResponse[]> GetLastNDataRecords(Guid deviceId, int n = 1)
         {
             //throw new NotImplementedException();
             //var result = new DataRawEEGResponse[300];
-            //Lấy Id 300 bản ghi gần nhất tương ứng thiết bị
+            //Lấy Id n bản ghi gần nhất tương ứng thiết bị
             if (_context.DeviceDatas == null)
                 throw new Exception("Entity DeviceDatas is not exist. Please check and try again.");
             var dataRecords = /*(List<DataMapRecord>)*/ await _context.DeviceDatas.Where(x => x.DeviceId == deviceId)
                 //.Select(x => new DataMapRecord { Id = x.Id, CreatedTime = x.CreatedTime })
                 .OrderByDescending(x => x.CreatedTime)
                 .Select(x => x.Id)
-                .Take(300).ToListAsync();
+                .Take(n).ToListAsync();
 
             //// Chuyển thành Array[300]
             //var arrayDataRecord = new DataMapRecord[300];
