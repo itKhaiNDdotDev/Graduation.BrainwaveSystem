@@ -116,7 +116,7 @@ export default {
   },
 
   created() {
-    this.$emit("onLoadData");
+    //this.$emit("onLoadData");
     console.log("Before Mount");
   },
 

@@ -6,10 +6,15 @@
       :propLabels="timeStampList"
       @onLoadData="getTGAMExtractionData"
     />
-    <KAreaChart
+    <!-- <KAreaChart
       :propDatas="tgamExtractions.data8Bands"
       :propLabels="timeStampList"
       v-if="tgamExtractions.data8Bands[0].data"
+    /> -->
+    <KLineChart
+      v-if="tgamExtractions.data8Bands[0].data"
+      :propDatas="tgamExtractions.data8Bands"
+      :propLabels="timeStampList"
     />
     <div>{{ currentTime }}</div>
     <v-btn @click="onClickRefresh">Refresh</v-btn>
@@ -18,11 +23,13 @@
 
 <script>
 import KAreaChart from "@/components/KAreaChart.vue";
+import KLineChart from '@/components/KLineChart.vue';
 import axios from "axios";
 
 export default {
   components: {
     KAreaChart,
+    KLineChart
   },
 
   data() {
@@ -102,9 +109,9 @@ export default {
                 .padStart(2, "0")}`
             );
             //this.timeStampList.fill("", this.timeStampList.length, this.timeStampList.length + record.values.length - 1);
-            tmpGenerals[0].push(record.poorQuality);
-            tmpGenerals[1].push(record.attention);
-            tmpGenerals[2].push(record.meditation);
+            tmpGenerals[0].push(record.attention);
+            tmpGenerals[1].push(record.meditation);
+            tmpGenerals[2].push(record.poorQuality);
           });
 
           res.data.data8Bands.forEach((record) => {
@@ -139,31 +146,46 @@ export default {
     },
 
     configGeneralsChart() {
-      this.tgamExtractions.generals[0].lblName = "Poor Quality";
-      this.tgamExtractions.generals[0].bgColor = "#FF2222";
-      this.tgamExtractions.generals[1].lblName = "Attention";
-      this.tgamExtractions.generals[1].bgColor = "#22FF22";
-      this.tgamExtractions.generals[2].lblName = "Meditation";
-      this.tgamExtractions.generals[2].bgColor = "#2222FFF";
+      this.tgamExtractions.generals[0].lblName = "Attention";
+      this.tgamExtractions.generals[0].bgColor = "#008000";
+      this.tgamExtractions.generals[1].lblName = "Meditation";
+      this.tgamExtractions.generals[1].bgColor = "#CC0000";
+      this.tgamExtractions.generals[2].lblName = "Poor Quality";
+      this.tgamExtractions.generals[2].bgColor = "#FFFF00";
     },
 
     config8BandsChart() {
       this.tgamExtractions.data8Bands[0].lblName = "Delta";
-      this.tgamExtractions.data8Bands[0].bgColor = "#FF2222";
+      this.tgamExtractions.data8Bands[0].bgColor = "#880000";
+      this.tgamExtractions.data8Bands[0].lineThickness = 2;
+
       this.tgamExtractions.data8Bands[1].lblName = "Theta";
-      this.tgamExtractions.data8Bands[1].bgColor = "#22FF22";
+      this.tgamExtractions.data8Bands[1].bgColor = "#C71585";
+      this.tgamExtractions.data8Bands[1].lineThickness = 2;
+
       this.tgamExtractions.data8Bands[2].lblName = "Alpha";
-      this.tgamExtractions.data8Bands[2].bgColor = "#2222FFF";
+      this.tgamExtractions.data8Bands[2].bgColor = "#CC8800";
+      this.tgamExtractions.data8Bands[2].lineThickness = 2;
+
       this.tgamExtractions.data8Bands[3].lblName = "Low Beta";
-      this.tgamExtractions.data8Bands[3].bgColor = "#000000";
+      this.tgamExtractions.data8Bands[3].bgColor = "#00AA00";
+      this.tgamExtractions.data8Bands[3].lineThickness = 2;
+
       this.tgamExtractions.data8Bands[4].lblName = "Midle Beta";
-      this.tgamExtractions.data8Bands[4].bgColor = "#FFCC22";
+      this.tgamExtractions.data8Bands[4].bgColor = "#004400";
+      this.tgamExtractions.data8Bands[4].lineThickness = 2;
+
       this.tgamExtractions.data8Bands[5].lblName = "High Beta";
-      this.tgamExtractions.data8Bands[5].bgColor = "#663399";
+      this.tgamExtractions.data8Bands[5].bgColor = "#0220AA";
+      this.tgamExtractions.data8Bands[5].lineThickness = 2;
+
       this.tgamExtractions.data8Bands[6].lblName = "Gmaa";
-      this.tgamExtractions.data8Bands[6].bgColor = "#006600";
-      this.tgamExtractions.data8Bands[7].lblName = "UFH Gama";
-      this.tgamExtractions.data8Bands[7].bgColor = "#003399";
+      this.tgamExtractions.data8Bands[6].bgColor = "#000044";
+      this.tgamExtractions.data8Bands[6].lineThickness = 2;
+
+      this.tgamExtractions.data8Bands[7].lblName = "UHF Gama";
+      this.tgamExtractions.data8Bands[7].bgColor = "#000000";
+      this.tgamExtractions.data8Bands[7].lineThickness = 2;
     },
   },
 

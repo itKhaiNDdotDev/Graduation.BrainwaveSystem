@@ -9,6 +9,7 @@
     <v-window v-model="tab">
       <v-window-item v-for="n in 4" :key="n" :value="n">
         <v-container fluid>
+          <GeneralTab v-if="n==1"/>
           <TgamExtractionTab v-if="n==2"/>
           <RawEEGDataTab v-if="n==3"/>
         </v-container>
@@ -20,11 +21,13 @@
 //import { md2 } from 'vuetify/blueprints'
 import TgamExtractionTab from '@/views/TgamExtractionTab.vue';
 import RawEEGDataTab from '@/views/RawEEGDataTab.vue';
+import GeneralTab from '@/views/GeneralTab.vue';
 
 export default {
   components: {
     TgamExtractionTab,
-    RawEEGDataTab
+    RawEEGDataTab,
+    GeneralTab
   },
 
   data: () => ({

@@ -1,9 +1,9 @@
 <template>
   <div>
     <KLineChart
-      :key="lineChartKey"
+      v-if="rawChartDatas[0].data"
       :propLabels="timeStampList"
-      :propDatas="rawValues"
+      :propDatas="rawChartDatas"
       @onLoadData="getRawData"
     />
     <div>{{ currentTime }}</div>
@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       timeStampList: [],
-      rawValues: [],
+      rawChartDatas: [{}],
       currentTime: "",
     };
   },
@@ -63,19 +63,19 @@ export default {
             tmpValues.push(record.value);
           });
           this.timeStampList = tmpTimeStamp;
-          this.rawValues = tmpValues;
-          console.log(this.timeStampList);
-          console.log(this.rawValues);
-          this.lineChartKey++;
+          this.rawChartDatas[0].data = tmpValues;
+          this.rawChartDatas[0].lblName = "Poor Quality";
+          this.rawChartDatas[0].bgColor = "darkblue";
         })
         .catch((err) => {
           console.log(err);
         });
     },
+  },
 
-    created() {
-      //this.getRawData();
-    },
+  created() {
+    this.getRawData();
+    console.log("RawPar Created");
   },
 };
 </script>

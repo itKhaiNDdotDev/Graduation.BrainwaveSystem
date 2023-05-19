@@ -90,9 +90,31 @@ export default {
     };
   },
 
-  mounted()
-  {
-    this.$emit("onLoadData");
+  methods: {
+    updateChartData() {
+      var tmpDatasets = [];
+      this.propDatas.forEach((propData) => {
+        var tmp = {
+          label: propData.lblName,
+          backgroundColor: propData.bgColor,
+          borderColor: propData.bgColor,
+          borderWidth: propData.lineThickness ?? 1,
+          tension: 0.5,
+          data: propData.data,
+          pointRadius: 0, // loại bỏ hiển thị điểm
+        };
+        tmpDatasets.push(tmp);
+      });
+      this.chartData = {
+        ...this.chartData,
+        datasets: tmpDatasets,
+      };
+    },
+  },
+
+  mounted() {
+    //this.$emit("onLoadData");
+    this.updateChartData();
   }
 };
 </script>
