@@ -15,9 +15,9 @@
       v-if="tgamExtractions.data8Bands[0].data"
       :propDatas="tgamExtractions.data8Bands"
       :propLabels="timeStampList"
+      @onLoadData="getTGAMExtractionData"
     />
     <div>{{ currentTime }}</div>
-    <v-btn @click="onClickRefresh">Refresh</v-btn>
   </div>
 </template>
 
@@ -61,21 +61,6 @@ export default {
   },
 
   methods: {
-    onClickRefresh(opt) {
-      try {
-        alert("load data?");
-        if (opt == 2) {
-          this.getTGAMExtractionData();
-        }
-        if (opt == 3) {
-          this.getRawData();
-        }
-      } catch (ex) {
-        alert("Có lỗi xảy ra trong quá trình tải lại dữ liệu!");
-        console.log(ex);
-      }
-    },
-
     getTGAMExtractionData() {
       axios
         .get(
@@ -138,6 +123,7 @@ export default {
           this.configGeneralsChart();
           this.config8BandsChart();
 
+          console.log("On GetTgamExtracion");
           console.log(this.tgamExtractions);
         })
         .catch((err) => {
@@ -190,74 +176,74 @@ export default {
   },
 
   created() {
-    //this.getTGAMExtractionData();
-    axios
-        .get(
-          "https://localhost:44321/api/DeviceDatas/bcb6bd84-8247-4cce-acb4-48487b9015bb/LastMin"
-        )
-        .then((res) => {
-          var tmp8Bands = [[], [], [], [], [], [], [], []];
-          var tmpTimeStamp = [];
-          var tmpGenerals = [[], [], []];
+    this.getTGAMExtractionData();
+    // axios
+    //     .get(
+    //       "https://localhost:44321/api/DeviceDatas/bcb6bd84-8247-4cce-acb4-48487b9015bb/LastMin"
+    //     )
+    //     .then((res) => {
+    //       var tmp8Bands = [[], [], [], [], [], [], [], []];
+    //       var tmpTimeStamp = [];
+    //       var tmpGenerals = [[], [], []];
 
-          res.data.generals.forEach((record, index) => {
-            const dateTime = new Date(record.createdTime);
-            const minutes = dateTime.getMinutes();
-            const seconds = dateTime.getSeconds();
-            if (index == res.data.generals.length - 1) {
-              const hh = dateTime.getHours();
-              const dd = dateTime.getDay();
-              const mm = dateTime.getMonth();
-              const yyyy = dateTime.getFullYear();
-              this.currentTime = `${hh.toString().padStart(2, "0")}:${minutes
-                .toString()
-                .padStart(2, "0")} ${(dd + 1).toString().padStart(2, "0")}/${(
-                mm + 1
-              )
-                .toString()
-                .padStart(2, "0")}/${yyyy.toString()}`;
-            }
-            tmpTimeStamp.push(
-              `${minutes.toString().padStart(2, "0")}:${seconds
-                .toString()
-                .padStart(2, "0")}`
-            );
-            //this.timeStampList.fill("", this.timeStampList.length, this.timeStampList.length + record.values.length - 1);
-            tmpGenerals[0].push(record.poorQuality);
-            tmpGenerals[1].push(record.attention);
-            tmpGenerals[2].push(record.meditation);
-          });
+    //       res.data.generals.forEach((record, index) => {
+    //         const dateTime = new Date(record.createdTime);
+    //         const minutes = dateTime.getMinutes();
+    //         const seconds = dateTime.getSeconds();
+    //         if (index == res.data.generals.length - 1) {
+    //           const hh = dateTime.getHours();
+    //           const dd = dateTime.getDay();
+    //           const mm = dateTime.getMonth();
+    //           const yyyy = dateTime.getFullYear();
+    //           this.currentTime = `${hh.toString().padStart(2, "0")}:${minutes
+    //             .toString()
+    //             .padStart(2, "0")} ${(dd + 1).toString().padStart(2, "0")}/${(
+    //             mm + 1
+    //           )
+    //             .toString()
+    //             .padStart(2, "0")}/${yyyy.toString()}`;
+    //         }
+    //         tmpTimeStamp.push(
+    //           `${minutes.toString().padStart(2, "0")}:${seconds
+    //             .toString()
+    //             .padStart(2, "0")}`
+    //         );
+    //         //this.timeStampList.fill("", this.timeStampList.length, this.timeStampList.length + record.values.length - 1);
+    //         tmpGenerals[0].push(record.poorQuality);
+    //         tmpGenerals[1].push(record.attention);
+    //         tmpGenerals[2].push(record.meditation);
+    //       });
 
-          res.data.data8Bands.forEach((record) => {
-            tmp8Bands[0].push(record.delta);
-            tmp8Bands[1].push(record.theta);
-            tmp8Bands[2].push(record.alpha);
-            tmp8Bands[3].push(record.lowBeta);
-            tmp8Bands[4].push(record.midBeta);
-            tmp8Bands[5].push(record.highBeta);
-            tmp8Bands[6].push(record.gama);
-            tmp8Bands[7].push(record.uhfGama);
-          });
+    //       res.data.data8Bands.forEach((record) => {
+    //         tmp8Bands[0].push(record.delta);
+    //         tmp8Bands[1].push(record.theta);
+    //         tmp8Bands[2].push(record.alpha);
+    //         tmp8Bands[3].push(record.lowBeta);
+    //         tmp8Bands[4].push(record.midBeta);
+    //         tmp8Bands[5].push(record.highBeta);
+    //         tmp8Bands[6].push(record.gama);
+    //         tmp8Bands[7].push(record.uhfGama);
+    //       });
 
-          this.timeStampList = tmpTimeStamp;
+    //       this.timeStampList = tmpTimeStamp;
 
-          for (let i = 0; i < 3; i++) {
-            this.tgamExtractions.generals[i].data = tmpGenerals[i];
-          }
+    //       for (let i = 0; i < 3; i++) {
+    //         this.tgamExtractions.generals[i].data = tmpGenerals[i];
+    //       }
 
-          for (let i = 0; i < 8; i++) {
-            this.tgamExtractions.data8Bands[i].data = tmp8Bands[i];
-          }
+    //       for (let i = 0; i < 8; i++) {
+    //         this.tgamExtractions.data8Bands[i].data = tmp8Bands[i];
+    //       }
 
-          this.configGeneralsChart();
-          this.config8BandsChart();
+    //       this.configGeneralsChart();
+    //       this.config8BandsChart();
 
-          console.log(this.tgamExtractions);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    console.log("Parrent Created")
+    //       console.log(this.tgamExtractions);
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // console.log("Parrent Created")
   },
 
   mounted() {

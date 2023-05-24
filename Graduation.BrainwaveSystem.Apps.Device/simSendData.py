@@ -8,20 +8,20 @@ while True:
     # Lấy dữ liệu từ thiết bị IoT và xử lý
     data = {
         'general': {
-            'poorQuality': random.randint(0, 255),
-            'attention': random.randint(0, 255),
-            'meditation': random.randint(0, 255),
+            'poorQuality': random.randint(0, 100),
+            'attention': random.randint(128, 255),
+            'meditation': random.randint(64, 196),
             'deviceId': 'bcb6bd84-8247-4cce-acb4-48487b9015bb'
         },
         'delta': random.randint(0, 255),
-        'theta': random.randint(0, 255),
-        'alpha': random.randint(0, 255),
-        'lowBeta': random.randint(0, 255),
-        'midBeta': random.randint(0, 255),
+        'theta': random.randint(100, 255),
+        'alpha': random.randint(100, 255),
+        'lowBeta': random.randint(0, 100),
+        'midBeta': random.randint(0, 100),
         'highBeta': random.randint(0, 255),
-        'gamma': random.randint(0, 255),
+        'gamma': random.randint(128, 255),
         'uhfGamma': random.randint(0, 255),
-        'rawEEGs': [random.randint(0, 255) for _ in range(255)]
+        'rawEEGs': [random.randint(50, 100) for _ in range(512)]
     }
     # processed_data = process_data(data)
 

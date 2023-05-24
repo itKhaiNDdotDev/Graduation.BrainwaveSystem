@@ -1,5 +1,6 @@
 <template>
   <Line id="my-chart-id" :options="chartOptions" :data="chartData" />
+  <v-btn @click="onClickRefresh">Refresh</v-btn>
 </template>
 
 <script>
@@ -91,6 +92,12 @@ export default {
   },
 
   methods: {
+    onClickRefresh() {
+      // emit to get API data
+      this.$emit("onLoadData");
+      this.updateChartData();
+    },
+
     updateChartData() {
       var tmpDatasets = [];
       this.propDatas.forEach((propData) => {

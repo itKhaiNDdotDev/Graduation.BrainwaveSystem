@@ -90,6 +90,8 @@ export default {
 
   methods: {
     onClickRefresh() {
+      // emit to get API data
+      this.$emit("onLoadData");
       this.updateChartData();
     },
 

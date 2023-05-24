@@ -7,7 +7,6 @@
       @onLoadData="getRawData"
     />
     <div>{{ currentTime }}</div>
-    <v-btn @click="onClickRefresh">Refresh</v-btn>
   </div>
 </template>
 
@@ -64,8 +63,10 @@ export default {
           });
           this.timeStampList = tmpTimeStamp;
           this.rawChartDatas[0].data = tmpValues;
-          this.rawChartDatas[0].lblName = "Poor Quality";
+          this.rawChartDatas[0].lblName = "Raw EEG";
           this.rawChartDatas[0].bgColor = "darkblue";
+          
+          console.log("On GetRawEEGData");  
         })
         .catch((err) => {
           console.log(err);
@@ -75,7 +76,7 @@ export default {
 
   created() {
     this.getRawData();
-    console.log("RawPar Created");
+    // console.log("RawPar Created");
   },
 };
 </script>
