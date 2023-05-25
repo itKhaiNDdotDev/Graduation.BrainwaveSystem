@@ -19,7 +19,7 @@
     </div>
 
     <div class="pt-0">
-      Cllect, Storage, analys and predict information form your brainwave data. 
+      Collect, Storage, analysis, extract and predict information form your brainwave data. 
     </div>
 
     <v-divider></v-divider>

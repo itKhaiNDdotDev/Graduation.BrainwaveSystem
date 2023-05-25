@@ -23,6 +23,29 @@ public class DeviceDataService : BaseService<DeviceData, DeviceDataRequest>, IDe
         _context = context;
     }
 
+    public async Task<(List<DeviceData> GeneralExtractions, List<Data8BandsEEG> Data8Bands)> GetLastNRecords(Guid deviceId, int n = 1)
+    {
+        if (_context.DeviceDatas == null)
+            throw new Exception("Entity DeviceDatas is not exist. Please check and try again.");
+        var dataRecords = await _context.DeviceDatas.Where(x => x.DeviceId == deviceId)
+            .OrderByDescending(x => x.CreatedTime)
+            .Take(n).ToListAsync();
+
+        if (_context.Data8BandsEEGs == null)
+            throw new Exception("Entity Data8BandsEEGs is not exist. Please check and try again.");
+        var data8Bands = new List<Data8BandsEEG>();
+        foreach(var record in dataRecords)
+        {
+            var item = await _context.Data8BandsEEGs.Where(d => d.DeviceDataId == record.Id)
+                .FirstOrDefaultAsync();
+            data8Bands.Add(item ?? new Data8BandsEEG());
+        }
+
+        dataRecords = dataRecords.OrderBy(d => d.CreatedTime).ToList();
+        data8Bands = data8Bands.OrderBy(d => d.CreatedTime).ToList();
+        return (dataRecords, data8Bands);
+    }
+
     public async Task<Guid> Create(Guid deviceId, DataDeviceSendRequest request)
     {
         //throw new NotImplementedException();
