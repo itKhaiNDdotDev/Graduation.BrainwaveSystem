@@ -21,7 +21,7 @@ while True:
         'highBeta': random.randint(0, 255),
         'gamma': random.randint(128, 255),
         'uhfGamma': random.randint(0, 255),
-        'rawEEGs': [random.randint(50, 100) for _ in range(512)]
+        'rawEEGs': [random.randint(150, 200) for _ in range(512)]
     }
     # processed_data = process_data(data)
 

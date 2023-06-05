@@ -31,19 +31,6 @@
           }
         }
       },
-      "MathNet.Numerics/5.0.0": {
-        "type": "package",
-        "compile": {
-          "lib/net6.0/MathNet.Numerics.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net6.0/MathNet.Numerics.dll": {
-            "related": ".xml"
-          }
-        }
-      },
       "Microsoft.CSharp/4.7.0": {
         "type": "package",
         "compile": {
@@ -906,19 +893,6 @@
           }
         }
       },
-      "Graduation.BrainwaveSystem.Cores/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v6.0",
-        "dependencies": {
-          "MathNet.Numerics": "5.0.0"
-        },
-        "compile": {
-          "bin/placeholder/Graduation.BrainwaveSystem.Cores.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Graduation.BrainwaveSystem.Cores.dll": {}
-        }
-      },
       "Graduation.BrainwaveSystem.Models/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
@@ -937,7 +911,6 @@
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
           "AutoMapper": "12.0.1",
-          "Graduation.BrainwaveSystem.Cores": "1.0.0",
           "Graduation.BrainwaveSystem.Models": "1.0.0"
         },
         "compile": {
@@ -979,28 +952,6 @@
         "lib/netstandard2.0/Humanizer.dll",
         "lib/netstandard2.0/Humanizer.xml",
         "logo.png"
-      ]
-    },
-    "MathNet.Numerics/5.0.0": {
-      "sha512": "pg1W2VwaEQMAiTpGK840hZgzavnqjlCMTVSbtVCXVyT+7AX4mc1o89SPv4TBlAjhgCOo9c1Y+jZ5m3ti2YgGgA==",
-      "type": "package",
-      "path": "mathnet.numerics/5.0.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "icon.png",
-        "lib/net461/MathNet.Numerics.dll",
-        "lib/net461/MathNet.Numerics.xml",
-        "lib/net48/MathNet.Numerics.dll",
-        "lib/net48/MathNet.Numerics.xml",
-        "lib/net5.0/MathNet.Numerics.dll",
-        "lib/net5.0/MathNet.Numerics.xml",
-        "lib/net6.0/MathNet.Numerics.dll",
-        "lib/net6.0/MathNet.Numerics.xml",
-        "lib/netstandard2.0/MathNet.Numerics.dll",
-        "lib/netstandard2.0/MathNet.Numerics.xml",
-        "mathnet.numerics.5.0.0.nupkg.sha512",
-        "mathnet.numerics.nuspec"
       ]
     },
     "Microsoft.CSharp/4.7.0": {
@@ -2410,11 +2361,6 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
-    },
-    "Graduation.BrainwaveSystem.Cores/1.0.0": {
-      "type": "project",
-      "path": "../Graduation.BrainwaveSystem.Cores/Graduation.BrainwaveSystem.Cores.csproj",
-      "msbuildProject": "../Graduation.BrainwaveSystem.Cores/Graduation.BrainwaveSystem.Cores.csproj"
     },
     "Graduation.BrainwaveSystem.Models/1.0.0": {
       "type": "project",
