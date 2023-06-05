@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Graduation.BrainwaveSystem.Cores\Graduation.BrainwaveSystem.Cores.csproj" />
     <ProjectReference Include="..\Graduation.BrainwaveSystem.Models\Graduation.BrainwaveSystem.Models.csproj" />
   </ItemGroup>
 

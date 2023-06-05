@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "lf19Ol1GcyAa/QJvjCKDiCfrkBC3iRr29pzi2eQDMlzG7ja4tm5oHP9VVwXdukDBhGwLqNoboqh7pdbrfRJ+Kw==",
+  "dgSpecHash": "gkuDwAGl6a/zdBx/4MIjO2BYsXwagtlUNSmRQy0CDVW3C4w/wk7KUCk568DfrvtPgheaCks/Pw5MicRXxNNTGQ==",
   "success": true,
   "projectFilePath": "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Services\\Graduation.BrainwaveSystem.Services.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\khain\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\khain\\.nuget\\packages\\mathnet.numerics\\5.0.0\\mathnet.numerics.5.0.0.nupkg.sha512",
     "C:\\Users\\khain\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\khain\\.nuget\\packages\\microsoft.data.sqlclient\\2.1.4\\microsoft.data.sqlclient.2.1.4.nupkg.sha512",
     "C:\\Users\\khain\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\2.1.1\\microsoft.data.sqlclient.sni.runtime.2.1.1.nupkg.sha512",
