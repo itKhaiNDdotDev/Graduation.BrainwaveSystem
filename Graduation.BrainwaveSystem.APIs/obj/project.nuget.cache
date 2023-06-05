@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "bk930iC/rcgIY6DguGHSUlWSLLaOyq+fVxoQXsGylnDTYc5+hi0OmNQ9Z6zQ+ELSCZU2m8gVi23IU1R7Z3TKWw==",
+  "dgSpecHash": "JE7LFRt2GFBNM2T5DcpWV+g/6YvwVbms8/X349gsgu5r25tI9ShYmOvaf5HOfS4kdyB9Sdv/MG1G8v8YZcIx8w==",
   "success": true,
   "projectFilePath": "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.APIs\\Graduation.BrainwaveSystem.APIs.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\khain\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\khain\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
+    "C:\\Users\\khain\\.nuget\\packages\\mathnet.numerics\\5.0.0\\mathnet.numerics.5.0.0.nupkg.sha512",
     "C:\\Users\\khain\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\khain\\.nuget\\packages\\microsoft.data.sqlclient\\2.1.4\\microsoft.data.sqlclient.2.1.4.nupkg.sha512",
     "C:\\Users\\khain\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\2.1.1\\microsoft.data.sqlclient.sni.runtime.2.1.1.nupkg.sha512",

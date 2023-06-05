@@ -47,6 +47,14 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
             return Ok(await _service.GetLastNDataRecords(deviceId, 15));
         }
 
+        [HttpGet("{deviceId}/FFT")]
+        public async Task<ActionResult<(List<double> frequencyAxis, List<double> amplitudeSpectrum)>> GetFFTData(Guid deviceId)
+        {
+            var frequencyAxis = _service.GetFFTData(deviceId).frequencyAxis;
+            var amplitudeSpectrum = _service.GetFFTData(deviceId).amplitudeSpectrum;
+            return Ok(new { FrequencyAxis = frequencyAxis, AmplitudeSpectrum = amplitudeSpectrum });
+        }
+
         //private readonly DataContext _context;
 
         //public DataRawEEGsController(DataContext context)

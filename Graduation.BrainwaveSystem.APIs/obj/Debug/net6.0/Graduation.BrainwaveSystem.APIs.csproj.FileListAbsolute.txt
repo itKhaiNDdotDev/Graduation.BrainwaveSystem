@@ -66,3 +66,6 @@ K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.APIs\bin\De
 K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.APIs\bin\Debug\net6.0\Humanizer.dll
 K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.APIs\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Design.dll
 K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.APIs\bin\Debug\net6.0\AutoMapper.dll
+K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.APIs\bin\Debug\net6.0\MathNet.Numerics.dll
+K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.APIs\bin\Debug\net6.0\Graduation.BrainwaveSystem.Cores.dll
+K:\2022_2_DATN\Graduation.BrainwaveSystem\Graduation.BrainwaveSystem.APIs\bin\Debug\net6.0\Graduation.BrainwaveSystem.Cores.pdb
