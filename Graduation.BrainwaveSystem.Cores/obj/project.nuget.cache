@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "32J3cJQLr1R5kLjwh2GjpGCua8GHPn527yERuDHHlnlWK7JyrpaN3BrDj2flzxJ5u/FQP8qj6oSq5kNt7d+SQQ==",
+  "dgSpecHash": "iXodt8Emc/NTatD0WVmV1jOiDmPM/+VH4fB8iRnC65NL82jWSIbgzwP4068pJ/qh7PdtO2hmLc65be/e15z3Dg==",
   "success": true,
   "projectFilePath": "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\Graduation.BrainwaveSystem.Cores.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\khain\\.nuget\\packages\\mathnet.numerics\\5.0.0\\mathnet.numerics.5.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

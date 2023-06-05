@@ -1,4 +1,5 @@
-﻿using Graduation.BrainwaveSystem.Models;
+﻿using Graduation.BrainwaveSystem.Cores.DataProcessors;
+using Graduation.BrainwaveSystem.Models;
 using Graduation.BrainwaveSystem.Models.DTOs;
 using Graduation.BrainwaveSystem.Models.Entities;
 using Graduation.BrainwaveSystem.Services.BaseServices;
@@ -70,6 +71,22 @@ namespace Graduation.BrainwaveSystem.Services.DataRawEEGServices
                 .OrderBy(d => d.RecivedTime).ToArrayAsync();
 
             return result;
+        }
+
+        public (List<double> frequencyAxis, List<double> amplitudeSpectrum) GetFFTData(Guid deviceId)
+        {
+            var inputData = GetLastNDataRecords(deviceId, 15);
+            var listValue = new List<int>();
+            var listTime = new List<DateTime>();
+            foreach(var item in inputData.Result)
+            {
+                listValue.Add(item.Value);
+                listTime.Add(item.RecivedTime);
+            }
+            var result = Transformer.SolveFFT(listValue, listTime);
+            var frequencyAxis = result.frequencyAxis;
+            var amplitudeSpectrum = result.amplitudeSpectrum;
+            return (frequencyAxis, amplitudeSpectrum);
         }
 
         class DataMapRecord
