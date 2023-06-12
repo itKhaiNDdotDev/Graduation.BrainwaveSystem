@@ -14,5 +14,9 @@ namespace Graduation.BrainwaveSystem.Services.DataRawEEGServices
         public Task<DataRawEEGResponse[]> GetLastNDataRecords(Guid deviceId, int n = 1);
 
         public (List<double> frequencyAxis, List<double> amplitudeSpectrum) GetFFTData(Guid deviceId);
+
+        public string GetTrainOutput();
+
+        public string GetTrainFTOutput();
     }
 }

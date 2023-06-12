@@ -55,6 +55,18 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
             return Ok(new { FrequencyAxis = frequencyAxis, AmplitudeSpectrum = amplitudeSpectrum });
         }
 
+        [HttpGet("svm-classification")]
+        public async Task<ActionResult> GetTrainOutput()
+        {
+            return Ok(_service.GetTrainOutput());
+        }
+
+        [HttpGet("fasttree")]
+        public async Task<ActionResult> GetTrainFTOutput()
+        {
+            return Ok(_service.GetTrainFTOutput());
+        }
+
         //private readonly DataContext _context;
 
         //public DataRawEEGsController(DataContext context)

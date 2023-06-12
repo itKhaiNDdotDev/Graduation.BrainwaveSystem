@@ -1,4 +1,5 @@
 ﻿using Graduation.BrainwaveSystem.Cores.DataProcessors;
+using Graduation.BrainwaveSystem.Cores.MLDotNETModels;
 using Graduation.BrainwaveSystem.Models;
 using Graduation.BrainwaveSystem.Models.DTOs;
 using Graduation.BrainwaveSystem.Models.Entities;
@@ -87,6 +88,16 @@ namespace Graduation.BrainwaveSystem.Services.DataRawEEGServices
             var frequencyAxis = result.frequencyAxis;
             var amplitudeSpectrum = result.amplitudeSpectrum;
             return (frequencyAxis, amplitudeSpectrum);
+        }
+
+        public string GetTrainOutput()
+        {
+            return Classification.SVMTrain();
+        }
+
+        public string GetTrainFTOutput()
+        {
+            return Classification.FastTreeTrain();
         }
 
         class DataMapRecord
