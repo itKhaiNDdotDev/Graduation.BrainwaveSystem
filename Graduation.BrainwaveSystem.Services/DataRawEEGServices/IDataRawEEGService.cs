@@ -1,4 +1,5 @@
-﻿using Graduation.BrainwaveSystem.Models.DTOs;
+﻿using Graduation.BrainwaveSystem.Cores.MLDotNETModels;
+using Graduation.BrainwaveSystem.Models.DTOs;
 using Graduation.BrainwaveSystem.Models.Entities;
 using Graduation.BrainwaveSystem.Services.BaseServices;
 using System;
@@ -17,6 +18,8 @@ namespace Graduation.BrainwaveSystem.Services.DataRawEEGServices
 
         public string GetTrainOutput();
 
-        public string GetTrainFTOutput();
+        public List<string> GetTrainFTOutput();
+
+        public List<string> GetTrainFTOutput(DataPoint inputData);
     }
 }

@@ -95,9 +95,14 @@ namespace Graduation.BrainwaveSystem.Services.DataRawEEGServices
             return Classification.SVMTrain();
         }
 
-        public string GetTrainFTOutput()
+        public List<string> GetTrainFTOutput()
         {
             return Classification.FastTreeTrain();
+        }
+
+        public List<string> GetTrainFTOutput(DataPoint inputData)
+        {
+            return Classification.FastTreeTest(inputData);
         }
 
         class DataMapRecord

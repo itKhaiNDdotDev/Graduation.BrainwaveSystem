@@ -9,6 +9,7 @@ using Graduation.BrainwaveSystem.Models;
 using Graduation.BrainwaveSystem.Models.Entities;
 using Graduation.BrainwaveSystem.Models.DTOs;
 using Graduation.BrainwaveSystem.Services.DataRawEEGServices;
+using Graduation.BrainwaveSystem.Cores.MLDotNETModels;
 
 namespace Graduation.BrainwaveSystem.APIs.Controllers
 {
@@ -65,6 +66,12 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
         public async Task<ActionResult> GetTrainFTOutput()
         {
             return Ok(_service.GetTrainFTOutput());
+        }
+
+        [HttpPost("fasttree-test")]
+        public async Task<ActionResult> GetTrainFTOutput([FromBody] DataPoint inputData)
+        {
+            return Ok(_service.GetTrainFTOutput(inputData));
         }
 
         //private readonly DataContext _context;

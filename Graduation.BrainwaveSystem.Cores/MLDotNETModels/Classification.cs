@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
 {
@@ -96,6 +98,16 @@ namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
 
     public class Classification
     {
+        private static string BaseDatasetsRelativePath = @"../../../DataSets";
+        private static string AwakeDataRelativePath = $"{BaseDatasetsRelativePath}/Awake.csv";
+        private static string DrowsinessDataRelativePath = $"{BaseDatasetsRelativePath}/Drowsiness.csv";
+        private static string AwakeDataPath = GetAbsolutePath(AwakeDataRelativePath);
+        private static string DrowsinessDataPath = GetAbsolutePath(DrowsinessDataPath);
+
+        private static string BaseModelsRelativePath = @"../../../TrainedModels";
+        private static string ModelRelativePath = $"{BaseModelsRelativePath}/AwakefulStateFastTreeMLNETBC.zip";
+        private static string ModelPath = GetAbsolutePath(ModelRelativePath);
+
         public static string SVMTrain()
         {
             // Khởi tạo MLContext
@@ -103,7 +115,7 @@ namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
 
             // Đọc dữ liệu từ các tệp CSV
             var file1 = mlContext.Data.LoadFromTextFile<DataPoint>("K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\DataSets\\Awake.csv", separatorChar: ',');
-            var file2 = mlContext.Data.LoadFromTextFile<DataPoint>("K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\DataSets\\drowsiness1.csv", separatorChar: ',');
+            var file2 = mlContext.Data.LoadFromTextFile<DataPoint>("K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\DataSets\\Drowsiness.csv", separatorChar: ',');
             //string dataFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "DataSets");
             //var file1 = mlContext.Data.LoadFromTextFile<DataPoint>(Path.Combine(dataFolderPath, "Awake.csv"), separatorChar: ',');
             //var file2 = mlContext.Data.LoadFromTextFile<DataPoint>(Path.Combine(dataFolderPath, "drowsiness1.csv"), separatorChar: ',');
@@ -231,15 +243,17 @@ namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
             return ($"Train score: {trainMetrics.Accuracy} - Test score: {testMetrics.Accuracy}");
         }
 
-        public static string FastTreeTrain()
+        public static List<string> FastTreeTrain()
         {
             // Khởi tạo MLContext
             var mlContext = new MLContext();
 
             // STEP 1: Common data loading configuration
             // Đọc dữ liệu từ các tệp CSV
+            //var file1 = mlContext.Data.LoadFromTextFile<DataPoint>(AwakeDataPath, hasHeader: true, separatorChar: ',');
+            //var file2 = mlContext.Data.LoadFromTextFile<DataPoint>(DrowsinessDataPath, hasHeader: true, separatorChar: ',');
             var file1 = mlContext.Data.LoadFromTextFile<DataPoint>("K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\DataSets\\Awake.csv", separatorChar: ',');
-            var file2 = mlContext.Data.LoadFromTextFile<DataPoint>("K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\DataSets\\drowsiness1.csv", separatorChar: ',');
+            var file2 = mlContext.Data.LoadFromTextFile<DataPoint>("K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\DataSets\\Drowsiness.csv", separatorChar: ',');
             var labeledFile1 = mlContext.Data.CreateEnumerable<DataPoint>(file1, reuseRowObject: false)
                 .Select(x => new DataPoint
                 {
@@ -286,7 +300,72 @@ namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
             var testPredictions = trainedModel.Transform(trainTestSplit.TestSet);
             var testMetrics = mlContext.BinaryClassification.Evaluate(data: testPredictions, labelColumnName: "Label", scoreColumnName: "Score");
 
-            return $"Train Accuracy: {trainMetrics.Accuracy:P2} - Test Accuracy: {testMetrics.Accuracy:P2}";
+            var listMsg = new List<string>();
+            listMsg.Add($"Train Accuracy: {trainMetrics.Accuracy:P2} - Test Accuracy: {testMetrics.Accuracy:P2}");
+            listMsg.Add("");
+            listMsg.Add($"************************ TRAIN RESULTS: *************");
+            listMsg.Add($"* Area Under Roc Curve:      {trainMetrics.AreaUnderRocCurve:P2}");
+            listMsg.Add($"* Area Under PrecisionRecall Curve:  {trainMetrics.AreaUnderPrecisionRecallCurve:P2}");
+            listMsg.Add($"* F1Score:  {trainMetrics.F1Score:P2}");
+            listMsg.Add($"* LogLoss:  {trainMetrics.LogLoss:#.##}");
+            listMsg.Add($"* LogLossReduction:  {trainMetrics.LogLossReduction:#.##}");
+            listMsg.Add($"* PositivePrecision:  {trainMetrics.PositivePrecision:#.##}");
+            listMsg.Add($"* PositiveRecall:  {trainMetrics.PositiveRecall:#.##}");
+            listMsg.Add($"* NegativePrecision:  {trainMetrics.NegativePrecision:#.##}");
+            listMsg.Add($"* NegativeRecall:  {trainMetrics.NegativeRecall:P2}");
+            listMsg.Add($"******************************************************");
+            listMsg.Add("");
+            listMsg.Add($"************************ TEST RESULTS: *************");
+            listMsg.Add($"* Area Under Roc Curve:      {testMetrics.AreaUnderRocCurve:P2}");
+            listMsg.Add($"* Area Under PrecisionRecall Curve:  {testMetrics.AreaUnderPrecisionRecallCurve:P2}");
+            listMsg.Add($"* F1Score:  {testMetrics.F1Score:P2}");
+            listMsg.Add($"* LogLoss:  {testMetrics.LogLoss:#.##}");
+            listMsg.Add($"* LogLossReduction:  {testMetrics.LogLossReduction:#.##}");
+            listMsg.Add($"* PositivePrecision:  {testMetrics.PositivePrecision:#.##}");
+            listMsg.Add($"* PositiveRecall:  {testMetrics.PositiveRecall:#.##}");
+            listMsg.Add($"* NegativePrecision:  {testMetrics.NegativePrecision:#.##}");
+            listMsg.Add($"* NegativeRecall:  {testMetrics.NegativeRecall:P2}");
+            listMsg.Add($"******************************************************");
+            listMsg.Add("");
+            listMsg.Add("============= Saving the model to a file =============");
+            mlContext.Model.Save(trainedModel, trainTestSplit.TrainSet.Schema, "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\TrainedModels\\AwakefulStateFastTreeMLNETBC.zip");
+            listMsg.Add("");
+            listMsg.Add("=================== Model Saved ===================== ");
+
+            return listMsg;
+        }
+
+        public static List<string> FastTreeTest(DataPoint inputData)
+        {
+            var mlContext = new MLContext();
+            ITransformer trainedModel = mlContext.Model.Load("K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\TrainedModels\\AwakefulStateFastTreeMLNETBC.zip", out var modelInputSchema);
+
+            // Create prediction engine related to the loaded trained model
+            var predictionEngine = mlContext.Model.CreatePredictionEngine<DataPoint, Prediction>(trainedModel);
+
+            var prediction = predictionEngine.Predict(inputData);
+            var listMsg = new List<string>();
+            listMsg.Add($"Prediction Value: {prediction.PredictedLabel} ");
+            listMsg.Add($"State: {(prediction.PredictedLabel ? "Awake" : "Drowsiness")} ");
+            listMsg.Add($"Probability: {prediction.Probability} ");
+            return listMsg;
+        }
+
+        /// <summary>
+        /// Nên bỏ vào Utility
+        /// </summary>
+        /// <param name="relativePath"></param>
+        /// <returns></returns> ĐANG SAI - vào bin/Debug
+        /// (Jun 15)
+        public static string GetAbsolutePath(string relativePath)
+        {
+            FileInfo _dataRoot = new FileInfo(typeof(Classification).Assembly.Location);
+            string assemblyFolderPath = _dataRoot.Directory.FullName;
+
+            string fullPath = Path.Combine(assemblyFolderPath, relativePath);
+
+            return fullPath;
+
         }
     }
 }
