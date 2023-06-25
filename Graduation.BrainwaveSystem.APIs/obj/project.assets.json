@@ -31,6 +31,18 @@
           }
         }
       },
+      "Keras.NET/3.8.5": {
+        "type": "package",
+        "dependencies": {
+          "Numpy.Bare": "3.8.1.25"
+        },
+        "compile": {
+          "lib/netstandard2.0/Keras.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Keras.dll": {}
+        }
+      },
       "MathNet.Numerics/5.0.0": {
         "type": "package",
         "compile": {
@@ -779,6 +791,48 @@
           }
         }
       },
+      "Numpy.Bare/3.8.1.25": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.CSharp": "4.5.0",
+          "pythonnet_netstandard_py38_win": "2.5.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/Numpy.Bare.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Numpy.Bare.dll": {}
+        }
+      },
+      "NumSharp/0.30.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.4"
+        },
+        "compile": {
+          "lib/netstandard2.0/NumSharp.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/NumSharp.dll": {
+            "related": ".pdb"
+          }
+        }
+      },
+      "pythonnet_netstandard_py38_win/2.5.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Python.Runtime.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Python.Runtime.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Swashbuckle.AspNetCore/6.2.3": {
         "type": "package",
         "dependencies": {
@@ -965,7 +1019,7 @@
           }
         }
       },
-      "System.Memory/4.5.3": {
+      "System.Memory/4.5.4": {
         "type": "package",
         "compile": {
           "ref/netcoreapp2.1/_._": {}
@@ -1271,9 +1325,12 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
+          "Graduation.BrainwaveSystem.Models": "1.0.0",
+          "Keras.NET": "3.8.5",
           "MathNet.Numerics": "5.0.0",
           "Microsoft.ML": "2.0.1",
-          "Microsoft.ML.FastTree": "2.0.1"
+          "Microsoft.ML.FastTree": "2.0.1",
+          "NumSharp": "0.30.0"
         },
         "compile": {
           "bin/placeholder/Graduation.BrainwaveSystem.Cores.dll": {}
@@ -1342,6 +1399,19 @@
         "lib/netstandard2.0/Humanizer.dll",
         "lib/netstandard2.0/Humanizer.xml",
         "logo.png"
+      ]
+    },
+    "Keras.NET/3.8.5": {
+      "sha512": "NFUV194GVq87ZBrUNMrFXy/pMPchh0clyShr4HHoKY+NYaCOIr9kvcRS1hE0rs8S9Adbvt2+gIG9HfNCWikIAg==",
+      "type": "package",
+      "path": "keras.net/3.8.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "keras.net.3.8.5.nupkg.sha512",
+        "keras.net.nuspec",
+        "lib/netstandard2.0/Keras.dll"
       ]
     },
     "MathNet.Numerics/5.0.0": {
@@ -2356,6 +2426,45 @@
         "packageIcon.png"
       ]
     },
+    "Numpy.Bare/3.8.1.25": {
+      "sha512": "YqbpafFbck+JI0/guhaiJqAqTOKJXGbCfre6PZH+eeQbg27rllyTNPCdw36oLSNzagBIzJjmsGDE61lfSvairg==",
+      "type": "package",
+      "path": "numpy.bare/3.8.1.25",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/Numpy.Bare.dll",
+        "numpy.bare.3.8.1.25.nupkg.sha512",
+        "numpy.bare.nuspec"
+      ]
+    },
+    "NumSharp/0.30.0": {
+      "sha512": "1f8m2B/m/ZSsICaqLszspCyA9/sTHK7wBKEH5KsxGg/r3QCYTc2HnfYOGMeCytvo8/j0v/umn5umLOLhdExlFA==",
+      "type": "package",
+      "path": "numsharp/0.30.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "lib/netstandard2.0/NumSharp.dll",
+        "lib/netstandard2.0/NumSharp.pdb",
+        "numsharp.0.30.0.nupkg.sha512",
+        "numsharp.nuspec"
+      ]
+    },
+    "pythonnet_netstandard_py38_win/2.5.1": {
+      "sha512": "y8D5KG5Z5pFUzxBINwaN6LuM50LpkRV3TD8Lrn9jz1spbT1mBSCeYAzyA8MSo9+Jb3R/evXq0m3+d1KiDGGYUg==",
+      "type": "package",
+      "path": "pythonnet_netstandard_py38_win/2.5.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/Python.Runtime.dll",
+        "lib/netstandard2.0/Python.Runtime.xml",
+        "pythonnet_netstandard_py38_win.2.5.1.nupkg.sha512",
+        "pythonnet_netstandard_py38_win.nuspec"
+      ]
+    },
     "Swashbuckle.AspNetCore/6.2.3": {
       "sha512": "cnzQDn0Le+hInsw2SYwlOhOCPXpYi/szcvnyqZJ12v+QyrLBwAmWXBg6RIyHB18s/mLeywC+Rg2O9ndz0IUNYQ==",
       "type": "package",
@@ -2666,22 +2775,24 @@
         "system.io.nuspec"
       ]
     },
-    "System.Memory/4.5.3": {
-      "sha512": "3oDzvc/zzetpTKWMShs1AADwZjQ/36HnsufHRPcOjyRAAMLDlu2iD33MBI2opxnezcVUtXyqDXXjoFMOU9c7SA==",
+    "System.Memory/4.5.4": {
+      "sha512": "1MbJTHS1lZ4bS4FmsJjnuGJOu88ZzTT2rLvrhW7Ygic+pC0NWA+3hgAen0HRdsocuQXCkUTdFn9yHJJhsijDXw==",
       "type": "package",
-      "path": "system.memory/4.5.3",
+      "path": "system.memory/4.5.4",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
+        "lib/net461/System.Memory.dll",
+        "lib/net461/System.Memory.xml",
         "lib/netcoreapp2.1/_._",
         "lib/netstandard1.1/System.Memory.dll",
         "lib/netstandard1.1/System.Memory.xml",
         "lib/netstandard2.0/System.Memory.dll",
         "lib/netstandard2.0/System.Memory.xml",
         "ref/netcoreapp2.1/_._",
-        "system.memory.4.5.3.nupkg.sha512",
+        "system.memory.4.5.4.nupkg.sha512",
         "system.memory.nuspec",
         "useSharedDesignerContext.txt",
         "version.txt"

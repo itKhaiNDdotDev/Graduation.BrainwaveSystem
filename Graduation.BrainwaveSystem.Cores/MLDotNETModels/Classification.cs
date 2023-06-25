@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 using System.Diagnostics;
+using System.Drawing;
+using Graduation.BrainwaveSystem.Models;
 
 namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
 {
@@ -350,6 +352,66 @@ namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
             listMsg.Add($"Probability: {prediction.Probability} ");
             return listMsg;
         }
+
+        ///// <summary>
+        ///// Dự đoán các giá trị tiếp theo
+        ///// </summary>
+        ///// <returns></returns>
+        ///// (Jun 16)
+        //public static List<Point<int, DateTime>> TrainPredict()
+        //{
+        //    // Tạo một đối tượng MLContext
+        //    var context = new MLContext();
+
+        //    // Đọc dữ liệu
+        //    var dataContext = new DataContext();
+        //    var data = dataContext.DataRawEEGs.ToList();
+        //    var dataView = context.Data.LoadFromEnumerable(data);
+
+        //    // Chia dữ liệu thành tập huấn luyện và tập kiểm tra
+        //    var trainTestSplit = context.Data.TrainTestSplit(dataView, testFraction: 0.2);
+
+        //    // Tạo pipeline xử lý dữ liệu
+        //    var pipeline = context.Transforms.Conversion.MapValueToKey("Label")
+        //        .Append(context.Transforms.Concatenate("Features", "Value"))
+        //        .Append(context.Transforms.NormalizeMinMax("Features"))
+        //        .Append(context.Transforms.SlidingWindow("WindowedFeatures", "Features", windowSize: 60))
+        //        .Append(context.Transforms.DropColumns("Features"))
+        //        .Append(context.Transforms.Concatenate("Features"))
+        //        .Append(context.Transforms.Concatenate("Features"))
+        //        .Append(context.Transforms.SelectFeatures("Features"))
+        //        .Append(context.Transforms.CopyColumns("Label", "Value"))
+        //        .Append(context.Transforms.DropColumns("Value"));
+
+        //    // Huấn luyện mô hình với pipeline đã xây dựng
+        //    var model = pipeline.Fit(trainTestSplit.TrainSet);
+
+        //    // Đánh giá mô hình trên tập kiểm tra
+        //    var predictions = model.Transform(trainTestSplit.TestSet);
+        //    var metrics = context.Regression.Evaluate(predictions);
+        //    Console.WriteLine($"Mean Absolute Error: {metrics.MeanAbsoluteError}");
+        //    Console.WriteLine($"Root Mean Squared Error: {metrics.RootMeanSquaredError}");
+
+        //    // Dự đoán các giá trị tiếp theo
+        //    var predictionEngine = context.Model.CreatePredictionEngine<TimeData, TimePrediction>(model);
+        //    var testData = new TimeData { Value = 100 };
+        //    var prediction = predictionEngine.Predict(testData);
+
+        //    Console.WriteLine($"Next value prediction: {prediction.Prediction}");
+        //}
+
+        //// Lớp chứa dữ liệu chuỗi thời gian
+        //public class TimeData
+        //{
+        //    public float Value { get; set; }
+        //}
+
+        //// Lớp chứa kết quả dự đoán chuỗi thời gian
+        //public class TimePrediction
+        //{
+        //    [ColumnName("Score")]
+        //    public float Prediction { get; set; }
+        //}
 
         /// <summary>
         /// Nên bỏ vào Utility

@@ -32,7 +32,11 @@
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Models\\Graduation.BrainwaveSystem.Models.csproj": {
+                "projectPath": "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Models\\Graduation.BrainwaveSystem.Models.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -45,6 +49,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Keras.NET": {
+              "target": "Package",
+              "version": "[3.8.5, )"
+            },
             "MathNet.Numerics": {
               "target": "Package",
               "version": "[5.0.0, )"
@@ -56,6 +64,10 @@
             "Microsoft.ML.FastTree": {
               "target": "Package",
               "version": "[2.0.1, )"
+            },
+            "NumSharp": {
+              "target": "Package",
+              "version": "[0.30.0, )"
             }
           },
           "imports": [
