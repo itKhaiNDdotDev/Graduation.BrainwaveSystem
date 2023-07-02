@@ -108,6 +108,8 @@ namespace Graduation.BrainwaveSystem.Models.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DeviceDataId");
+
                     b.ToTable("DataRawEEGs");
                 });
 

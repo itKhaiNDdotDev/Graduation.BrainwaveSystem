@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Graduation.BrainwaveSystem.Cores.MLDotNETModels.RegressionPredictor;
 
 namespace Graduation.BrainwaveSystem.Services.DataRawEEGServices
 {
@@ -21,5 +22,7 @@ namespace Graduation.BrainwaveSystem.Services.DataRawEEGServices
         public List<string> GetTrainFTOutput();
 
         public List<string> GetTrainFTOutput(DataPoint inputData);
+
+        public (TimeSeriesPredictMetricsModel Evaluation, ModelOutput Prediction) GetTrainSSAPredictOutput(Guid deviceId);
     }
 }

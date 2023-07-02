@@ -10,6 +10,7 @@ using Graduation.BrainwaveSystem.Models.Entities;
 using Graduation.BrainwaveSystem.Models.DTOs;
 using Graduation.BrainwaveSystem.Services.DataRawEEGServices;
 using Graduation.BrainwaveSystem.Cores.MLDotNETModels;
+using static Graduation.BrainwaveSystem.Cores.MLDotNETModels.RegressionPredictor;
 
 namespace Graduation.BrainwaveSystem.APIs.Controllers
 {
@@ -72,6 +73,22 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
         public async Task<ActionResult> GetTrainFTOutput([FromBody] DataPoint inputData)
         {
             return Ok(_service.GetTrainFTOutput(inputData));
+        }
+
+        [HttpGet("{deviceId}/SSAPredict")]
+        public async Task<ActionResult<PredictOutDTO>> GetSSAPredictTrain(Guid deviceId)
+        {
+            var res = _service.GetTrainSSAPredictOutput(deviceId);
+            var resShow = new PredictOutDTO();
+            resShow.Prediction = res.Prediction;
+            resShow.Evaluation = res.Evaluation;
+            return Ok(resShow);
+        }
+
+        public class PredictOutDTO
+        {
+            public TimeSeriesPredictMetricsModel Evaluation { get; set; }
+            public ModelOutput Prediction { get; set; }
         }
 
         //private readonly DataContext _context;

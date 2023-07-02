@@ -28,7 +28,8 @@ namespace Graduation.BrainwaveSystem.Cores.DataProcessors
 
             // Số lượng mẫu và tần số lấy mẫu
             int sampleCount = listByteTimeDomainSignal.Count;
-            double sampleRate = 1.0 / (listTime[1] - listTime[0]).TotalSeconds;
+            //double sampleRate = 1.0 / (listTime[1] - listTime[0]).TotalSeconds;  /// Fs = 512
+            double sampleRate = 512;
 
             // Tính số lượng cửa sổ FFT
             int windowCount = sampleCount / windowSize;

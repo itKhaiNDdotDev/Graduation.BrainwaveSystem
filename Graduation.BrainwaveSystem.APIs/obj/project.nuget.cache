@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "IUUnpgP3qnamq5FkKpf32I1KlWSbEJfleMbbNgs0O9SPfxdEahdzekVNzto0N2Z4abeHaXJKKslbaiJs6Ay79g==",
+  "dgSpecHash": "7mCYC6rT6DyiPNLPvB+YBev51G8+OITyiDGy/du5iEiZuh/y/X6u82axjd2yC+exbf356GdymxOS/qFrTVSq2A==",
   "success": true,
   "projectFilePath": "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.APIs\\Graduation.BrainwaveSystem.APIs.csproj",
   "expectedPackageFiles": [
@@ -38,6 +38,8 @@
     "C:\\Users\\khain\\.nuget\\packages\\microsoft.ml.cpumath\\2.0.1\\microsoft.ml.cpumath.2.0.1.nupkg.sha512",
     "C:\\Users\\khain\\.nuget\\packages\\microsoft.ml.dataview\\2.0.1\\microsoft.ml.dataview.2.0.1.nupkg.sha512",
     "C:\\Users\\khain\\.nuget\\packages\\microsoft.ml.fasttree\\2.0.1\\microsoft.ml.fasttree.2.0.1.nupkg.sha512",
+    "C:\\Users\\khain\\.nuget\\packages\\microsoft.ml.mkl.redist\\2.0.1\\microsoft.ml.mkl.redist.2.0.1.nupkg.sha512",
+    "C:\\Users\\khain\\.nuget\\packages\\microsoft.ml.timeseries\\2.0.1\\microsoft.ml.timeseries.2.0.1.nupkg.sha512",
     "C:\\Users\\khain\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\khain\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "C:\\Users\\khain\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
