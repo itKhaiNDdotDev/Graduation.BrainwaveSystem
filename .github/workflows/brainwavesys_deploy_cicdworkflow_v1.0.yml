@@ -32,7 +32,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/Graduation.BrainwaveSystem.APIs/Program.cs
+          path: ${{env.DOTNET_ROOT}}/Graduation.BrainwaveSystem
 
   deploy:
     runs-on: windows-latest
