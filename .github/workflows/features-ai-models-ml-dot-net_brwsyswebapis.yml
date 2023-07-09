@@ -46,6 +46,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: .net-app
+          retain-artifacts: false
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
