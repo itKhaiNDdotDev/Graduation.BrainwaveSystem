@@ -39,6 +39,33 @@
         <v-code>{{ apiInfo.bodyFormat }}</v-code>
         <li>Sample CURL:</li>
         <v-code>{{ apiInfo.postDeviceEEGDataCurl }}</v-code>
+        <br />
+        <pre><code>
+          <span class="keyword">function</span> <span class="function">greeting</span>(<span class="parameter">name</span>) {
+          <span class="keyword">return</span> <span class="string">'Hello, '</span> + name + <span class="string">'!'</span>;
+          }
+
+          <span class="keyword">var</span> <span class="variable">person</span> = <span class="string">'John'</span>;
+          <span class="keyword">var</span> <span class="variable">message</span> = greeting(person);
+
+          console.log(message);
+  </code></pre>
+
+    <div>
+    <v-code language="javascript" dark>
+      function greeting(name) {
+        return 'Hello, ' + name + '!';
+      }
+
+      var person = 'John';
+      var message = greeting(person);
+
+      console.log(message);
+    </v-code>
+  </div>
+<br>
+aaaa
+  <v-code v-model="code" language="javascript" theme="vs-dark" />
       </div>
     </div>
   </div>
@@ -104,12 +131,23 @@ export default {
           "  ]" +
           "}'\"",
       },
+
+      code: `
+        function greeting(name) {
+          return 'Hello, ' + name + '!';
+        }
+
+        var person = 'John';
+        var message = greeting(person);
+
+        console.log(message);
+      `
     };
   },
 
   created() {
     axios
-      .get(this.baseURL + this.getDeviceInfoEndpoint)
+      .get(this.apiInfo.baseURL + this.apiInfo.getDeviceInfoEndpoint)
       .then((res) => {
         this.device = res.data;
         console.log(res);
@@ -139,4 +177,87 @@ export default {
 
 .info__item span {
 }
+
+pre {
+  background-color: black /*#f4f4f4*/;
+  color: white;
+  border: 1px solid #ddd;
+  padding: 10px;
+  overflow: auto;
+}
+
+code {
+  font-family: Consolas, Monaco, Courier, monospace;
+  font-size: 14px;
+}
+
+.function {
+      color: #6f42c1;
+    }
+
+    .string {
+      color: #032f62;
+    }
+
+    .comment {
+      color: #6a737d;
+      font-style: italic;
+    }
+
+    pre {
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      padding: 10px;
+      border-radius: 5px;
+      overflow: auto;
+    }
+
+    .keyword {
+      color: #d73a49;
+      font-weight: bold;
+    }
+
+    .function {
+      color: #c586c0;
+    }
+
+    .string {
+      color: #ce9178;
+    }
+
+    .comment {
+      color: #6a9955;
+      font-style: italic;
+    }
+
+    pre {
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      padding: 10px;
+      border-radius: 5px;
+      overflow: auto;
+    }
+
+    .keyword {
+      color: #d73a49;
+      font-weight: bold;
+    }
+
+    .function {
+      color: #c586c0;
+    }
+
+    .string {
+      color: #ce9178;
+    }
+
+    .comment {
+      color: #6a9955;
+      font-style: italic;
+    }
+
+    body {
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+    }
 </style>

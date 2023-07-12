@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Graduation.BrainwaveSystem.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Graduation.BrainwaveSystem.Cores", "Graduation.BrainwaveSystem.Cores\Graduation.BrainwaveSystem.Cores.csproj", "{86B968C3-AA0E-4B38-AD81-7ABA7CDFDC14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graduation.BrainwaveSystem.Utils", "Graduation.BrainwaveSystem.Utils\Graduation.BrainwaveSystem.Utils.csproj", "{3A113270-C64D-4890-BC19-F90012871B03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Graduation.BrainwaveSystem.Utils", "Graduation.BrainwaveSystem.Utils\Graduation.BrainwaveSystem.Utils.csproj", "{3A113270-C64D-4890-BC19-F90012871B03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

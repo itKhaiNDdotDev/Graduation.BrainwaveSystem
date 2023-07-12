@@ -1,4 +1,6 @@
-﻿using Graduation.BrainwaveSystem.Models;
+﻿using Graduation.BrainwaveSystem.Cores.DataProcessors;
+using Graduation.BrainwaveSystem.Cores.MLDotNETModels;
+using Graduation.BrainwaveSystem.Models;
 using Graduation.BrainwaveSystem.Models.DTOs;
 using Graduation.BrainwaveSystem.Models.Entities;
 using Graduation.BrainwaveSystem.Services.BaseServices;
@@ -9,6 +11,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Graduation.BrainwaveSystem.Cores.MLDotNETModels.RegressionPredictor;
 
 namespace Graduation.BrainwaveSystem.Services.DataRawEEGServices
 {
@@ -72,6 +75,55 @@ namespace Graduation.BrainwaveSystem.Services.DataRawEEGServices
             return result;
         }
 
+        public (List<double> frequencyAxis, List<double> amplitudeSpectrum) GetFFTData(Guid deviceId)
+        {
+            var inputData = GetLastNDataRecords(deviceId, 60);
+            var listValue = new List<int>();
+            var listTime = new List<DateTime>();
+            foreach(var item in inputData.Result)
+            {
+                listValue.Add(item.Value);
+                listTime.Add(item.RecivedTime);
+            }
+            var result = Transformer.SolveFFT(listValue, listTime);
+            var frequencyAxis = result.frequencyAxis;
+            var amplitudeSpectrum = result.amplitudeSpectrum;
+            return (frequencyAxis, amplitudeSpectrum);
+        }
+
+        public string GetTrainOutput()
+        {
+            return Classification.SVMTrain();
+        }
+
+        public List<string> GetTrainFTOutput()
+        {
+            return Classification.FastTreeTrain();
+        }
+
+        public List<string> GetTrainFTOutput(DataPoint inputData)
+        {
+            return Classification.FastTreeTest(inputData);
+        }
+
+        public (TimeSeriesPredictMetricsModel Evaluation, ModelOutput Prediction) GetTrainSSAPredictOutput(Guid deviceId)
+        {
+            //// Đoạn này clone từ method đã có ở trên, nên refactor để tái sử dụng
+            ////var data = GetLastNDataRecords(deviceId, 3600);
+            //if (_context.DeviceDatas == null)
+            //    throw new Exception("Entity DeviceDatas is not exist. Please check and try again.");
+            //var dataRecords = _context.DeviceDatas.Where(x => x.DeviceId == deviceId)
+            //    .OrderByDescending(x => x.CreatedTime)
+            //    .Select(x => x.Id)
+            //    .Take(15).ToList();
+            //if (_context.DataRawEEGs == null)
+            //    throw new Exception("Entity DataRawEEGs is not exist. Please check and try again.");
+            //var data = _context.DataRawEEGs.Where(r => dataRecords.Contains(r.DeviceDataId))
+            //    .OrderBy(d => d.CreatedTime).ToList();
+            var data = new List<DataRawEEG>();//////
+            return RegressionPredictor.TrainSSAWithSplitTrainTestDataSet(data);
+        }
+        
         class DataMapRecord
         {
             internal Guid? Id { get; set; }

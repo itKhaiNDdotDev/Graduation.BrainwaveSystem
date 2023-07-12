@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,6 +13,7 @@ namespace Graduation.BrainwaveSystem.Models.Entities
     /// Quan hệ n-1 đến DeviceData.
     /// </summary>
     /// Author: KhaiND (20/04/2023).
+    [Index(nameof(DeviceDataId))]
     public class DataRawEEG : BaseEntity
     {
         public Guid Id { get; set; }

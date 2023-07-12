@@ -7,6 +7,12 @@
       @onLoadData="getRawData"
     />
     <div>{{ currentTime }}</div>
+    <KLineChart
+      v-if="rawFFTChartDatas[0].data"
+      :propLabels="fftFrequencyAxis"
+      :propDatas="rawFFTChartDatas"
+      @onLoadData="getFFTData"
+    />
   </div>
 </template>
 
@@ -23,6 +29,8 @@ export default {
     return {
       timeStampList: [],
       rawChartDatas: [{}],
+      fftFrequencyAxis: [],
+      rawFFTChartDatas: [{}],
       currentTime: "",
     };
   },
@@ -72,10 +80,29 @@ export default {
           console.log(err);
         });
     },
+
+    getFFTData() {
+      axios
+        .get(
+          "https://localhost:44321/api/DataRawEEGs/bcb6bd84-8247-4cce-acb4-48487b9015bb/FFT"
+        )
+        .then((res) => {
+          this.fftFrequencyAxis = res.data.frequencyAxis;
+          this.rawFFTChartDatas[0].data = res.data.amplitudeSpectrum;
+          this.rawFFTChartDatas[0].lblName = "Amplitude Spectrum";
+          this.rawFFTChartDatas[0].bgColor = "darkblue";
+          console.log(res);
+          console.log(this.rawFFTChartDatas);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   },
 
   created() {
     this.getRawData();
+    this.getFFTData();
     // console.log("RawPar Created");
   },
 };

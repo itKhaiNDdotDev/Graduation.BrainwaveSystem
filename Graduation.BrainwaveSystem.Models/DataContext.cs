@@ -9,9 +9,9 @@ namespace Graduation.BrainwaveSystem.Models
 {
     public class DataContext : DbContext
     {
-        //public DataContext() : base() // Overload do gặp lỗi Unable object DataContext....design time...
-        //{
-        //}
+        public DataContext() : base() // Overload do gặp lỗi Unable object DataContext....design time...
+        {
+        }
 
         public DataContext (DbContextOptions<DataContext> options)
             : base(options)
