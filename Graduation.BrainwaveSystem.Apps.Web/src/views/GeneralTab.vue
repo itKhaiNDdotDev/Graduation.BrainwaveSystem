@@ -1,4 +1,4 @@
-<template>
+<template ::key="deviceId">
   <div class="info__wrapper">
     <div class="info__item">
       <span>Name:</span>
@@ -28,19 +28,16 @@
       <span>Send EEG Data API for Device:</span>
       <div>
         <li>URL:</li>
-        <v-code>{{
-          apiInfo.baseURL + apiInfo.postDeviceEEGDataEndpoint
-        }}</v-code>
+        <pre><v-code>{{ apiInfo.baseURL + apiInfo.postDeviceEEGDataEndpoint }}</v-code></pre>
         <li>HTTP Method:</li>
-        <v-code>{{ apiInfo.httpMethods.POST }}</v-code>
+        <pre><v-code>{{ apiInfo.httpMethods.POST }}</v-code></pre>
         <li>Header:</li>
-        <v-code>{{ apiInfo.header }}</v-code>
+        <pre><v-code>{{ apiInfo.header }}</v-code></pre>
         <li>Body format:</li>
-        <v-code>{{ apiInfo.bodyFormat }}</v-code>
+        <pre><v-code>{{ apiInfo.bodyFormat }}</v-code></pre>
         <li>Sample CURL:</li>
-        <v-code>{{ apiInfo.postDeviceEEGDataCurl }}</v-code>
-        <br />
-        <pre><code>
+        <pre><v-code language="javascript" theme="vs-dark">{{ apiInfo.postDeviceEEGDataCurl}}</v-code></pre>
+        <!-- <pre><code>
           <span class="keyword">function</span> <span class="function">greeting</span>(<span class="parameter">name</span>) {
           <span class="keyword">return</span> <span class="string">'Hello, '</span> + name + <span class="string">'!'</span>;
           }
@@ -49,23 +46,7 @@
           <span class="keyword">var</span> <span class="variable">message</span> = greeting(person);
 
           console.log(message);
-  </code></pre>
-
-    <div>
-    <v-code language="javascript" dark>
-      function greeting(name) {
-        return 'Hello, ' + name + '!';
-      }
-
-      var person = 'John';
-      var message = greeting(person);
-
-      console.log(message);
-    </v-code>
-  </div>
-<br>
-aaaa
-  <v-code v-model="code" language="javascript" theme="vs-dark" />
+        </code></pre> -->
       </div>
     </div>
   </div>
@@ -80,56 +61,55 @@ export default {
       device: {},
       apiInfo: {
         baseURL: "https://localhost:44321/api/",
-        getDeviceInfoEndpoint: "Devices/5b85104d-a8b4-4059-a3a0-f9991287b380",
-        postDeviceEEGDataEndpoint:
-          "DeviceDatas/5b85104d-a8b4-4059-a3a0-f9991287b380",
+        getDeviceInfoEndpoint: `Devices/${this.deviceId}`,
+        postDeviceEEGDataEndpoint: `DeviceDatas/${this.deviceId}`,
         httpMethods: { GET: "GET", POST: "POST", PUT: "PUT", DEL: "DELETE" },
-        header:
-          "```Javascript \n{\n    accept: text/plain,\n    Content-Type: application/json    \n}```",
-        bodyFormat:
-          "{\n" +
-          '"general": {' +
-          '"poorQuality": 0,' +
-          '"attention": 0,' +
-          '"meditation": 0,' +
-          '"deviceId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"' +
-          "},\n" +
-          '"delta": 0, ' +
-          '"theta": 0, ' +
-          '"alpha": 0,' +
-          '"lowBeta": 0,' +
-          '"midBeta": 0,' +
-          '"highBeta": 0,' +
-          '"gamma": 0,' +
-          '"uhfGamma": 0,\n' +
-          '"rawEEGs": [' +
-          "  0 " +
-          "]\n" +
-          "}",
-        postDeviceEEGDataCurl:
-          "curl -X 'POST' \\" +
-          "'https://localhost:44321/api/DeviceDatas/5b85104d-a8b4-4059-a3a0-f9991287b380' \\" +
-          "-H 'accept: text/plain' \\" +
-          "-H 'Content-Type: application/json' \\" +
-          "-d '{" +
-          '"general": {' +
-          '  "poorQuality": 0,' +
-          '  "attention": 0,' +
-          '  "meditation": 0,' +
-          '  "deviceId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"' +
-          "}," +
-          '"delta": 0,' +
-          '"theta": 0,' +
-          '"alpha": 0,' +
-          '"lowBeta": 0,' +
-          '"midBeta": 0,' +
-          '"highBeta": 0,' +
-          '"gamma": 0,' +
-          '"uhfGamma": 0,' +
-          '  "rawEEGs": [' +
-          "   0" +
-          "  ]" +
-          "}'\"",
+        header: `{
+  accept: text/plain,
+  Content-Type: application/json
+}`,
+        bodyFormat: `{
+  "general": {
+    "poorQuality": <<Fill a interger value form 0 to 255>>,
+    "attention": <<Fill a interger value form 0 to 255>>,
+    "meditation": <<Fill a interger value form 0 to 255>>,
+    "deviceId": "${this.deviceId}"
+  },
+  "delta": <<Fill a interger value form 0 to 255>>,
+  "theta": <<Fill a interger value form 0 to 255>>,
+  "alpha": <<Fill a interger value form 0 to 255>>,
+  "lowBeta": <<Fill a interger value form 0 to 255>>,
+  "midBeta": <<Fill a interger value form 0 to 255>>,
+  "highBeta": <<Fill a interger value form 0 to 255>>,
+  "gamma": <<Fill a interger value form 0 to 255>>,
+  "uhfGamma": <<Fill a interger value form 0 to 255, preferably 512 number separated values (by ,)>>,
+  "rawEEGs": [
+    <<Fill some interger value form 0 to 255, >>
+  ]
+}`,
+        postDeviceEEGDataCurl: `curl -X 'POST' \
+  'https://localhost:44321/api/DeviceDatas/${this.deviceId}' \
+  -H 'accept: text/plain' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "general": {
+    "poorQuality": 0,
+    "attention": 0,
+    "meditation": 0,
+    "deviceId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+  },
+  "delta": 0,
+  "theta": 0,
+  "alpha": 0,
+  "lowBeta": 0,
+  "midBeta": 0,
+  "highBeta": 0,
+  "gamma": 0,
+  "uhfGamma": 0,
+  "rawEEGs": [
+    0
+  ]
+}'`,
       },
 
       code: `
@@ -141,9 +121,11 @@ export default {
         var message = greeting(person);
 
         console.log(message);
-      `
+      `,
     };
   },
+
+  props: ["deviceId"],
 
   created() {
     axios
@@ -182,7 +164,8 @@ pre {
   background-color: black /*#f4f4f4*/;
   color: white;
   border: 1px solid #ddd;
-  padding: 10px;
+  /* padding: 10px; */
+  border-radius: 4px;
   overflow: auto;
 }
 
@@ -192,72 +175,56 @@ code {
 }
 
 .function {
-      color: #6f42c1;
-    }
+  color: #6f42c1;
+}
 
-    .string {
-      color: #032f62;
-    }
+.string {
+  color: #032f62;
+}
 
-    .comment {
-      color: #6a737d;
-      font-style: italic;
-    }
+.comment {
+  color: #6a737d;
+  font-style: italic;
+}
 
-    pre {
-      background-color: #1e1e1e;
-      color: #d4d4d4;
-      padding: 10px;
-      border-radius: 5px;
-      overflow: auto;
-    }
+.keyword {
+  color: #d73a49;
+  font-weight: bold;
+}
 
-    .keyword {
-      color: #d73a49;
-      font-weight: bold;
-    }
+.function {
+  color: #c586c0;
+}
 
-    .function {
-      color: #c586c0;
-    }
+.string {
+  color: #ce9178;
+}
 
-    .string {
-      color: #ce9178;
-    }
+.comment {
+  color: #6a9955;
+  font-style: italic;
+}
 
-    .comment {
-      color: #6a9955;
-      font-style: italic;
-    }
+.keyword {
+  color: #d73a49;
+  font-weight: bold;
+}
 
-    pre {
-      background-color: #1e1e1e;
-      color: #d4d4d4;
-      padding: 10px;
-      border-radius: 5px;
-      overflow: auto;
-    }
+.function {
+  color: #c586c0;
+}
 
-    .keyword {
-      color: #d73a49;
-      font-weight: bold;
-    }
+.string {
+  color: #ce9178;
+}
 
-    .function {
-      color: #c586c0;
-    }
+.comment {
+  color: #6a9955;
+  font-style: italic;
+}
 
-    .string {
-      color: #ce9178;
-    }
-
-    .comment {
-      color: #6a9955;
-      font-style: italic;
-    }
-
-    body {
-      background-color: #1e1e1e;
-      color: #d4d4d4;
-    }
+body {
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+}
 </style>

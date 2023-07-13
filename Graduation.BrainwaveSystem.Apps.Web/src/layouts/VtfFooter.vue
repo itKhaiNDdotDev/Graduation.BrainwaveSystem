@@ -5,9 +5,7 @@
   <v-icon icon="mdi:mdi-minus" />
 </template>-->
 <template>
-  <v-footer
-    class="bg-grey-darken-4 text-center d-flex flex-column"
-  >
+  <v-footer class="bg-grey-darken-4 text-center d-flex flex-column" elevation="2">
     <div>
       <v-btn
         v-for="icon in icons"

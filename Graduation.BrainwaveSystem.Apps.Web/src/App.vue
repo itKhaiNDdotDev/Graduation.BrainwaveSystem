@@ -8,7 +8,7 @@
         permanent
         width="256"
       ></v-navigation-drawer> -->
-      <VtfSideBar/>
+      <VtfSideBar :key="sidebarKey" @onRefresh="onRefresh"/>
 
       <!-- <v-app-bar
         color="grey"
@@ -33,8 +33,9 @@
 
       <!-- <VtfFooter /> -->
 
-      <v-main>
-        <VtfContent/>
+      <v-main style="min-height: 90vh">
+        <!-- <VtfContent/> -->
+        <router-view :key="mainViewKey" @onRefresh="onRefresh"></router-view>
       </v-main>
     </v-layout>
     <VtfFooter/>
@@ -43,7 +44,7 @@
 
 <script>
 import VtfAppBar from './layouts/VtfAppBar.vue';
-import VtfContent from './layouts/VtfContent.vue';
+// import VtfContent from './layouts/VtfContent.vue';
 import VtfSideBar from './layouts/VtfSideBar.vue';
 import VtfFooter from "./layouts/VtfFooter.vue";
 
@@ -53,7 +54,22 @@ export default {
     VtfFooter,
     VtfAppBar,
     VtfSideBar,
-    VtfContent
+    // VtfContent
+  },
+
+  data() {
+    return {
+      sidebarKey: 0,
+      mainViewKey: 0
+    }
+  },
+
+  methods: {
+    onRefresh() {
+      console.log("Refresh");
+      this.sidebarKey++;
+      this.mainViewKey++;
+    }
   },
 };
 </script>

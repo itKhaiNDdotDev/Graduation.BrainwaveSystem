@@ -9,33 +9,33 @@
     <v-window v-model="tab">
       <v-window-item v-for="n in 4" :key="n" :value="n">
         <v-container fluid>
-          <GeneralTab v-if="n==1"/>
-          <TgamExtractionTab v-if="n==2"/>
-          <RawEEGDataTab v-if="n==3"/>
+          <GeneralTab v-if="n == 1" :deviceId="$route.params.id" />
+          <TgamExtractionTab v-if="n == 2" :deviceId="$route.params.id" />
+          <RawEEGDataTab v-if="n == 3" :deviceId="$route.params.id" />
         </v-container>
       </v-window-item>
     </v-window>
   </v-card>
 </template>
+
 <script>
 //import { md2 } from 'vuetify/blueprints'
-import TgamExtractionTab from '@/views/TgamExtractionTab.vue';
-import RawEEGDataTab from '@/views/RawEEGDataTab.vue';
-import GeneralTab from '@/views/GeneralTab.vue';
+import TgamExtractionTab from "@/views/TgamExtractionTab.vue";
+import RawEEGDataTab from "@/views/RawEEGDataTab.vue";
+import GeneralTab from "@/views/GeneralTab.vue";
 
 export default {
   components: {
     TgamExtractionTab,
     RawEEGDataTab,
-    GeneralTab
+    GeneralTab,
   },
 
   data: () => ({
     tab: null,
   }),
 
-  created() {
-  },
+  created() {},
 };
 </script>
 
