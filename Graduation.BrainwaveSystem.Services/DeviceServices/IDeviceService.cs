@@ -16,6 +16,10 @@ namespace Graduation.BrainwaveSystem.Services.DeviceServices
     /// Author: KhaiND (20/04/2023).
     public interface IDeviceService : IBaseService<Device, DeviceRequest>
     {
+        public Task<List<Device>> GetListExist();
+
+        public Task ToggleActive(Guid id);
+
         //public Task<Guid>/*int*/ Create(DeviceRequest request);
 
         //public Task<int> Update(Guid id, DeviceRequest request);

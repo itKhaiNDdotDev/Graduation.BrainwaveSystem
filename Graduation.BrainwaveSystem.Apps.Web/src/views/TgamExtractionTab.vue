@@ -34,6 +34,7 @@ export default {
 
   data() {
     return {
+      apiBaseURL: process.env.VUE_APP_API_BASE_URL,
       timeStampList: [],
       currentTime: "",
       // tgamExtractions: {
@@ -59,12 +60,13 @@ export default {
       },
     };
   },
+  props: ["deviceId"],
 
   methods: {
     getTGAMExtractionData() {
       axios
         .get(
-          "https://localhost:44321/api/DeviceDatas/bcb6bd84-8247-4cce-acb4-48487b9015bb/LastMin"
+          this.apiBaseURL + "DeviceDatas/" + this.deviceId + "/LastMin"
         )
         .then((res) => {
           var tmp8Bands = [[], [], [], [], [], [], [], []];

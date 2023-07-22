@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "7mCYC6rT6DyiPNLPvB+YBev51G8+OITyiDGy/du5iEiZuh/y/X6u82axjd2yC+exbf356GdymxOS/qFrTVSq2A==",
+  "dgSpecHash": "DzG3U2a2XKw8Ej1dL8tvsngCPXsm9BSLgyMBMYycYTB0/rtxQP89tzDK1XN9bo3lIFWRUO6RAS1D4qPjPWluhA==",
   "success": true,
-  "projectFilePath": "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.APIs\\Graduation.BrainwaveSystem.APIs.csproj",
+  "projectFilePath": "K:\\2022_2_DATN\\COUNTER_CODE\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.APIs\\Graduation.BrainwaveSystem.APIs.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\khain\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\khain\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",

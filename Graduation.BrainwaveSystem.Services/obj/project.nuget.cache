@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "+lGbRiDHmlbsbo4CGNsGuVfFQEodiDvTv2fjVDs6QFm34KnjOcNM7CAn61/TMKMEcZwmegup5GTm7+foCmT13w==",
+  "dgSpecHash": "x3YtzeyaLvdkr8jY8W4cdnDFVvidJNT11kVt6vYTfiIM2gI/BLwR1aU4ez/9I0mhdpHPjb8uCemqyW205NrxJg==",
   "success": true,
-  "projectFilePath": "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Services\\Graduation.BrainwaveSystem.Services.csproj",
+  "projectFilePath": "K:\\2022_2_DATN\\COUNTER_CODE\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Services\\Graduation.BrainwaveSystem.Services.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\khain\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\khain\\.nuget\\packages\\keras.net\\3.8.5\\keras.net.3.8.5.nupkg.sha512",
