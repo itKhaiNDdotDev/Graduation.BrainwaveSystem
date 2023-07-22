@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "bG3NI1cl6TxazrL4YTBcy1rLRtH/0F7M4t16DHW26l6fwp+PYvVjP6BgslxmQ2iLRa84HDBzk9b0OZd4gnMA+A==",
+  "dgSpecHash": "G+XVaMsbgGyq1ayTkdLGj7fGXh7aZVWZ+BYq7UPnF18+0IVIFeJ2mTIs4JefL5Kn3ZnEIhZIP7A4rUTSPJwnDQ==",
   "success": true,
-  "projectFilePath": "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Models\\Graduation.BrainwaveSystem.Models.csproj",
+  "projectFilePath": "K:\\2022_2_DATN\\COUNTER_CODE\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Models\\Graduation.BrainwaveSystem.Models.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\khain\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\khain\\.nuget\\packages\\microsoft.data.sqlclient\\2.1.4\\microsoft.data.sqlclient.2.1.4.nupkg.sha512",

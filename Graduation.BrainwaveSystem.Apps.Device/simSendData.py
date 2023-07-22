@@ -27,7 +27,7 @@ while True:
 
     # Gửi dữ liệu lên server
     headers = {'Content-Type': 'application/json'}
-    url = 'https://localhost:44321/api/DeviceDatas/bcb6bd84-8247-4cce-acb4-48487b9015bb'
+    url = 'https://brwsyswebapis.azurewebsites.net/api/DeviceDatas/2a4f4eef-f132-4c47-bbe8-e5184ca2e118'
     res = requests.post(url, data=json.dumps(data), headers=headers, verify=False)
     print(res)
 

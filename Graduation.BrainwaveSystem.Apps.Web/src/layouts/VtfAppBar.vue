@@ -1,9 +1,9 @@
 <template>
-  <v-app-bar class="bg-grey-darken-4" height="56" flat elevation="2">
-    <v-toolbar title="Device: KhaiND Test" color="grey-lighten-3">
+  <v-app-bar app fixed class="bg-grey-darken" height="56" flat elevation="2">
+    <v-toolbar :title="appName? appName : ' '">
       <v-btn stacked>
         <v-badge content="2" color="error">
-          <v-icon>mdi-bell-outline</v-icon>
+          <v-icon color="#000832">mdi-bell</v-icon>
         </v-badge>
       </v-btn>
 
@@ -15,7 +15,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: ["appName"]
+};
 </script>
 
 <style lang="">
