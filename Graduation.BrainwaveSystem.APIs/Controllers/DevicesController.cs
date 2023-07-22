@@ -23,6 +23,20 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
             _service = service;
         }
 
+        [HttpGet("exist")]
+        public async Task<ActionResult<IEnumerable<Device>>> GetListExist()
+        {
+            var results = await _service.GetListExist();
+            return Ok(results);
+        }
+
+        [HttpPatch("{id}/active")]
+        public async Task<IActionResult> ToggleActive(Guid id)
+        {
+            await _service.ToggleActive(id);
+            return Ok();
+        }
+
         //// POST: api/Devices
         //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         //[HttpPost]

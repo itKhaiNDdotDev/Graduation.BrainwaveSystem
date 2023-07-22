@@ -1,4 +1,5 @@
-﻿using Graduation.BrainwaveSystem.Models;
+﻿using AutoMapper;
+using Graduation.BrainwaveSystem.Models;
 using Graduation.BrainwaveSystem.Models.DTOs;
 using Graduation.BrainwaveSystem.Models.Entities;
 using Graduation.BrainwaveSystem.Services.BaseServices;
@@ -22,6 +23,36 @@ namespace Graduation.BrainwaveSystem.Services.DeviceServices
         public DeviceService(DataContext context) : base(context)
         {
             _context = context;
+        }
+
+        public async Task<List<Device>> GetListExist()
+        {
+            if (_context.Devices == null)
+            {
+                throw new Exception($"404 - Not Found: Entity set 'DataContext.Devices' is null.");
+            }
+            return await _context.Devices.Where(d => d.IsDeleted == false).ToListAsync();
+        }
+
+        public async Task ToggleActive(Guid id)
+        {
+            var item = await GetById(id);
+            item.IsActive = !item.IsActive;
+            if(item.IsActive)
+            {
+                item.ActiveTime = DateTime.Now;
+            }
+            item.LastModifiedTime = DateTime.Now;
+            item.LastModifiedBy = "KhaiND";
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
         }
 
         //public async Task<Guid> Create(DeviceRequest request)

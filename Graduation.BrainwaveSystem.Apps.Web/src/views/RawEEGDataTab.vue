@@ -27,6 +27,7 @@ export default {
 
   data() {
     return {
+      apiBaseURL: process.env.VUE_APP_API_BASE_URL,
       timeStampList: [],
       rawChartDatas: [{}],
       fftFrequencyAxis: [],
@@ -34,13 +35,12 @@ export default {
       currentTime: "",
     };
   },
+  props: ["deviceId"],
 
   methods: {
     getRawData() {
       axios
-        .get(
-          "https://localhost:44321/api/DataRawEEGs/bcb6bd84-8247-4cce-acb4-48487b9015bb/Last15Secs"
-        )
+        .get(this.apiBaseURL + "DataRawEEGs/" + this.deviceId + "/Last15Secs")
         .then((res) => {
           var tmpValues = [];
           var tmpTimeStamp = [];
@@ -73,8 +73,8 @@ export default {
           this.rawChartDatas[0].data = tmpValues;
           this.rawChartDatas[0].lblName = "Raw EEG";
           this.rawChartDatas[0].bgColor = "darkblue";
-          
-          console.log("On GetRawEEGData");  
+
+          console.log("On GetRawEEGData");
         })
         .catch((err) => {
           console.log(err);
@@ -84,7 +84,7 @@ export default {
     getFFTData() {
       axios
         .get(
-          "https://localhost:44321/api/DataRawEEGs/bcb6bd84-8247-4cce-acb4-48487b9015bb/FFT"
+          this.apiBaseURL + "DataRawEEGs/" + this.deviceId + "/FFT"
         )
         .then((res) => {
           this.fftFrequencyAxis = res.data.frequencyAxis;
@@ -97,7 +97,7 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-    }
+    },
   },
 
   created() {

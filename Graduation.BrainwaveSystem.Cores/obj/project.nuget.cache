@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "D9FArlr7Y97y6y4aaNzzFXnTqOgv1FmoW4aSfQ40rcNfpM8lXPBU7d7mJT9v8PmU2+rmQLl1GcyJsOS3lEGzGg==",
+  "dgSpecHash": "7/HVRh76tb9DTCHVW/l0Tm7x8WRJA95agWta/THwPXIYNufBS081NYgG0zG/bQxHUTXMa5aPK6qodlbyy/a62Q==",
   "success": true,
-  "projectFilePath": "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\Graduation.BrainwaveSystem.Cores.csproj",
+  "projectFilePath": "K:\\2022_2_DATN\\COUNTER_CODE\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\Graduation.BrainwaveSystem.Cores.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\khain\\.nuget\\packages\\keras.net\\3.8.5\\keras.net.3.8.5.nupkg.sha512",
     "C:\\Users\\khain\\.nuget\\packages\\mathnet.numerics\\5.0.0\\mathnet.numerics.5.0.0.nupkg.sha512",

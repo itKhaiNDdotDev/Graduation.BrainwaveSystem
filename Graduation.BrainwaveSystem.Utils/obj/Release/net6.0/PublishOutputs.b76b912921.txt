@@ -1,3 +1,0 @@
-K:\2022_2_DATN\Graduation.BrainwaveSystem\${{env.DOTNET_ROOT}}\Graduation.BrainwaveSystem.APIs\Graduation.BrainwaveSystem.Utils.dll
-K:\2022_2_DATN\Graduation.BrainwaveSystem\${{env.DOTNET_ROOT}}\Graduation.BrainwaveSystem.APIs\Graduation.BrainwaveSystem.Utils.deps.json
-K:\2022_2_DATN\Graduation.BrainwaveSystem\${{env.DOTNET_ROOT}}\Graduation.BrainwaveSystem.APIs\Graduation.BrainwaveSystem.Utils.pdb

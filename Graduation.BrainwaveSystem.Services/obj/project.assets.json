@@ -3358,11 +3358,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Services\\Graduation.BrainwaveSystem.Services.csproj",
+      "projectUniqueName": "K:\\2022_2_DATN\\COUNTER_CODE\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Services\\Graduation.BrainwaveSystem.Services.csproj",
       "projectName": "Graduation.BrainwaveSystem.Services",
-      "projectPath": "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Services\\Graduation.BrainwaveSystem.Services.csproj",
+      "projectPath": "K:\\2022_2_DATN\\COUNTER_CODE\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Services\\Graduation.BrainwaveSystem.Services.csproj",
       "packagesPath": "C:\\Users\\khain\\.nuget\\packages\\",
-      "outputPath": "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Services\\obj\\",
+      "outputPath": "K:\\2022_2_DATN\\COUNTER_CODE\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Services\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -3384,11 +3384,11 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\Graduation.BrainwaveSystem.Cores.csproj": {
-              "projectPath": "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\Graduation.BrainwaveSystem.Cores.csproj"
+            "K:\\2022_2_DATN\\COUNTER_CODE\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\Graduation.BrainwaveSystem.Cores.csproj": {
+              "projectPath": "K:\\2022_2_DATN\\COUNTER_CODE\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\Graduation.BrainwaveSystem.Cores.csproj"
             },
-            "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Models\\Graduation.BrainwaveSystem.Models.csproj": {
-              "projectPath": "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Models\\Graduation.BrainwaveSystem.Models.csproj"
+            "K:\\2022_2_DATN\\COUNTER_CODE\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Models\\Graduation.BrainwaveSystem.Models.csproj": {
+              "projectPath": "K:\\2022_2_DATN\\COUNTER_CODE\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Models\\Graduation.BrainwaveSystem.Models.csproj"
             }
           }
         }
