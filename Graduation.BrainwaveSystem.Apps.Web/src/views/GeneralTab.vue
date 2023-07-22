@@ -272,8 +272,8 @@ export default {
   data() {
     return {
       device: {},
+      apiBaseURL: process.env.VUE_APP_API_BASE_URL,
       apiInfo: {
-        baseURL: "https://localhost:44321/api/",
         getDeviceInfoEndpoint: `Devices/${this.deviceId}`,
         postDeviceEEGDataEndpoint: `DeviceDatas/${this.deviceId}`,
         httpMethods: { GET: "GET", POST: "POST", PUT: "PUT", DEL: "DELETE" },
@@ -301,7 +301,7 @@ export default {
   ]
 }`,
         postDeviceEEGDataCurl: `curl -X 'POST' \
-  'https://localhost:44321/api/DeviceDatas/${this.deviceId}' \
+  '${this.apiBaseURL}DeviceDatas/${this.deviceId}' \
   -H 'accept: text/plain' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -365,7 +365,7 @@ export default {
     async getDeviceDetail() {
       this.isShowLoading = true;
       await axios
-        .get(this.apiInfo.baseURL + this.apiInfo.getDeviceInfoEndpoint)
+        .get(this.apiBaseURL + this.apiInfo.getDeviceInfoEndpoint)
         .then((res) => {
           this.device = res.data;
           if (res.data.isActive) {
@@ -492,7 +492,7 @@ export default {
 
     async callToggleActiveDevice(id) {
       axios
-        .patch("https://localhost:44321/api/Devices/" + id + "/active")
+        .patch(this.apiBaseURL + "Devices/" + id + "/active")
         .then((response) => {
           console.log(response);
         })
@@ -508,7 +508,7 @@ export default {
       this.isShowLoading = true;
       try {
         await axios
-          .delete("https://localhost:44321/api/Devices/" + id)
+          .delete(this.apiBaseURL + "Devices/" + id)
           .then(() => {
             this.resultInfo = {
               status: 1, // 0: Fail, 1: Success, 2: Warning, 3: Note

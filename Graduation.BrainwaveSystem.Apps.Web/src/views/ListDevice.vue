@@ -215,6 +215,7 @@ export default {
   },
 
   data: () => ({
+    apiBaseURL: process.env.VUE_APP_API_BASE_URL,
     ListDevice: [],
     createPopup: false,
     confirmDialog: false,
@@ -245,7 +246,7 @@ export default {
       this.isShowLoading = true;
       try {
         await axios
-          .get("https://localhost:44321/api/Devices/exist")
+          .get(this.apiBaseURL + "Devices/exist")
           .then((response) => {
             this.ListDevice = response.data;
           })
@@ -286,7 +287,7 @@ export default {
           this.objectDevice.isActive = false;
         else this.objectDevice.isActive = true;
         await axios
-          .post("https://localhost:44321/api/Devices", this.objectDevice)
+          .post(this.apiBaseURL + "Devices", this.objectDevice)
           .then((response) => {
             this.createPopup = false;
             this.resultInfo = {
@@ -374,7 +375,7 @@ export default {
 
     async callToggleActiveDevice(id) {
       axios
-        .patch("https://localhost:44321/api/Devices/" + id + "/active")
+        .patch(this.apiBaseURL + "Devices/" + id + "/active")
         .then((response) => {
           console.log(response);
         })
@@ -390,7 +391,7 @@ export default {
       this.isShowLoading = true;
       try {
         await axios
-          .delete("https://localhost:44321/api/Devices/" + id)
+          .delete(this.apiBaseURL + "Devices/" + id)
           .then(() => {
             this.resultInfo = {
               status: 1, // 0: Fail, 1: Success, 2: Warning, 3: Note

@@ -303,7 +303,8 @@ export default {
   data: () => ({
     drawer: true,
     rail: false,
-    DeviceSubTabs: ["General", "TGAM Extraction", "Raw EEG Data"],
+    // DeviceSubTabs: ["General", "TGAM Extraction", "Raw EEG Data"],
+    apiBaseURL: process.env.VUE_APP_API_BASE_URL,
     createPopup: false,
     objectDevice: {
       name: undefined,
@@ -333,7 +334,7 @@ export default {
       this.$emit("onShowLoading");
       try {
         axios
-          .get("https://localhost:44321/api/Devices/exist")
+          .get(this.apiBaseURL + "Devices/exist")
           .then((response) => {
             this.listDevice = response.data;
           })
@@ -370,7 +371,7 @@ export default {
           this.objectDevice.isActive = false;
         else this.objectDevice.isActive = true;
         await axios
-          .post("https://localhost:44321/api/Devices", this.objectDevice)
+          .post(this.apiBaseURL + "Devices", this.objectDevice)
           .then((response) => {
             this.resultInfo = {
               status: 1, // 0: Fail, 1: Success, 2: Warning, 3: Note
@@ -442,6 +443,7 @@ export default {
   },
 
   created() {
+    console.log(this.apiBaseURL)
     this.getListActiveDevice();
   },
 
