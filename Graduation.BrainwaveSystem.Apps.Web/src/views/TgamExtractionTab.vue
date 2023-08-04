@@ -1,35 +1,126 @@
 <template>
   <div>
-    <KAreaChart
-      v-if="tgamExtractions.generals[0].data"
-      :propDatas="tgamExtractions.generals"
-      :propLabels="timeStampList"
-      @onLoadData="getTGAMExtractionData"
-    />
+    <v-card class="mx-auto">
+      <!-- <v-container fluid>
+        <v-row dense>
+          <v-col cols="8">
+            <v-card>
+              <KAreaChart
+                v-if="tgamExtractions.generals[0].data"
+                :propDatas="tgamExtractions.generals"
+                :propLabels="timeStampList"
+                @onLoadData="getTGAMExtractionData"
+              />
+            </v-card>
+          </v-col>
+          <v-col cols="4">
+            <v-row>
+              <v-card class="w-100">
+                <KAreaChart
+                  v-if="tgamExtractions.generals[0].data"
+                  :propDatas="tgamExtractions.generals"
+                  :propLabels="timeStampList"
+                  @onLoadData="getTGAMExtractionData"
+                />
+                <v-spacer></v-spacer>
+                <b>&nbsp;&nbsp;Prediction SSA: </b> - RMSE: 213.11 - MAE: 201
+              </v-card>
+            </v-row>
+            <v-row>
+              <v-card class="w-100">
+                <KAreaChart
+                  v-if="tgamExtractions.generals[0].data"
+                  :propDatas="tgamExtractions.generals"
+                  :propLabels="timeStampList"
+                  @onLoadData="getTGAMExtractionData"
+                />
+                <v-spacer></v-spacer>
+                <b>&nbsp;&nbsp;Prediction LSTM: </b> - RMSE: 213.11 - MAE: 201
+              </v-card>
+            </v-row>
+          </v-col>
+        </v-row>
+        General Results - <b>{{ currentTime }}</b>
+      </v-container> -->
+      <v-card class="mx-auto">
+        <v-card style="width: 66%; float: left">
+          <KAreaChart
+            v-if="tgamExtractions.generals[0].data"
+            :propDatas="tgamExtractions.generals"
+            :propLabels="timeStampList"
+            @onLoadData="getTGAMExtractionData"
+          />
+        </v-card>
+        <v-card style="width: 33%; float: left">
+          <KAreaChart
+            v-if="tgamExtractions.generals[0].data"
+            :propDatas="tgamExtractions.generals"
+            :propLabels="timeStampList"
+            @onLoadData="getTGAMExtractionData"
+          />
+          <v-spacer></v-spacer>
+          <b>&nbsp;&nbsp;Prediction SSA: </b> - RMSE: 213.11 - MAE: 201
+        </v-card>
+        <v-card style="width: 33%; float: left">
+          <KAreaChart
+            v-if="tgamExtractions.generals[0].data"
+            :propDatas="tgamExtractions.generals"
+            :propLabels="timeStampList"
+            @onLoadData="getTGAMExtractionData"
+          />
+          <v-spacer></v-spacer>
+          <b>&nbsp;&nbsp;Prediction LSTM: </b> - RMSE: 213.11 - MAE: 201
+        </v-card>
+        <div style="margin-bottom: 16px">
+          General Results - <b>{{ currentTime }}</b>
+        </div>
+      </v-card>
+    </v-card>
+
     <!-- <KAreaChart
       :propDatas="tgamExtractions.data8Bands"
       :propLabels="timeStampList"
       v-if="tgamExtractions.data8Bands[0].data"
     /> -->
-    <KLineChart
-      v-if="tgamExtractions.data8Bands[0].data"
-      :propDatas="tgamExtractions.data8Bands"
-      :propLabels="timeStampList"
-      @onLoadData="getTGAMExtractionData"
-    />
-    <div>{{ currentTime }}</div>
+
+    <v-card class="mx-auto">
+      <v-card style="width: 66%; float: left">
+        <KLineChart
+          v-if="tgamExtractions.data8Bands[0].data"
+          :propDatas="tgamExtractions.data8Bands"
+          :propLabels="timeStampList"
+          @onLoadData="getTGAMExtractionData"
+        />
+      </v-card>
+      <v-card style="width: 33%; float: left">
+        <KLineChart
+          v-if="tgamExtractions.data8Bands[0].data"
+          :propDatas="tgamExtractions.data8Bands"
+          :propLabels="timeStampList"
+          @onLoadData="getTGAMExtractionData"
+        />
+      </v-card>
+      <v-card style="width: 33%; float: left">
+        <KLineChart
+          v-if="tgamExtractions.data8Bands[0].data"
+          :propDatas="tgamExtractions.data8Bands"
+          :propLabels="timeStampList"
+          @onLoadData="getTGAMExtractionData"
+        />
+      </v-card>
+    </v-card>
   </div>
 </template>
 
 <script>
 import KAreaChart from "@/components/KAreaChart.vue";
-import KLineChart from '@/components/KLineChart.vue';
+import KLineChart from "@/components/KLineChart.vue";
 import axios from "axios";
 
 export default {
   components: {
     KAreaChart,
-    KLineChart
+    KLineChart,
   },
 
   data() {
@@ -65,9 +156,7 @@ export default {
   methods: {
     getTGAMExtractionData() {
       axios
-        .get(
-          this.apiBaseURL + "DeviceDatas/" + this.deviceId + "/LastMin"
-        )
+        .get(this.apiBaseURL + "DeviceDatas/" + this.deviceId + "/LastMin")
         .then((res) => {
           var tmp8Bands = [[], [], [], [], [], [], [], []];
           var tmpTimeStamp = [];
@@ -249,8 +338,8 @@ export default {
   },
 
   mounted() {
-    console.log("Parrent Mounted")
-  }
+    console.log("Parrent Mounted");
+  },
 };
 </script>
 
