@@ -1,12 +1,47 @@
 <template>
   <div>
-    <KLineChart
-      v-if="rawChartDatas[0].data"
-      :propLabels="timeStampList"
-      :propDatas="rawChartDatas"
-      @onLoadData="getRawData"
-    />
-    <div>{{ currentTime }}</div>
+    <v-card class="mx-auto">
+      <v-card style="width: 66%; float: left">
+        <KLineChart
+          v-if="rawChartDatas[0].data"
+          :propLabels="timeStampList"
+          :propDatas="rawChartDatas"
+          @onLoadData="getRawData"
+        />
+        <div style="margin-bottom: 16px">{{ currentTime }}</div>
+      </v-card>
+      <v-card style="width: 33%; float: left">
+        <KLineChart
+          v-if="rawChartDatas[0].data"
+          :propLabels="timeStampList"
+          :propDatas="rawChartDatas"
+          @onLoadData="getRawData"
+        />
+        <v-spacer></v-spacer>
+        <b>&nbsp;&nbsp;Prediction SSA: </b> - RMSE: 213.11 - MAE: 201
+      </v-card>
+      <v-card style="width: 33%; float: left">
+        <KLineChart
+          v-if="rawChartDatas[0].data"
+          :propLabels="timeStampList"
+          :propDatas="rawChartDatas"
+          @onLoadData="getRawData"
+        />
+        <v-spacer></v-spacer>
+        <b>&nbsp;&nbsp;Prediction SSA: </b> - RMSE: 213.11 - MAE: 201
+      </v-card>
+    </v-card>
+    <div class="analys-result">
+      <div>
+        State SVM - DeepSleetNet: <b>Sleep - NREM S1</b>
+        <div>Train Score: 97.04%</div>
+        <div>Accuracy:    94.13%</div>
+      </div>
+      <div>State FastTree - DeepSleetNet: <b>Drowsiness</b>
+        <div>Train Score: 99.51%</div>
+        <div>Accuracy:    97.06%</div>
+      </div>
+    </div>
     <KLineChart
       v-if="rawFFTChartDatas[0].data"
       :propLabels="fftFrequencyAxis"
@@ -83,9 +118,7 @@ export default {
 
     getFFTData() {
       axios
-        .get(
-          this.apiBaseURL + "DataRawEEGs/" + this.deviceId + "/FFT"
-        )
+        .get(this.apiBaseURL + "DataRawEEGs/" + this.deviceId + "/FFT")
         .then((res) => {
           this.fftFrequencyAxis = res.data.frequencyAxis;
           this.rawFFTChartDatas[0].data = res.data.amplitudeSpectrum;
@@ -108,5 +141,9 @@ export default {
 };
 </script>
 
-<style lang="">
+<style>
+.analys-result {
+  display: flex;
+  justify-content: space-around;
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
   <Line :options="chartOptions" :data="chartData" />
-  <v-btn @click="onClickRefresh">Refresh</v-btn>
+  <!-- <v-btn @click="onClickRefresh">Refresh</v-btn> -->
 </template>
 
 <script>
