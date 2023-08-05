@@ -39,7 +39,8 @@
     <v-divider></v-divider>
 
     <!-- v-model:opened="open" -->
-    <v-list color="transparent" density="compact" nav>
+    <div v-if="token !== null">
+      <v-list color="transparent" density="compact" nav>
       <!-- Home -->
       <router-link to="/devices" v-slot="{ href, navigate }">
         <v-list-item
@@ -199,6 +200,7 @@
       </v-dialog>
       <!-- </v-list-item> -->
     </v-list>
+    </div>
 
     <!-- <div class="pa-2">
       <v-btn @click="onClickCreate" block>
@@ -305,8 +307,10 @@ export default {
     rail: false,
     // DeviceSubTabs: ["General", "TGAM Extraction", "Raw EEG Data"],
     apiBaseURL: process.env.VUE_APP_API_BASE_URL,
+    token : localStorage.getItem("token"),
     createPopup: false,
     objectDevice: {
+      userId: 0,
       name: undefined,
       description: "",
       isActive: "Active",
@@ -334,7 +338,32 @@ export default {
       this.$emit("onShowLoading");
       try {
         axios
-          .get(this.apiBaseURL + "Devices/exist")
+          .get(this.apiBaseURL + "Devices/exist", {
+            headers: {
+              Authorization: 'Bearer ' + this.token
+            }
+          })
+          .then((response) => {
+            this.listDevice = response.data;
+          })
+          .catch((response) => {
+            console.log(response);
+          });
+      } catch (ex) {
+        console.log(ex);
+      }
+      this.$emit("onHideLoading");
+    },
+
+    getListActiveDeviceUser() {
+      this.$emit("onShowLoading");
+      try {
+        axios
+          .get(this.apiBaseURL + "Devices/userId?userId=" + this.userIdbyToken(), {
+            headers: {
+              Authorization: 'Bearer ' + this.token
+            }
+          })
           .then((response) => {
             this.listDevice = response.data;
           })
@@ -348,6 +377,7 @@ export default {
     },
 
     onClickCreate() {
+        
       this.confirmInfo = {
         title: "Create New Device - Policy Notes",
         message: `When you create a new device, it is registered to the Brainwave System. 
@@ -365,13 +395,18 @@ export default {
     },
 
     async createDevice() {
+      this.objectDevice.userId = this.userIdbyToken()
       this.$emit("onShowLoading");
       try {
         if (this.objectDevice.isActive == "Unactive")
           this.objectDevice.isActive = false;
         else this.objectDevice.isActive = true;
         await axios
-          .post(this.apiBaseURL + "Devices", this.objectDevice)
+          .post(this.apiBaseURL + "Devices", this.objectDevice, {
+            headers: {
+              Authorization: 'Bearer ' + this.token
+            }
+          })
           .then((response) => {
             this.resultInfo = {
               status: 1, // 0: Fail, 1: Success, 2: Warning, 3: Note
@@ -415,6 +450,14 @@ export default {
       // this.$emit("onHideLoading");
     },
 
+    userIdbyToken() {
+      var logginToken = localStorage.getItem('token') || '';
+      var _extractedToken = logginToken.split('.')[1];
+      var _atobData = atob(_extractedToken.toString());
+      var _finaldata = JSON.parse(_atobData);
+      return _finaldata.userId
+    },
+
     onCancelConfirm() {
       this.confirmAction = 2;
       this.confirmDialog = false;
@@ -443,8 +486,15 @@ export default {
   },
 
   created() {
-    console.log(this.apiBaseURL)
+    var logginToken = localStorage.getItem('token') || '';
+    var _extractedToken = logginToken.split('.')[1];
+    var _atobData = atob(_extractedToken.toString());
+    var _finaldata = JSON.parse(_atobData);
+    var role = _finaldata.role
+    if (role === "admin")
     this.getListActiveDevice();
+    else
+    this.getListActiveDeviceUser();
   },
 
   // mounted() {

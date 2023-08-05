@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,8 @@ namespace Graduation.BrainwaveSystem.Models.Entities
     /// Quan hệ n-1 đến Device.
     /// </summary>
     /// Author: KhaiND (20/04/2023)
+    [Index(nameof(DeviceId))]
+    [Index(nameof(CreatedTime))]
     public class DeviceData : BaseEntity
     {
         public Guid Id { get; set; }

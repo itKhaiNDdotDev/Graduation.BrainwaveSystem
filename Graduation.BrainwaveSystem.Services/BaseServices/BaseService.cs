@@ -81,14 +81,8 @@ namespace Graduation.BrainwaveSystem.Services.BaseServices
                     case "CreatedTime":
                         property.SetValue(item, DateTime.Now);
                         break;
-                    case "CreatedBy": // Cần thay thế bằng tên tương ứng Profile khi có Authentication.
-                        property.SetValue(item, "KhaiND");
-                        break;
                     case "LastModifiedTime":
                         property.SetValue(item, DateTime.Now);
-                        break;
-                    case "LastModifiedBy": // Cần thay thế bằng tên tương ứng Profile khi có Authentication.
-                        property.SetValue(item, "KhaiND");
                         break;
                     default:
                         //if(property.Name == "IsActive")
@@ -98,10 +92,6 @@ namespace Graduation.BrainwaveSystem.Services.BaseServices
                         if (property.Name == "ActiveTime")
                         {
                             property.SetValue(item, DateTime.Now);
-                        }
-                        if (property.Name == "UserId")
-                        { // Cần thay thế bằng Id tương ứng Profile khi có Authentication.
-                            property.SetValue(item, Guid.Empty);
                         }
                         break;
                 }

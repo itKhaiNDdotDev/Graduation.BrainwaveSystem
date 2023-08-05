@@ -12,6 +12,7 @@ namespace Graduation.BrainwaveSystem.Models.DTOs
     /// Author: KhaiND (20/04/2023).
     public class DeviceRequest
     {
+        public Guid UserId { get; set; }
         public string Name { get; set; }
 
         public string Description { get; set; }

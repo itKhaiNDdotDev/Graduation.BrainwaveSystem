@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,9 @@ namespace Graduation.BrainwaveSystem.Models.Entities
     /// Định nghĩa các thông tin Thiết bị lưu trong Database.
     /// </summary>
     /// Author: KhaiND (20/04/2023).
+    [Index(nameof(Name))]
+    [Index(nameof(UserId))]
+    [Index(nameof(Description))]
     public class Device : BaseEntity
     {
         public Guid Id { get; set; }

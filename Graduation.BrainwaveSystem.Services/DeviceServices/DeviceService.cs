@@ -4,11 +4,6 @@ using Graduation.BrainwaveSystem.Models.DTOs;
 using Graduation.BrainwaveSystem.Models.Entities;
 using Graduation.BrainwaveSystem.Services.BaseServices;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Graduation.BrainwaveSystem.Services.DeviceServices
 {
@@ -55,32 +50,41 @@ namespace Graduation.BrainwaveSystem.Services.DeviceServices
             }
         }
 
-        //public async Task<Guid> Create(DeviceRequest request)
-        //{
-        //    if (_context.Devices == null)
-        //    {
-        //        throw new Exception("404 - Not Found: Entity set 'DataContext.Devices' is null.");
-        //    }
+        public async Task<Guid> Create(DeviceRequest request)
+        {
+            if (_context.Devices == null)
+            {
+                throw new Exception("404 - Not Found: Entity set 'DataContext.Devices' is null.");
+            }
 
-        //    var device = new Device()
-        //    {
-        //        Id = new Guid(),
-        //        Name = request.Name,
-        //        Description = request.Description,
-        //        UserId = Guid.Empty, // Cần thay thế bằng Id tương ứng Profile khi có Authentication.
-        //        IsActive = request.IsActive.HasValue ? request.IsActive.Value : true,
-        //        ActiveTime = DateTime.Now,
-        //        IsDeleted = false,
-        //        CreatedTime = DateTime.Now,
-        //        CreatedBy = "KhaiND", // Cần thay thế bằng tên tương ứng Profile khi có Authentication.
-        //        LastModifiedTime = DateTime.Now,
-        //        LastModifiedBy = "KhaiND" // Cần thay thế bằng tên tương ứng Profile khi có Authentication.
-        //    };
-        //    _context.Devices.Add(device);
+            var device = new Device()
+            {
+                Id = new Guid(),
+                Name = request.Name,
+                Description = request.Description,
+                UserId = request.UserId, // Cần thay thế bằng Id tương ứng Profile khi có Authentication.
+                IsActive = request.IsActive.HasValue ? request.IsActive.Value : true,
+                ActiveTime = DateTime.Now,
+                IsDeleted = false,
+                CreatedTime = DateTime.Now,
+                CreatedBy = request.UserId.ToString(), // Cần thay thế bằng tên tương ứng Profile khi có Authentication.
+                LastModifiedTime = DateTime.Now,
+                LastModifiedBy = request.UserId.ToString() // Cần thay thế bằng tên tương ứng Profile khi có Authentication.
+            };
+            _context.Devices.Add(device);
 
-        //    await _context.SaveChangesAsync();
-        //    return device.Id;
-        //}
+            await _context.SaveChangesAsync();
+            return device.Id;
+        }
+
+        public async Task<List<Device>> GetListExistByUserId(Guid userId)
+        {
+            if (_context.Devices == null)
+            {
+                throw new Exception($"404 - Not Found: Entity set 'DataContext.Devices' is null.");
+            }
+            return await _context.Devices.Where(d => d.IsDeleted == false && d.UserId == userId).ToListAsync();
+        }
 
         //public async Task<int> Update(Guid id, DeviceRequest request)
         //{

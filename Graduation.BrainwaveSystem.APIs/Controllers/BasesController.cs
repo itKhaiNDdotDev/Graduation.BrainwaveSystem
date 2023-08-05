@@ -1,6 +1,7 @@
 ﻿using Graduation.BrainwaveSystem.Models.DTOs;
 using Graduation.BrainwaveSystem.Models.Entities;
 using Graduation.BrainwaveSystem.Services.BaseServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +20,7 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
 
         // GET: api/Devices
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<T>>> Get()
         {
             var results = await _service.GetAll();
@@ -27,6 +29,7 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
 
         // GET: api/Devices/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<Device>> Get(Guid id)
         {
             var result = await _service.GetById(id);
@@ -35,19 +38,21 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
 
         // POST: api/Devices
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Device>> Post(TRequest request)
-        {
-            var result = await _service.Create(request);
-            if (result == Guid.Empty)
-                return Problem("Insert failed! Please contact KhaiND to check problem.");
+        //[HttpPost]
+        //[Authorize]
+        //public async Task<ActionResult<Device>> Post(TRequest request)
+        //{
+        //    var result = await _service.Create(request);
+        //    if (result == Guid.Empty)
+        //        return Problem("Insert failed! Please contact KhaiND to check problem.");
 
-            return CreatedAtAction("Get", new { id = result }, result);
-        }
+        //    return CreatedAtAction("Get", new { id = result }, result);
+        //}
 
         // PUT: api/Devices/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> Put(Guid id, TRequest request)
         {
             var result = await _service.Update(id, request);
@@ -63,6 +68,7 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
 
         // DELETE: api/Devices/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
             var result = await _service.Delete(id);
@@ -74,6 +80,7 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
 
         // DELETE: api/Devices/5/delete-forever
         [HttpDelete("{id}/delete-forever")]
+        [Authorize]
         public async Task<IActionResult> DeleteForever(Guid id)
         {
             var result = await _service.DeleteForever(id);

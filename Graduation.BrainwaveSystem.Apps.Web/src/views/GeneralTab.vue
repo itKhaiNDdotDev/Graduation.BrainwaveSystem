@@ -274,6 +274,7 @@ export default {
     return {
       device: {},
       apiBaseURL: process.env.VUE_APP_API_BASE_URL,
+      token: localStorage.getItem("token"),
       apiInfo: {
         getDeviceInfoEndpoint: `Devices/${this.deviceId}`,
         postDeviceEEGDataEndpoint: `DeviceDatas/${this.deviceId}`,
@@ -366,7 +367,11 @@ export default {
     async getDeviceDetail() {
       this.isShowLoading = true;
       await axios
-        .get(this.apiBaseURL + this.apiInfo.getDeviceInfoEndpoint)
+        .get(this.apiBaseURL + this.apiInfo.getDeviceInfoEndpoint, {
+          headers: {
+            Authorization: "Bearer " + this.token,
+          },
+        })
         .then((res) => {
           this.device = res.data;
           if (res.data.isActive) {
@@ -459,14 +464,14 @@ export default {
       }
     },
 
-    onClickDeleteDevice() {
-      this.confirmInfo = {
-        title: "Delete Device",
-        message: "Are you sure you want to delete device " + this.device.name + "?",
-      };
-      this.confirmDialog = true;
-      this.confirmAction = 1;
-      this.selectedDeviceId = this.device.id;
+    onClickDeleteDevice() {	
+      this.confirmInfo = {	
+        title: "Delete Device",	
+        message: "Are you sure you want to delete device " + this.device.name + "?",	
+      };	
+      this.confirmDialog = true;	
+      this.confirmAction = 1;	
+      this.selectedDeviceId = this.device.id;	
     },
 
     onCancelConfirm() {
@@ -491,7 +496,11 @@ export default {
 
     async callToggleActiveDevice(id) {
       axios
-        .patch(this.apiBaseURL + "Devices/" + id + "/active")
+        .patch(this.apiBaseURL + "Devices/" + id + "/active", {
+          headers: {
+            Authorization: "Bearer " + this.token,
+          },
+        })
         .then((response) => {
           console.log(response);
         })
@@ -507,7 +516,11 @@ export default {
       this.isShowLoading = true;
       try {
         await axios
-          .delete(this.apiBaseURL + "Devices/" + id)
+          .delete(this.apiBaseURL + "Devices/" + id, {
+            headers: {
+              Authorization: "Bearer " + this.token,
+            },
+          })
           .then(() => {
             this.resultInfo = {
               status: 1, // 0: Fail, 1: Success, 2: Warning, 3: Note

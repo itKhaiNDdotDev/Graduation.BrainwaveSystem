@@ -11,6 +11,7 @@ using Graduation.BrainwaveSystem.Models.DTOs;
 using Graduation.BrainwaveSystem.Services.DataRawEEGServices;
 using Graduation.BrainwaveSystem.Cores.MLDotNETModels;
 using static Graduation.BrainwaveSystem.Cores.MLDotNETModels.RegressionPredictor;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Graduation.BrainwaveSystem.APIs.Controllers
 {
@@ -26,30 +27,35 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
         }
 
         [HttpGet("{deviceId}/Last5Mins")]
+        [Authorize]
         public async Task<ActionResult<DataRawEEGResponse[]>> GetLast5Mins(Guid deviceId)
         {
             return Ok(await _service.GetLastNDataRecords(deviceId, 300));
         }
 
         [HttpGet("{deviceId}/LastMin")]
+        [Authorize]
         public async Task<ActionResult<DataRawEEGResponse[]>> GetLastMin(Guid deviceId)
         {
             return Ok(await _service.GetLastNDataRecords(deviceId, 60));
         }
 
         [HttpGet("{deviceId}/Last")]
+        [Authorize]
         public async Task<ActionResult<DataRawEEGResponse[]>> GetLast(Guid deviceId)
         {
             return Ok(await _service.GetLastNDataRecords(deviceId));
         }
 
         [HttpGet("{deviceId}/Last15Secs")]
+        [Authorize]
         public async Task<ActionResult<DataRawEEGResponse[]>> GetLast15Secs(Guid deviceId)
         {
             return Ok(await _service.GetLastNDataRecords(deviceId, 15));
         }
 
         [HttpGet("{deviceId}/FFT")]
+        [Authorize]
         public async Task<ActionResult<(List<double> frequencyAxis, List<double> amplitudeSpectrum)>> GetFFTData(Guid deviceId)
         {
             var frequencyAxis = _service.GetFFTData(deviceId).frequencyAxis;
@@ -58,24 +64,28 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
         }
 
         [HttpGet("svm-classification")]
+        [Authorize]
         public async Task<ActionResult> GetTrainOutput()
         {
             return Ok(_service.GetTrainOutput());
         }
 
         [HttpGet("fasttree")]
+        [Authorize]
         public async Task<ActionResult> GetTrainFTOutput()
         {
             return Ok(_service.GetTrainFTOutput());
         }
 
         [HttpPost("fasttree-test")]
+        [Authorize]
         public async Task<ActionResult> GetTrainFTOutput([FromBody] DataPoint inputData)
         {
             return Ok(_service.GetTrainFTOutput(inputData));
         }
 
         [HttpGet("{deviceId}/SSAPredict")]
+        [Authorize]
         public async Task<ActionResult<PredictOutDTO>> GetSSAPredictTrain(Guid deviceId)
         {
             var res = _service.GetTrainSSAPredictOutput(deviceId);
