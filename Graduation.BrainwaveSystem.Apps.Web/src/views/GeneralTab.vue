@@ -81,6 +81,7 @@
         color="#AA1616"
         prepend-icon="mdi-delete"
         v-bind="props"
+        @click="onClickDeleteDevice"
         >Delete</v-btn
       >
     </div>
@@ -117,7 +118,7 @@
               hide-details
               inset
               @click.stop
-              @change="onChangeActiveDevice(item.id, item.isActive, item.name)"
+              @change="onChangeActiveDevice(deviceId, device.isActive, device.name)"
             >
             </v-switch>
             <b style="margin-left: 56px">{{ device.status }}</b>
@@ -458,22 +459,20 @@ export default {
       }
     },
 
-    onClickDeleteDevice(id, name) {
+    onClickDeleteDevice() {
       this.confirmInfo = {
         title: "Delete Device",
-        message: "Are you sure you want to delete device " + name + "?",
+        message: "Are you sure you want to delete device " + this.device.name + "?",
       };
       this.confirmDialog = true;
       this.confirmAction = 1;
-      this.selectedDeviceId = id;
+      this.selectedDeviceId = this.device.id;
     },
 
     onCancelConfirm() {
       //Nếu là unactive thì hủy action unactive đó
       if (this.confirmAction == 0)
-        this.ListDevice.find(
-          (item) => item.id == this.selectedDeviceId
-        ).isActive = true;
+        this.device.isActive = true;
       // Đóng Popup và reset
       this.confirmAction = 0;
       this.confirmDialog = false;
