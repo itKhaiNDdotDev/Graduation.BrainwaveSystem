@@ -47,8 +47,8 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
                         Role = user.Role,
                         Email = user.Email,
                         IsDeleted = false,
-                        CreatedTime = DateTime.Now,
-                        LastModifiedTime = DateTime.Now,
+                        CreatedTime = DateTime.UtcNow,
+                        LastModifiedTime = DateTime.UtcNow,
                         CreatedBy = user.CreatedBy,
                         LastModifiedBy = user.CreatedBy
                     };

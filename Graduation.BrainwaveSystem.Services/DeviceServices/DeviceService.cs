@@ -35,9 +35,9 @@ namespace Graduation.BrainwaveSystem.Services.DeviceServices
             item.IsActive = !item.IsActive;
             if(item.IsActive)
             {
-                item.ActiveTime = DateTime.Now;
+                item.ActiveTime = DateTime.UtcNow;
             }
-            item.LastModifiedTime = DateTime.Now;
+            item.LastModifiedTime = DateTime.UtcNow;
             item.LastModifiedBy = "KhaiND";
 
             try
@@ -64,11 +64,11 @@ namespace Graduation.BrainwaveSystem.Services.DeviceServices
                 Description = request.Description,
                 UserId = request.UserId, // Cần thay thế bằng Id tương ứng Profile khi có Authentication.
                 IsActive = request.IsActive.HasValue ? request.IsActive.Value : true,
-                ActiveTime = DateTime.Now,
+                ActiveTime = DateTime.UtcNow,
                 IsDeleted = false,
-                CreatedTime = DateTime.Now,
+                CreatedTime = DateTime.UtcNow,
                 CreatedBy = request.UserId.ToString(), // Cần thay thế bằng tên tương ứng Profile khi có Authentication.
-                LastModifiedTime = DateTime.Now,
+                LastModifiedTime = DateTime.UtcNow,
                 LastModifiedBy = request.UserId.ToString() // Cần thay thế bằng tên tương ứng Profile khi có Authentication.
             };
             _context.Devices.Add(device);

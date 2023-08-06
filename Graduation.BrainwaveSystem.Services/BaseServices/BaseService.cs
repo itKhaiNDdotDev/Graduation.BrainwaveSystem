@@ -79,10 +79,10 @@ namespace Graduation.BrainwaveSystem.Services.BaseServices
                         property.SetValue(item, false);
                         break;
                     case "CreatedTime":
-                        property.SetValue(item, DateTime.Now);
+                        property.SetValue(item, DateTime.UtcNow);
                         break;
                     case "LastModifiedTime":
-                        property.SetValue(item, DateTime.Now);
+                        property.SetValue(item, DateTime.UtcNow);
                         break;
                     default:
                         //if(property.Name == "IsActive")
@@ -91,7 +91,7 @@ namespace Graduation.BrainwaveSystem.Services.BaseServices
                         //}
                         if (property.Name == "ActiveTime")
                         {
-                            property.SetValue(item, DateTime.Now);
+                            property.SetValue(item, DateTime.UtcNow);
                         }
                         break;
                 }
@@ -154,12 +154,12 @@ namespace Graduation.BrainwaveSystem.Services.BaseServices
                     //device.IsActive = newValue;
                     item.GetType().GetProperty("IsActive")!.SetValue(item, newValue);
                     //device.ActiveTime = DateTime.Now;
-                    item.GetType().GetProperty("ActiveTime")!.SetValue(item, DateTime.Now);
+                    item.GetType().GetProperty("ActiveTime")!.SetValue(item, DateTime.UtcNow);
                 }
             }
             item = mapper.Map(request, item);
             //device.LastModifiedTime = DateTime.Now;
-            item.GetType().GetProperty("LastModifiedTime")!.SetValue(item, DateTime.Now);
+            item.GetType().GetProperty("LastModifiedTime")!.SetValue(item, DateTime.UtcNow);
             //device.LastModifiedBy = "KhaiND"; // Cần thay thế bằng tên tương ứng Profile khi có Authentication.
             item.GetType().GetProperty("LastModifiedBy")!.SetValue(item, "KhaiND");
 
@@ -185,9 +185,9 @@ namespace Graduation.BrainwaveSystem.Services.BaseServices
         public virtual async Task<int> Delete(Guid id)
         {
             var item = await GetById(id);
-            item.GetType().GetProperty("ActiveTime")!.SetValue(item, DateTime.Now); //device.ActiveTime = DateTime.Now;
+            item.GetType().GetProperty("ActiveTime")!.SetValue(item, DateTime.UtcNow); //device.ActiveTime = DateTime.Now;
             item.GetType().GetProperty("IsDeleted")!.SetValue(item, true); //device.IsDeleted = true;
-            item.GetType().GetProperty("LastModifiedTime")!.SetValue(item, DateTime.Now); //device.LastModifiedTime = DateTime.Now;
+            item.GetType().GetProperty("LastModifiedTime")!.SetValue(item, DateTime.UtcNow); //device.LastModifiedTime = DateTime.Now;
             item.GetType().GetProperty("LastModifiedBy")!.SetValue(item, "KhaiND"); //device.LastModifiedBy = "KhaiND"; // Cần thay thế bằng tên tương ứng Profile khi có Authentication.
 
             // Có thể dùng Entry.Modified như trên ví dụ Update

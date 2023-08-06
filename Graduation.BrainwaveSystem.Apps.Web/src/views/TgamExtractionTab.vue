@@ -139,16 +139,15 @@ export default {
           var tmp8Bands = [[], [], [], [], [], [], [], []];
           var tmpTimeStamp = [];
           var tmpGenerals = [[], [], []];
-
           res.data.generals.forEach((record, index) => {         
             if (index == 0) {
-              this.currentFirstTime = moment(record.createdTime).format("hh:mm A - MMM DD, YYYY");
+              this.currentFirstTime = moment.utc(record.createdTime).local().format("hh:mm A - MMM DD, YYYY");
             }
             if (index == res.data.generals.length - 1) {
-              this.currentLastTime = moment(record.createdTime).format("hh:mm A - MMM DD, YYYY");
+              this.currentLastTime = moment.utc(record.createdTime).local().format("hh:mm A - MMM DD, YYYY");
             }
             tmpTimeStamp.push(
-              moment(record.createdTime).format("mm:ss")
+              moment.utc(record.createdTime).local().format("mm:ss")
             );
             //this.timeStampList.fill("", this.timeStampList.length, this.timeStampList.length + record.values.length - 1);
             tmpGenerals[0].push(record.attention);

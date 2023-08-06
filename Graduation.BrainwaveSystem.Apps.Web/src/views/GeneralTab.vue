@@ -118,7 +118,9 @@
               hide-details
               inset
               @click.stop
-              @change="onChangeActiveDevice(deviceId, device.isActive, device.name)"
+              @change="
+                onChangeActiveDevice(deviceId, device.isActive, device.name)
+              "
             >
             </v-switch>
             <b style="margin-left: 56px">{{ device.status }}</b>
@@ -281,7 +283,8 @@ export default {
         httpMethods: { GET: "GET", POST: "POST", PUT: "PUT", DEL: "DELETE" },
         header: `{
   accept: text/plain,
-  Content-Type: application/json
+  Content-Type: application/json,
+  Authorization: "Bearer ${this.token}",
 }`,
         bodyFormat: `{
   "general": {
@@ -379,14 +382,12 @@ export default {
           } else {
             this.device.status = "Unactive";
           }
-          this.device.createdTime = moment(this.device.createdTime);
-          this.device.activeTime = moment(this.device.activeTime);
-          this.device.createdTime = this.device.createdTime.format(
-            "hh:mm A - MMM DD, YYYY"
-          );
-          this.device.activeTime = this.device.activeTime.format(
-            "hh:mm A - MMM DD, YYYY"
-          );
+          this.device.createdTime = moment
+            .utc(this.device.createdTime).local()
+            .format("hh:mm A - MMM DD, YYYY");
+          this.device.activeTime = moment
+            .utc(this.device.activeTime).local()
+            .format("hh:mm A - MMM DD, YYYY");
         })
         .catch((err) => {
           console.log(err);
@@ -464,20 +465,20 @@ export default {
       }
     },
 
-    onClickDeleteDevice() {	
-      this.confirmInfo = {	
-        title: "Delete Device",	
-        message: "Are you sure you want to delete device " + this.device.name + "?",	
-      };	
-      this.confirmDialog = true;	
-      this.confirmAction = 1;	
-      this.selectedDeviceId = this.device.id;	
+    onClickDeleteDevice() {
+      this.confirmInfo = {
+        title: "Delete Device",
+        message:
+          "Are you sure you want to delete device " + this.device.name + "?",
+      };
+      this.confirmDialog = true;
+      this.confirmAction = 1;
+      this.selectedDeviceId = this.device.id;
     },
 
     onCancelConfirm() {
       //Nếu là unactive thì hủy action unactive đó
-      if (this.confirmAction == 0)
-        this.device.isActive = true;
+      if (this.confirmAction == 0) this.device.isActive = true;
       // Đóng Popup và reset
       this.confirmAction = 0;
       this.confirmDialog = false;
