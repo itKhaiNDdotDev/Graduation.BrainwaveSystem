@@ -92,6 +92,54 @@ namespace Graduation.BrainwaveSystem.Models.Migrations
                 {
                     table.PrimaryKey("PK_Devices", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+               name: "UserLogins",
+               columns: table => new
+               {
+                   Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                   Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                   Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                   UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                   PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                   PasswordSalt = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                   PhotoFileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                   Role = table.Column<int>(type: "int", nullable: true),
+                   IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                   CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                   CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                   LastModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                   LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false)
+               },
+               constraints: table =>
+               {
+                   table.PrimaryKey("PK_UserLogins", x => x.Id);
+               });
+
+            migrationBuilder.CreateTable(
+               name: "Roles",
+               columns: table => new
+               {
+                   Id = table.Column<int>(type: "int", nullable: false),
+                   Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+               },
+               constraints: table =>
+               {
+                   table.PrimaryKey("PK_Roles", x => x.Id);
+               });
+
+            migrationBuilder.CreateTable(
+               name: "UserRoles",
+               columns: table => new
+               {
+                   Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                   RoleId = table.Column<int>(type: "int", nullable: false),
+                   UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+               },
+               constraints: table =>
+               {
+                   table.PrimaryKey("PK_UserRoles", x => x.Id);
+               });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -107,6 +155,15 @@ namespace Graduation.BrainwaveSystem.Models.Migrations
 
             migrationBuilder.DropTable(
                 name: "Devices");
+
+            migrationBuilder.DropTable(
+                name: "UserLogins");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "UserRoles");
         }
     }
 }

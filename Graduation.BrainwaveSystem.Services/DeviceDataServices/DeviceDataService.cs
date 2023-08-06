@@ -69,7 +69,9 @@ public class DeviceDataService : BaseService<DeviceData, DeviceDataRequest>, IDe
             HighBeta = request.HighBeta,
             Gamma = request.Gamma,
             UHFGamma = request.UHFGamma,
-            DeviceDataId = dataId
+            DeviceDataId = dataId,
+            CreatedBy = request.CreatedBy,
+            LastModifiedBy = request.LastModifiedBy,
         };
         //if (eeg8BandsRequest != null)
         //{
@@ -89,7 +91,9 @@ public class DeviceDataService : BaseService<DeviceData, DeviceDataRequest>, IDe
                 var eegRaw = new DataRawEEGRequest
                 {
                     Value = RawValue,
-                    DeviceDataId = dataId
+                    DeviceDataId = dataId,
+                    LastModifiedBy = request.LastModifiedBy,
+                    CreatedBy = request.CreatedBy,
                 };
                 // Nên cân nhắc thay thế thành AddRange và 1 lần SaveChange duy nhất (viết method add List Raw trong RawService)
                 var eegRawId = await eegRawService.Create(eegRaw);

@@ -15,5 +15,7 @@ namespace Graduation.BrainwaveSystem.Models.DTOs
         public int? Meditation { get; set; }
 
         public Guid? DeviceId { get; set; }
+        public Guid? CreatedBy { get; set; }
+        public Guid? LastModifiedBy { get; set; }
     }
 }

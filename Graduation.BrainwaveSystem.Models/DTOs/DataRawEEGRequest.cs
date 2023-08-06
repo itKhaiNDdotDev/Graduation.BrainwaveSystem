@@ -14,5 +14,7 @@ namespace Graduation.BrainwaveSystem.Models.DTOs
         /// ID của bản ghi dữ liệu tổng quan tương ứng làm khóa ngoại liên kết với DeviceData.
         /// </summary>
         public Guid? DeviceDataId { get; set; }
+        public Guid? CreatedBy { get; set; }
+        public Guid? LastModifiedBy { get; set; }
     }
 }

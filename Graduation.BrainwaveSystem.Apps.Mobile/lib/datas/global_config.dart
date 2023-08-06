@@ -1,0 +1,1 @@
+const String safeZoneHost = "http://safezone.abcsolutions.com.vn";

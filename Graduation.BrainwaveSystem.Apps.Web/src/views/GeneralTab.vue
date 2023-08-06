@@ -118,7 +118,9 @@
               hide-details
               inset
               @click.stop
-              @change="onChangeActiveDevice(deviceId, device.isActive, device.name)"
+              @change="
+                onChangeActiveDevice(deviceId, device.isActive, device.name)
+              "
             >
             </v-switch>
             <b style="margin-left: 56px">{{ device.status }}</b>
@@ -274,13 +276,15 @@ export default {
     return {
       device: {},
       apiBaseURL: process.env.VUE_APP_API_BASE_URL,
+      token: localStorage.getItem("token"),
       apiInfo: {
         getDeviceInfoEndpoint: `Devices/${this.deviceId}`,
         postDeviceEEGDataEndpoint: `DeviceDatas/${this.deviceId}`,
         httpMethods: { GET: "GET", POST: "POST", PUT: "PUT", DEL: "DELETE" },
         header: `{
   accept: text/plain,
-  Content-Type: application/json
+  Content-Type: application/json,
+  Authorization: "Bearer ${this.token}",
 }`,
         bodyFormat: `{
   "general": {
@@ -366,7 +370,11 @@ export default {
     async getDeviceDetail() {
       this.isShowLoading = true;
       await axios
-        .get(this.apiBaseURL + this.apiInfo.getDeviceInfoEndpoint)
+        .get(this.apiBaseURL + this.apiInfo.getDeviceInfoEndpoint, {
+          headers: {
+            Authorization: "Bearer " + this.token,
+          },
+        })
         .then((res) => {
           this.device = res.data;
           if (res.data.isActive) {
@@ -374,14 +382,12 @@ export default {
           } else {
             this.device.status = "Unactive";
           }
-          this.device.createdTime = moment(this.device.createdTime);
-          this.device.activeTime = moment(this.device.activeTime);
-          this.device.createdTime = this.device.createdTime.format(
-            "hh:mm A - MMM DD, YYYY"
-          );
-          this.device.activeTime = this.device.activeTime.format(
-            "hh:mm A - MMM DD, YYYY"
-          );
+          this.device.createdTime = moment
+            .utc(this.device.createdTime).local()
+            .format("hh:mm A - MMM DD, YYYY");
+          this.device.activeTime = moment
+            .utc(this.device.activeTime).local()
+            .format("hh:mm A - MMM DD, YYYY");
         })
         .catch((err) => {
           console.log(err);
@@ -462,7 +468,8 @@ export default {
     onClickDeleteDevice() {
       this.confirmInfo = {
         title: "Delete Device",
-        message: "Are you sure you want to delete device " + this.device.name + "?",
+        message:
+          "Are you sure you want to delete device " + this.device.name + "?",
       };
       this.confirmDialog = true;
       this.confirmAction = 1;
@@ -471,8 +478,7 @@ export default {
 
     onCancelConfirm() {
       //Nếu là unactive thì hủy action unactive đó
-      if (this.confirmAction == 0)
-        this.device.isActive = true;
+      if (this.confirmAction == 0) this.device.isActive = true;
       // Đóng Popup và reset
       this.confirmAction = 0;
       this.confirmDialog = false;
@@ -491,7 +497,11 @@ export default {
 
     async callToggleActiveDevice(id) {
       axios
-        .patch(this.apiBaseURL + "Devices/" + id + "/active")
+        .patch(this.apiBaseURL + "Devices/" + id + "/active", {
+          headers: {
+            Authorization: "Bearer " + this.token,
+          },
+        })
         .then((response) => {
           console.log(response);
         })
@@ -507,7 +517,11 @@ export default {
       this.isShowLoading = true;
       try {
         await axios
-          .delete(this.apiBaseURL + "Devices/" + id)
+          .delete(this.apiBaseURL + "Devices/" + id, {
+            headers: {
+              Authorization: "Bearer " + this.token,
+            },
+          })
           .then(() => {
             this.resultInfo = {
               status: 1, // 0: Fail, 1: Success, 2: Warning, 3: Note

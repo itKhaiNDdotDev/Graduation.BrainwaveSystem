@@ -1,34 +1,14 @@
 <template>
   <v-sheet class="pa-1 d-flex align-content-start flex-wrap">
     <!-- Danh sách -->
-    <v-card
-      v-for="item in ListDevice"
-      :key="item.id"
-      class="btn ma-4 d-flex justify-center align-center flex-wraơ"
-      elevation="10"
-      height="180"
-      width="180"
-      theme="dark"
-      color="#000832"
-      @click="onClickDevice(item.id)"
-      nav
-    >
+    <v-card v-for="item in ListDevice" :key="item.id" class="btn ma-4 d-flex justify-center align-center flex-wraơ"
+      elevation="10" height="180" width="180" theme="dark" color="#000832" @click="onClickDevice(item.id)" nav>
       <div class="item__toolbar">
-        <v-btn
-          style="height: 28px; width: 48px; border-radius: 14px; color: #dd6448"
-          icon="mdi-delete"
-          color="#FF000066"
-          @click.stop="onClickDeleteDevice(item.id, item.name)"
-        ></v-btn>
+        <v-btn style="height: 28px; width: 48px; border-radius: 14px; color: #dd6448" icon="mdi-delete" color="#FF000066"
+          @click.stop="onClickDeleteDevice(item.id, item.name)"></v-btn>
         <div style="height: 28px; display: flex; align-items: center">
-          <v-switch
-            v-model="item.isActive"
-            color="green"
-            hide-details
-            inset
-            @click.stop
-            @change="onChangeActiveDevice(item.id, item.isActive, item.name)"
-          >
+          <v-switch v-model="item.isActive" color="green" hide-details inset @click.stop
+            @change="onChangeActiveDevice(item.id, item.isActive, item.name)">
           </v-switch>
         </div>
       </div>
@@ -39,27 +19,11 @@
     <!-- Thêm mới -->
     <v-dialog v-model="createPopup" persistent width="768">
       <template v-slot:activator="{ props }">
-        <v-btn
-          class="ma-3"
-          elevation="10"
-          height="180"
-          width="180"
-          theme="dark"
-          color="#001664"
-          v-bind="props"
-        >
-          <v-sheet
-            class="d-flex justify-center flex-column align-center;"
-            width="180"
-            color="transparent"
-            height="180"
-          >
+        <v-btn class="ma-3" elevation="10" height="180" width="180" theme="dark" color="#001664" v-bind="props">
+          <v-sheet class="d-flex justify-center flex-column align-center;" width="180" color="transparent" height="180">
             <div>
               <div style="font-size: 48px; font-weight: bolder">+</div>
-              <div
-                class="d-flex justify-center flex-wrap"
-                style="width: 100%; font-weight: bold"
-              >
+              <div class="d-flex justify-center flex-wrap" style="width: 100%; font-weight: bold">
                 Create New Device
               </div>
             </div>
@@ -68,44 +32,25 @@
       </template>
       <v-card theme="light">
         <v-card-title>
-          <span style="color: #000832; font-weight: bold" class="text-h5"
-            >Device Information</span
-          >
+          <span style="color: #000832; font-weight: bold" class="text-h5">Device Information</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
               <v-col cols="12">
-                <v-text-field
-                  color="#000832"
-                  label="Name *"
-                  required
-                  v-model="objectDevice.name"
-                ></v-text-field>
+                <v-text-field color="#000832" label="Name *" required v-model="objectDevice.name"></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-textarea
-                  color="#000832"
-                  label="Description"
-                  rows="4"
-                  v-model="objectDevice.description"
-                ></v-textarea>
+                <v-textarea color="#000832" label="Description" rows="4" v-model="objectDevice.description"></v-textarea>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-select
-                  color="#000832"
-                  :items="['Active', 'Unactive']"
-                  label="Status"
-                  v-model="objectDevice.isActive"
-                ></v-select>
+                <v-select color="#000832" :items="['Active', 'Unactive']" label="Status"
+                  v-model="objectDevice.isActive"></v-select>
               </v-col>
               <v-col cols="12" sm="6">
-                <small
-                  style="height: 80%"
-                  class="d-flex align-center justify-center text-center w-100"
-                  ><b style="color: red; margin-right: 4px">*</b> Indicates
-                  required field</small
-                >
+                <small style="height: 80%" class="d-flex align-center justify-center text-center w-100"><b
+                    style="color: red; margin-right: 4px">*</b> Indicates
+                  required field</small>
               </v-col>
             </v-row>
           </v-container>
@@ -115,12 +60,7 @@
           <v-btn color="#000832" variant="text" @click="createPopup = false">
             Close
           </v-btn>
-          <v-btn
-            color="white"
-            style="background-color: #001664"
-            variant="text"
-            @click="omClickCreate"
-          >
+          <v-btn color="white" style="background-color: #001664" variant="text" @click="omClickCreate">
             Create
           </v-btn>
         </v-card-actions>
@@ -142,13 +82,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn variant="text" @click="onCancelConfirm()"> Cancel </v-btn>
-          <v-btn
-            theme="dark"
-            color="white"
-            variant="text"
-            @click="onDoConfirm()"
-            style="background-color: #001664"
-          >
+          <v-btn theme="dark" color="white" variant="text" @click="onDoConfirm()" style="background-color: #001664">
             Ok
           </v-btn>
         </v-card-actions>
@@ -157,43 +91,22 @@
 
     <!-- Card (sheet) thông báo kết quả -->
     <v-dialog v-model="resultCard">
-      <v-sheet
-        elevation="12"
-        max-width="400"
-        rounded="lg"
-        width="100%"
-        class="pa-4 text-center mx-auto"
-      >
+      <v-sheet elevation="12" max-width="400" rounded="lg" width="100%" class="pa-4 text-center mx-auto">
         <div v-if="resultInfo.status == 0">
-          <v-icon
-            class="mb-5"
-            color="error"
-            icon="mdi-alert-circle"
-            size="112"
-          ></v-icon>
+          <v-icon class="mb-5" color="error" icon="mdi-alert-circle" size="112"></v-icon>
           <h2 class="text-h5 mb-6">Fail!</h2>
         </div>
         <div v-else-if="resultInfo.status == 1">
-          <v-icon
-            class="mb-5"
-            color="success"
-            icon="mdi-check-circle"
-            size="112"
-          ></v-icon>
+          <v-icon class="mb-5" color="success" icon="mdi-check-circle" size="112"></v-icon>
           <h2 class="text-h5 mb-6">Success!</h2>
         </div>
 
         {{ resultInfo.message }}
         <br />
-        <p
-          class="mb-4 text-medium-emphasis text-body-2"
-          v-if="resultInfo.linkHref"
-        >
+        <p class="mb-4 text-medium-emphasis text-body-2" v-if="resultInfo.linkHref">
           {{ resultInfo.linkPreNote }}
-          <router-link
-            :to="resultInfo.linkHref"
-            class="text-decoration-none text-info"
-            >{{ resultInfo.linkTitle ? resultInfo.linkTitle : "Go to link." }}.
+          <router-link :to="resultInfo.linkHref" class="text-decoration-none text-info">{{ resultInfo.linkTitle ?
+            resultInfo.linkTitle : "Go to link." }}.
           </router-link>
         </p>
       </v-sheet>
@@ -218,8 +131,10 @@ export default {
     apiBaseURL: process.env.VUE_APP_API_BASE_URL,
     ListDevice: [],
     createPopup: false,
+    token: localStorage.getItem("token"),
     confirmDialog: false,
     objectDevice: {
+      userId: 0,
       name: undefined,
       description: "",
       isActive: "Active",
@@ -246,7 +161,32 @@ export default {
       this.isShowLoading = true;
       try {
         await axios
-          .get(this.apiBaseURL + "Devices/exist")
+          .get(this.apiBaseURL + "Devices/exist", {
+            headers: {
+              Authorization: 'Bearer ' + this.token
+            }
+          })
+          .then((response) => {
+            this.ListDevice = response.data;
+          })
+          .catch((response) => {
+            console.log(response);
+          });
+      } catch (ex) {
+        console.log(ex);
+      }
+      this.isShowLoading = false;
+    },
+
+    async getListDeviceUser() {
+      this.isShowLoading = true;
+      try {
+        await axios
+          .get(this.apiBaseURL + "Devices/userId?userId=" + this.userIdbyToken(), {
+            headers: {
+              Authorization: 'Bearer ' + this.token
+            }
+          })
           .then((response) => {
             this.ListDevice = response.data;
           })
@@ -261,6 +201,14 @@ export default {
 
     onClickDevice(id) {
       router.push("/devices/" + id);
+    },
+
+    userIdbyToken() {
+      var logginToken = localStorage.getItem('token') || '';
+      var _extractedToken = logginToken.split('.')[1];
+      var _atobData = atob(_extractedToken.toString());
+      var _finaldata = JSON.parse(_atobData);
+      return _finaldata.userId
     },
 
     omClickCreate() {
@@ -281,13 +229,18 @@ export default {
     },
 
     async createDevice() {
+      this.objectDevice.userId = this.userIdbyToken()
       this.isShowLoading = true;
       try {
         if (this.objectDevice.isActive == "Unactive")
           this.objectDevice.isActive = false;
         else this.objectDevice.isActive = true;
         await axios
-          .post(this.apiBaseURL + "Devices", this.objectDevice)
+          .post(this.apiBaseURL + "Devices", this.objectDevice, {
+            headers: {
+              Authorization: 'Bearer ' + this.token
+            }
+          })
           .then((response) => {
             this.createPopup = false;
             this.resultInfo = {
@@ -375,7 +328,11 @@ export default {
 
     async callToggleActiveDevice(id) {
       axios
-        .patch(this.apiBaseURL + "Devices/" + id + "/active")
+        .patch(this.apiBaseURL + "Devices/" + id + "/active", {
+          headers: {
+            Authorization: 'Bearer ' + this.token
+          }
+        })
         .then((response) => {
           console.log(response);
         })
@@ -391,7 +348,11 @@ export default {
       this.isShowLoading = true;
       try {
         await axios
-          .delete(this.apiBaseURL + "Devices/" + id)
+          .delete(this.apiBaseURL + "Devices/" + id, {
+            headers: {
+              Authorization: 'Bearer ' + this.token
+            }
+          })
           .then(() => {
             this.resultInfo = {
               status: 1, // 0: Fail, 1: Success, 2: Warning, 3: Note
@@ -426,7 +387,16 @@ export default {
   },
 
   created() {
-    this.getListDevice();
+    var logginToken = localStorage.getItem('token') || '';
+    var _extractedToken = logginToken.split('.')[1];
+    var _atobData = atob(_extractedToken.toString());
+    var _finaldata = JSON.parse(_atobData);
+    var role = _finaldata.role
+    console.log(role)
+    if (role === "admin")
+      this.getListDevice();
+    else
+      this.getListDeviceUser();
   },
 
   mounted() {
@@ -463,6 +433,7 @@ export default {
   top: 15%;
   height: calc(50% - 32px);
 }
+
 .item__label {
   position: absolute;
   width: 100%;

@@ -1,59 +1,77 @@
 <template>
   <div>
     <v-card class="mx-auto">
-      <v-card style="width: 66%; float: left">
-        <KLineChart
-          v-if="rawChartDatas[0].data"
-          :propLabels="timeStampList"
-          :propDatas="rawChartDatas"
-          @onLoadData="getRawData"
-        />
-        <div style="margin-bottom: 16px">{{ currentTime }}</div>
-      </v-card>
-      <v-card style="width: 33%; float: left">
-        <KLineChart
-          v-if="rawChartDatas[0].data"
-          :propLabels="timeStampList"
-          :propDatas="rawChartDatas"
-          @onLoadData="getRawData"
-        />
-        <v-spacer></v-spacer>
-        <b>&nbsp;&nbsp;Prediction SSA: </b> - RMSE: 213.11 - MAE: 201
-      </v-card>
-      <v-card style="width: 33%; float: left">
-        <KLineChart
-          v-if="rawChartDatas[0].data"
-          :propLabels="timeStampList"
-          :propDatas="rawChartDatas"
-          @onLoadData="getRawData"
-        />
-        <v-spacer></v-spacer>
-        <b>&nbsp;&nbsp;Prediction SSA: </b> - RMSE: 213.11 - MAE: 201
+      <v-card class="mx-auto" style="border-top: 1px solid #001664">
+        <v-card
+          style="width: 68%; float: left; border-right: 1px solid #001664"
+        >
+          <KLineChart
+            v-if="rawChartDatas[0].data"
+            :propLabels="timeStampList"
+            :propDatas="rawChartDatas"
+            @onLoadData="getRawData"
+          />
+          <div class="chart__info">
+            <div>{{ currentFirstTime }}</div>
+            <div style="font-weight: 900">Generals TGAM QC Results</div>
+            <div>{{ currentLastTime }}</div>
+          </div>
+        </v-card>
+        <v-card style="width: 32%; float: left">
+          <KLineChart
+            v-if="rawChartDatas[0].data"
+            :propLabels="timeStampList"
+            :propDatas="rawChartDatas"
+            :isShwoLegend="false"
+            @onLoadData="getRawData"
+          />
+          <v-spacer></v-spacer>
+          <b>&nbsp;&nbsp;Prediction SSA: </b> - RMSE: 213.11 - MAE: 201
+        </v-card>
+        <v-divider style="width: 32%; float: left"></v-divider>
+        <v-card style="width: 32%; float: left">
+          <KLineChart
+            v-if="rawChartDatas[0].data"
+            :propLabels="timeStampList"
+            :propDatas="rawChartDatas"
+            :isShwoLegend="false"
+            @onLoadData="getRawData"
+          />
+          <v-spacer></v-spacer>
+          <b>&nbsp;&nbsp;Prediction LSTM: </b> - RMSE: 213.11 - MAE: 201
+        </v-card>
       </v-card>
     </v-card>
-    <div class="analys-result">
+
+    <v-divider></v-divider>
+    <v-card class="d-flex justify-space-around py-4">
       <div>
         State SVM - DeepSleetNet: <b>Sleep - NREM S1</b>
         <div>Train Score: 97.04%</div>
-        <div>Accuracy:    94.13%</div>
+        <div>Accuracy: 94.13%</div>
       </div>
-      <div>State FastTree - DeepSleetNet: <b>Drowsiness</b>
+      <div>
+        State FastTree - DeepSleetNet: <b>Drowsiness</b>
         <div>Train Score: 99.51%</div>
-        <div>Accuracy:    97.06%</div>
+        <div>Accuracy: 97.06%</div>
       </div>
-    </div>
-    <KLineChart
-      v-if="rawFFTChartDatas[0].data"
-      :propLabels="fftFrequencyAxis"
-      :propDatas="rawFFTChartDatas"
-      @onLoadData="getFFTData"
-    />
+    </v-card>
+
+    <v-card class="mx-auto" style="border-top: 1px solid #001664">
+      <KLineChart
+        v-if="rawFFTChartDatas[0].data"
+        :propLabels="fftFrequencyAxis"
+        :propDatas="rawFFTChartDatas"
+        @onLoadData="getFFTData"
+      />
+    </v-card>
   </div>
 </template>
 
 <script>
 import KLineChart from "@/components/KLineChart.vue";
 import axios from "axios";
+import moment from "moment";
 
 export default {
   components: {
@@ -63,6 +81,7 @@ export default {
   data() {
     return {
       apiBaseURL: process.env.VUE_APP_API_BASE_URL,
+      token: localStorage.getItem("token"),
       timeStampList: [],
       rawChartDatas: [{}],
       fftFrequencyAxis: [],
@@ -75,31 +94,21 @@ export default {
   methods: {
     getRawData() {
       axios
-        .get(this.apiBaseURL + "DataRawEEGs/" + this.deviceId + "/Last15Secs")
+        .get(this.apiBaseURL + "DataRawEEGs/" + this.deviceId + "/Last15Secs", {
+          headers: { Authorization: "Bearer " + this.token },
+        })
         .then((res) => {
           var tmpValues = [];
           var tmpTimeStamp = [];
           res.data.forEach((record, index) => {
-            const dateTime = new Date(record.recivedTime);
-            const minutes = dateTime.getMinutes();
-            const seconds = dateTime.getSeconds();
+            if (index == 0) {
+              this.currentFirstTime = moment.utc(record.createdTime).local().format("hh:mm A - MMM DD, YYYY");
+            }
             if (index == res.data.length - 1) {
-              const hh = dateTime.getHours();
-              const dd = dateTime.getDay();
-              const mm = dateTime.getMonth();
-              const yyyy = dateTime.getFullYear();
-              this.currentTime = `${hh.toString().padStart(2, "0")}:${minutes
-                .toString()
-                .padStart(2, "0")} ${(dd + 1).toString().padStart(2, "0")}/${(
-                mm + 1
-              )
-                .toString()
-                .padStart(2, "0")}/${yyyy.toString()}`;
+              this.currentLastTime = moment.utc(record.createdTime).local().format("hh:mm A - MMM DD, YYYY");
             }
             tmpTimeStamp.push(
-              `${minutes.toString().padStart(2, "0")}:${seconds
-                .toString()
-                .padStart(2, "0")}`
+              moment.utc(record.createdTime).local().format("mm:ss")
             );
             //this.timeStampList.fill("", this.timeStampList.length, this.timeStampList.length + record.values.length - 1);
             tmpValues.push(record.value);
@@ -118,7 +127,11 @@ export default {
 
     getFFTData() {
       axios
-        .get(this.apiBaseURL + "DataRawEEGs/" + this.deviceId + "/FFT")
+        .get(this.apiBaseURL + "DataRawEEGs/" + this.deviceId + "/FFT", {
+          headers: {
+            Authorization: "Bearer " + this.token,
+          },
+        })
         .then((res) => {
           this.fftFrequencyAxis = res.data.frequencyAxis;
           this.rawFFTChartDatas[0].data = res.data.amplitudeSpectrum;
@@ -141,9 +154,5 @@ export default {
 };
 </script>
 
-<style>
-.analys-result {
-  display: flex;
-  justify-content: space-around;
-}
+<style lang="">
 </style>

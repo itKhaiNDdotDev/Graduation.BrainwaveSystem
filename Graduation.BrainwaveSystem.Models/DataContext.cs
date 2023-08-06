@@ -25,5 +25,9 @@ namespace Graduation.BrainwaveSystem.Models
         public DbSet<DataRawEEG>? DataRawEEGs { get; set; }
 
         public DbSet<Data8BandsEEG>? Data8BandsEEGs { get; set; }
+
+        public DbSet<Role>? Roles { get; set; }
+        public DbSet<UserLogin>? UserLogins { get; set; } 
+        public DbSet<UserRole>? UserRoles { get; set; }
     }
 }

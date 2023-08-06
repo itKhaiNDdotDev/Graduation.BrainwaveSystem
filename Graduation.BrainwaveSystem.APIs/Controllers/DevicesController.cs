@@ -9,6 +9,7 @@ using Graduation.BrainwaveSystem.Models;
 using Graduation.BrainwaveSystem.Models.Entities;
 using Graduation.BrainwaveSystem.Models.DTOs;
 using Graduation.BrainwaveSystem.Services.DeviceServices;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Graduation.BrainwaveSystem.APIs.Controllers
 {
@@ -24,30 +25,42 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
         }
 
         [HttpGet("exist")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<IEnumerable<Device>>> GetListExist()
         {
             var results = await _service.GetListExist();
             return Ok(results);
         }
 
+        [HttpGet]
+        [Route("userId")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<Device>>> GetListByUserId(Guid userId)
+        {
+            var results = await _service.GetListExistByUserId(userId);
+            return Ok(results);
+        }
+
         [HttpPatch("{id}/active")]
+        [Authorize]
         public async Task<IActionResult> ToggleActive(Guid id)
         {
             await _service.ToggleActive(id);
             return Ok();
         }
 
-        //// POST: api/Devices
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<Device>> PostDevice(DeviceRequest request)
-        //{
-        //    var result = await _service.Create(request);
-        //    if (result == Guid.Empty)
-        //        return Problem("Insert failed! Please contact KhaiND to check problem.");
+        // POST: api/Devices
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        [Authorize]
+        public async Task<ActionResult<Device>> PostDevice(DeviceRequest request)
+        {
+            var result = await _service.Create(request);
+            if (result == Guid.Empty)
+                return Problem("Insert failed! Please contact KhaiND to check problem.");
 
-        //    return CreatedAtAction("Get", new { id = result }, result);
-        //}
+            return CreatedAtAction("Get", new { id = result }, result);
+        }
 
         //// PUT: api/Devices/5
         //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

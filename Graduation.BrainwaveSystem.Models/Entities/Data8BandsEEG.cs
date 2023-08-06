@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,8 @@ namespace Graduation.BrainwaveSystem.Models.Entities
     /// Quan hệ 1-1 đến DeviceData.
     /// </summary>
     /// Author: KhaiND (20/04/2023).
+    [Index(nameof(DeviceDataId))]
+    [Index(nameof(CreatedTime))]
     public class Data8BandsEEG : BaseEntity
     {
         public Guid Id { get; set; }

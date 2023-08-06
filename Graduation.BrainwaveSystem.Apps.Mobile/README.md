@@ -1,4 +1,4 @@
-# init_app
+# mind_monitoring_application
 
 A new Flutter project.
 

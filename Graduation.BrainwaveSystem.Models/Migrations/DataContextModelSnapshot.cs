@@ -74,6 +74,10 @@ namespace Graduation.BrainwaveSystem.Models.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedTime");
+
+                    b.HasIndex("DeviceDataId");
+
                     b.ToTable("Data8BandsEEGs");
                 });
 
@@ -108,6 +112,8 @@ namespace Graduation.BrainwaveSystem.Models.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedTime");
+
                     b.HasIndex("DeviceDataId");
 
                     b.ToTable("DataRawEEGs");
@@ -131,7 +137,7 @@ namespace Graduation.BrainwaveSystem.Models.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -148,12 +154,18 @@ namespace Graduation.BrainwaveSystem.Models.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Description");
+
+                    b.HasIndex("Name");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Devices");
                 });
@@ -195,7 +207,107 @@ namespace Graduation.BrainwaveSystem.Models.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedTime");
+
+                    b.HasIndex("DeviceId");
+
                     b.ToTable("DeviceDatas");
+                });
+
+            modelBuilder.Entity("Graduation.BrainwaveSystem.Models.Entities.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("Graduation.BrainwaveSystem.Models.Entities.UserLogin", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("Email");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Name");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PasswordHash");
+
+                    b.Property<string>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PasswordSalt");
+
+                    b.Property<string>("PhotoFileName")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PhotoFileName");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int")
+                        .HasColumnName("Role");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("UserName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserLogins");
+                });
+
+            modelBuilder.Entity("Graduation.BrainwaveSystem.Models.Entities.UserRole", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserRoles");
                 });
 #pragma warning restore 612, 618
         }
