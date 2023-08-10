@@ -46,12 +46,13 @@
     <v-divider></v-divider>
     <v-card class="d-flex justify-space-around py-4">
       <div>
-        State SVM - DeepSleetNet: <b>Sleep - NREM S1</b>
+        State SVM - DeepSleetNet: <b>{{awakeState.SVM}} - {{"NREM S1"}}</b>
         <div>Train Score: 97.04%</div>
         <div>Accuracy: 94.13%</div>
       </div>
+      <v-btn text="Refresh" @click="onClickReloadModelResults"></v-btn>
       <div>
-        State FastTree - DeepSleetNet: <b>Drowsiness</b>
+        State FastTree - DeepSleetNet: <b>{{awakeState.FastTree}} - {{}}</b>
         <div>Train Score: 99.51%</div>
         <div>Accuracy: 97.06%</div>
       </div>
@@ -86,7 +87,12 @@ export default {
       rawChartDatas: [{}],
       fftFrequencyAxis: [],
       rawFFTChartDatas: [{}],
-      currentTime: "",
+      currentFirstTime: "",
+      currentLastTime: "",
+      awakeState: {
+        FastTree: "",
+        SVM: ""
+      }
     };
   },
   props: ["deviceId"],
@@ -127,14 +133,14 @@ export default {
 
     getFFTData() {
       axios
-        .get(this.apiBaseURL + "DataRawEEGs/" + this.deviceId + "/FFT", {
+        .get(this.apiBaseURL + "DataRawEEGs/" + this.deviceId + "/FFTFix", {
           headers: {
             Authorization: "Bearer " + this.token,
           },
         })
         .then((res) => {
-          this.fftFrequencyAxis = res.data.frequencyAxis;
-          this.rawFFTChartDatas[0].data = res.data.amplitudeSpectrum;
+          this.fftFrequencyAxis = res.data.indexs;//frequencyAxis;
+          this.rawFFTChartDatas[0].data = res.data.values;//amplitudeSpectrum;
           this.rawFFTChartDatas[0].lblName = "Amplitude Spectrum";
           this.rawFFTChartDatas[0].bgColor = "darkblue";
           console.log(res);
@@ -144,11 +150,31 @@ export default {
           console.log(err);
         });
     },
+
+    getFastTreeAwakeState() {
+      axios
+        .get(this.apiBaseURL + "DataRawEEGs/" + this.deviceId + "/fasttree", {
+          headers: {
+            Authorization: "Bearer " + this.token,
+          },
+        })
+        .then((res) => {
+          this.awakeState.FastTree = res.data.stateLabel
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    onClickReloadModelResults() {
+      this.getFastTreeAwakeState();
+    }
   },
 
   created() {
     this.getRawData();
     this.getFFTData();
+    this.getFastTreeAwakeState();
     // console.log("RawPar Created");
   },
 };

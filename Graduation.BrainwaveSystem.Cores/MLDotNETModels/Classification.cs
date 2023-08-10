@@ -9,6 +9,8 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Drawing;
 using Graduation.BrainwaveSystem.Models;
+using Graduation.BrainwaveSystem.Cores.DataProcessors;
+using Graduation.BrainwaveSystem.Models.DTOs.AIModels;
 
 namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
 {
@@ -337,20 +339,37 @@ namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
             return listMsg;
         }
 
-        public static List<string> FastTreeTest(DataPoint inputData)
+        public static AwakeStateFastTreeResponse FastTreeTest(AwakeState10Feature inputFeaturesData)
         {
+            string rootDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../../"));
+            string coreProjectDir = Path.Combine(rootDir, "Graduation.BrainwaveSystem.Cores");
+            string modelPath = Path.Combine(coreProjectDir, "TrainedModels", "AwakefulStateFastTreeMLNETBC.zip");
             var mlContext = new MLContext();
-            ITransformer trainedModel = mlContext.Model.Load("K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\TrainedModels\\AwakefulStateFastTreeMLNETBC.zip", out var modelInputSchema);
+            ITransformer trainedModel = mlContext.Model.Load(modelPath, out var modelInputSchema);
 
             // Create prediction engine related to the loaded trained model
             var predictionEngine = mlContext.Model.CreatePredictionEngine<DataPoint, Prediction>(trainedModel);
 
-            var prediction = predictionEngine.Predict(inputData);
-            var listMsg = new List<string>();
-            listMsg.Add($"Prediction Value: {prediction.PredictedLabel} ");
-            listMsg.Add($"State: {(prediction.PredictedLabel ? "Awake" : "Drowsiness")} ");
-            listMsg.Add($"Probability: {prediction.Probability} ");
-            return listMsg;
+            var dataPoint = new DataPoint()
+            {
+                Delta = (float)inputFeaturesData.Delta,
+                Theta = (float)inputFeaturesData.Theta,
+                Alpha = (float)inputFeaturesData.Alpha,
+                Beta = (float)inputFeaturesData.Beta,
+                Abr = (float)inputFeaturesData.Abr,
+                Dbr = (float)inputFeaturesData.Dbr,
+                Tbr = (float)inputFeaturesData.Tbr,
+                Tar = (float)inputFeaturesData.Tar,
+                Dar = (float)inputFeaturesData.Dar,
+                Dtabr = (float)inputFeaturesData.Dtabr,
+            };
+            var prediction = predictionEngine.Predict(dataPoint);
+            return new AwakeStateFastTreeResponse()
+            {
+                PredictionValue = prediction.PredictedLabel,
+                StateLabel = prediction.PredictedLabel ? "Awake" : "Drowsiness",
+                Probability = prediction.Probability
+            };
         }
 
         ///// <summary>

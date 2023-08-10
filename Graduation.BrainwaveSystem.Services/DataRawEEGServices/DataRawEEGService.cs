@@ -2,6 +2,7 @@
 using Graduation.BrainwaveSystem.Cores.MLDotNETModels;
 using Graduation.BrainwaveSystem.Models;
 using Graduation.BrainwaveSystem.Models.DTOs;
+using Graduation.BrainwaveSystem.Models.DTOs.AIModels;
 using Graduation.BrainwaveSystem.Models.Entities;
 using Graduation.BrainwaveSystem.Services.BaseServices;
 using Microsoft.EntityFrameworkCore;
@@ -91,6 +92,24 @@ namespace Graduation.BrainwaveSystem.Services.DataRawEEGServices
             return (frequencyAxis, amplitudeSpectrum);
         }
 
+        //public (List<int> indexs, List<double> values) GetFFT15SecData(Guid deviceId)
+        public (List<double> freqs, List<double> spectrums) GetFFT15SecData(Guid deviceId)
+
+        {
+            var inputData = GetLastNDataRecords(deviceId, 15);
+            var listValue = new List<int>();
+            foreach (var item in inputData.Result)
+            {
+                listValue.Add(item.Value);
+            }
+            var result = Transformer.TransformFFT(listValue);
+            //var indexs = new List<int>();
+            //for (int i = 0; i < result.Count; i++)
+            //    indexs.Add(i);
+            //return (indexs, result);
+            return result;
+        }
+
         public string GetTrainOutput()
         {
             return Classification.SVMTrain();
@@ -101,9 +120,16 @@ namespace Graduation.BrainwaveSystem.Services.DataRawEEGServices
             return Classification.FastTreeTrain();
         }
 
-        public List<string> GetTrainFTOutput(DataPoint inputData)
+        public AwakeStateFastTreeResponse GetTrainFTOutput(Guid deviceId)
         {
-            return Classification.FastTreeTest(inputData);
+            var inputData = GetLastNDataRecords(deviceId, 15);
+            var listValue = new List<int>();
+            foreach (var item in inputData.Result)
+            {
+                listValue.Add(item.Value);
+            }
+            var inputFeatures = FeaturesExtractor.ExtractAwakeState(listValue);
+            return Classification.FastTreeTest(inputFeatures);
         }
 
         public (TimeSeriesPredictMetricsModel Evaluation, ModelOutput Prediction) GetTrainSSAPredictOutput(Guid deviceId)

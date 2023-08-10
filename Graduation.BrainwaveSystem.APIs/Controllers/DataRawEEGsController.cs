@@ -63,6 +63,16 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
             return Ok(new { FrequencyAxis = frequencyAxis, AmplitudeSpectrum = amplitudeSpectrum });
         }
 
+        [HttpGet("{deviceId}/FFTFix")]
+        [Authorize]
+        public async Task<ActionResult<(List<double> indexs, List<double> values)>> GetFFT15SecData(Guid deviceId)
+        {
+            var res = _service.GetFFT15SecData(deviceId);
+            var indexs = res.freqs;
+            var values = res.spectrums;
+            return Ok(new { Indexs = indexs, Values = values });
+        }
+
         [HttpGet("svm-classification")]
         [Authorize]
         public async Task<ActionResult> GetTrainOutput()
@@ -77,11 +87,11 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
             return Ok(_service.GetTrainFTOutput());
         }
 
-        [HttpPost("fasttree-test")]
+        [HttpGet("{deviceId}/fasttree")]
         [Authorize]
-        public async Task<ActionResult> GetTrainFTOutput([FromBody] DataPoint inputData)
+        public async Task<ActionResult> GetTrainFTOutput(Guid deviceId)
         {
-            return Ok(_service.GetTrainFTOutput(inputData));
+            return Ok(_service.GetTrainFTOutput(deviceId));
         }
 
         [HttpGet("{deviceId}/SSAPredict")]
