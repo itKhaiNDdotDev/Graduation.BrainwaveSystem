@@ -105,22 +105,31 @@ namespace Graduation.BrainwaveSystem.Services.DataRawEEGServices
             return Classification.FastTreeTest(inputFeatures);
         }
 
-        public (TimeSeriesPredictMetricsModel Evaluation, ModelOutput Prediction) GetTrainSSAPredictOutput(Guid deviceId)
+        public RawEEGPredictionResponse GetTrainSSAPredictOutput(Guid deviceId)
         {
-            //// Đoạn này clone từ method đã có ở trên, nên refactor để tái sử dụng
-            ////var data = GetLastNDataRecords(deviceId, 3600);
-            //if (_context.DeviceDatas == null)
-            //    throw new Exception("Entity DeviceDatas is not exist. Please check and try again.");
-            //var dataRecords = _context.DeviceDatas.Where(x => x.DeviceId == deviceId)
-            //    .OrderByDescending(x => x.CreatedTime)
-            //    .Select(x => x.Id)
-            //    .Take(15).ToList();
-            //if (_context.DataRawEEGs == null)
-            //    throw new Exception("Entity DataRawEEGs is not exist. Please check and try again.");
-            //var data = _context.DataRawEEGs.Where(r => dataRecords.Contains(r.DeviceDataId))
-            //    .OrderBy(d => d.CreatedTime).ToList();
-            var data = new List<DataRawEEG>();//////
-            return RegressionPredictor.TrainSSAWithSplitTrainTestDataSet(data);
+            var inputData = GetLastNDataRecords(deviceId, 3).Result.Values;
+            var result = RegressionPredictor.TrainSSAWithSplitTrainTestDataSet(inputData, 1);
+
+            // Tính toán chuỗi thời gian tương lai gần
+            var incrementsPerSecond = 512;
+            var increment = TimeSpan.FromSeconds(1.0 / incrementsPerSecond);
+            var timeList = new List<DateTime>((int)(1 * incrementsPerSecond));
+            var startTime = DateTime.UtcNow.AddSeconds(1.0 / 3);
+
+            for (int i = 0; i < 1 * incrementsPerSecond; i++)
+            {
+                timeList.Add(startTime.Add(increment * i));
+            }
+
+            return new RawEEGPredictionResponse()
+            {
+                ForecastedValues = result.Prediction.ForecastedValues,
+                LowerBoundValues = result.Prediction.LowerBoundValues,
+                UpperBoundValues = result.Prediction.UpperBoundValues,
+                PredictTimes = timeList,
+                MAE = result.Evaluation.MAE,
+                RMSE = result.Evaluation.RMSE
+            };
         }
     }
 }

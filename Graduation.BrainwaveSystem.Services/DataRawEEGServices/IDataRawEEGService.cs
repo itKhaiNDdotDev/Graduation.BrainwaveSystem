@@ -26,6 +26,6 @@ namespace Graduation.BrainwaveSystem.Services.DataRawEEGServices
 
         public AwakeStateFastTreeResponse GetTrainFTOutput(Guid deviceId);
 
-        public (TimeSeriesPredictMetricsModel Evaluation, ModelOutput Prediction) GetTrainSSAPredictOutput(Guid deviceId);
+        public RawEEGPredictionResponse GetTrainSSAPredictOutput(Guid deviceId);
     }
 }

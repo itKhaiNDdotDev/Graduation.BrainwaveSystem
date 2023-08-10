@@ -54,6 +54,13 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
             return Ok(await _service.GetLastNDataRecords(deviceId, 15));
         }
 
+        [HttpGet("{deviceId}/Last10Secs")]
+        [Authorize]
+        public async Task<ActionResult<DataRawEEGResponse>> GetLast10Secs(Guid deviceId)
+        {
+            return Ok(await _service.GetLastNDataRecords(deviceId, 10));
+        }
+
         [HttpGet("{deviceId}/FFT")]
         [Authorize]
         public async Task<ActionResult<(List<double> frequencyAxis, List<double> amplitudeSpectrum)>> GetFFTData(Guid deviceId)
@@ -96,19 +103,10 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
 
         [HttpGet("{deviceId}/SSAPredict")]
         [Authorize]
-        public async Task<ActionResult<PredictOutDTO>> GetSSAPredictTrain(Guid deviceId)
+        public async Task<ActionResult<RawEEGPredictionResponse>> GetSSAPredictTrain(Guid deviceId)
         {
             var res = _service.GetTrainSSAPredictOutput(deviceId);
-            var resShow = new PredictOutDTO();
-            resShow.Prediction = res.Prediction;
-            resShow.Evaluation = res.Evaluation;
-            return Ok(resShow);
-        }
-
-        public class PredictOutDTO
-        {
-            public TimeSeriesPredictMetricsModel Evaluation { get; set; }
-            public ModelOutput Prediction { get; set; }
+            return Ok(res);
         }
 
         //private readonly DataContext _context;
