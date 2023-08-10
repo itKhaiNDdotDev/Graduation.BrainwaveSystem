@@ -104,27 +104,20 @@ export default {
           headers: { Authorization: "Bearer " + this.token },
         })
         .then((res) => {
-          var tmpValues = [];
           var tmpTimeStamp = [];
-          res.data.forEach((record, index) => {
+          res.data.recivedTimes.forEach((record, index) => {
             if (index == 0) {
-              this.currentFirstTime = moment.utc(record.createdTime).local().format("hh:mm A - MMM DD, YYYY");
+              this.currentFirstTime = moment.utc(record).local().format("hh:mm A - MMM DD, YYYY");
             }
-            if (index == res.data.length - 1) {
-              this.currentLastTime = moment.utc(record.createdTime).local().format("hh:mm A - MMM DD, YYYY");
+            if (index == res.data.recivedTimes.length - 1) {
+              this.currentLastTime = moment.utc(record).local().format("hh:mm A - MMM DD, YYYY");
             }
-            tmpTimeStamp.push(
-              moment.utc(record.createdTime).local().format("mm:ss")
-            );
-            //this.timeStampList.fill("", this.timeStampList.length, this.timeStampList.length + record.values.length - 1);
-            tmpValues.push(record.value);
+            tmpTimeStamp.push(moment.utc(record).local().format("mm:ss"));
           });
           this.timeStampList = tmpTimeStamp;
-          this.rawChartDatas[0].data = tmpValues;
+          this.rawChartDatas[0].data = res.data.values;
           this.rawChartDatas[0].lblName = "Raw EEG";
           this.rawChartDatas[0].bgColor = "darkblue";
-
-          console.log("On GetRawEEGData");
         })
         .catch((err) => {
           console.log(err);

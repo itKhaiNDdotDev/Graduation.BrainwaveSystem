@@ -28,28 +28,28 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
 
         [HttpGet("{deviceId}/Last5Mins")]
         [Authorize]
-        public async Task<ActionResult<DataRawEEGResponse[]>> GetLast5Mins(Guid deviceId)
+        public async Task<ActionResult<DataRawEEGResponse>> GetLast5Mins(Guid deviceId)
         {
             return Ok(await _service.GetLastNDataRecords(deviceId, 300));
         }
 
         [HttpGet("{deviceId}/LastMin")]
         [Authorize]
-        public async Task<ActionResult<DataRawEEGResponse[]>> GetLastMin(Guid deviceId)
+        public async Task<ActionResult<DataRawEEGResponse>> GetLastMin(Guid deviceId)
         {
             return Ok(await _service.GetLastNDataRecords(deviceId, 60));
         }
 
         [HttpGet("{deviceId}/Last")]
         [Authorize]
-        public async Task<ActionResult<DataRawEEGResponse[]>> GetLast(Guid deviceId)
+        public async Task<ActionResult<DataRawEEGResponse>> GetLast(Guid deviceId)
         {
             return Ok(await _service.GetLastNDataRecords(deviceId));
         }
 
         [HttpGet("{deviceId}/Last15Secs")]
         [Authorize]
-        public async Task<ActionResult<DataRawEEGResponse[]>> GetLast15Secs(Guid deviceId)
+        public async Task<ActionResult<DataRawEEGResponse>> GetLast15Secs(Guid deviceId)
         {
             return Ok(await _service.GetLastNDataRecords(deviceId, 15));
         }
