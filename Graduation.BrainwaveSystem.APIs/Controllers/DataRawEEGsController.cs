@@ -12,6 +12,7 @@ using Graduation.BrainwaveSystem.Services.DataRawEEGServices;
 using Graduation.BrainwaveSystem.Cores.MLDotNETModels;
 using static Graduation.BrainwaveSystem.Cores.MLDotNETModels.RegressionPredictor;
 using Microsoft.AspNetCore.Authorization;
+using Graduation.BrainwaveSystem.Models.DTOs.AIModels;
 
 namespace Graduation.BrainwaveSystem.APIs.Controllers
 {
@@ -103,7 +104,7 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
 
         [HttpGet("{deviceId}/SSAPredict")]
         [Authorize]
-        public async Task<ActionResult<RawEEGPredictionResponse>> GetSSAPredictTrain(Guid deviceId)
+        public async Task<ActionResult<RawEEGPredictResponse>> GetSSAPredictTrain(Guid deviceId)
         {
             var res = _service.GetTrainSSAPredictOutput(deviceId);
             return Ok(res);

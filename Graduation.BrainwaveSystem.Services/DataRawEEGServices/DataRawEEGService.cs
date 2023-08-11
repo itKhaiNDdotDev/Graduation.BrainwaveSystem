@@ -105,23 +105,23 @@ namespace Graduation.BrainwaveSystem.Services.DataRawEEGServices
             return Classification.FastTreeTest(inputFeatures);
         }
 
-        public RawEEGPredictionResponse GetTrainSSAPredictOutput(Guid deviceId)
+        public RawEEGPredictResponse GetTrainSSAPredictOutput(Guid deviceId)
         {
-            var inputData = GetLastNDataRecords(deviceId, 3).Result.Values;
-            var result = RegressionPredictor.TrainSSAWithSplitTrainTestDataSet(inputData, 1);
+            var inputData = GetLastNDataRecords(deviceId, 3).Result;
+            var result = RegressionPredictor.TrainSSAWithSplitTrainTestDataSet(inputData.Values, 512);
 
             // Tính toán chuỗi thời gian tương lai gần
             var incrementsPerSecond = 512;
             var increment = TimeSpan.FromSeconds(1.0 / incrementsPerSecond);
             var timeList = new List<DateTime>((int)(1 * incrementsPerSecond));
-            var startTime = DateTime.UtcNow.AddSeconds(1.0 / 3);
+            var startTime = inputData.RecivedTimes.Max().AddSeconds(1.0 / 2);
 
             for (int i = 0; i < 1 * incrementsPerSecond; i++)
             {
                 timeList.Add(startTime.Add(increment * i));
             }
 
-            return new RawEEGPredictionResponse()
+            return new RawEEGPredictResponse()
             {
                 ForecastedValues = result.Prediction.ForecastedValues,
                 LowerBoundValues = result.Prediction.LowerBoundValues,

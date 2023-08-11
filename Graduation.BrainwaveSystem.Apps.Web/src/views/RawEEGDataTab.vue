@@ -65,17 +65,21 @@
             <div></div>
           </div>
     </v-card>
+
+    <VtfLoading v-if="isShowLoading" />
   </div>
 </template>
 
 <script>
 import KLineChart from "@/components/KLineChart.vue";
+import VtfLoading from "@/components/VtfLoading.vue";
 import axios from "axios";
 import moment from "moment";
 
 export default {
   components: {
     KLineChart,
+    VtfLoading,
   },
 
   data() {
@@ -94,7 +98,8 @@ export default {
       awakeState: {
         FastTree: "",
         SVM: ""
-      }
+      },
+      isShowLoading: true,
     };
   },
   props: ["deviceId"],
@@ -122,6 +127,7 @@ export default {
           this.rawChartDatas[0].bgColor = "darkblue";
         })
         .catch((err) => {
+          this.isShowLoading = false;
           console.log(err);
         });
     },
@@ -193,8 +199,10 @@ export default {
             RMSE: res.data.rmse.toFixed(2),
             MAE: res.data.mae.toFixed(2)
           };
+           this.isShowLoading = false;
         })
         .catch((err) => {
+          this.isShowLoading = false;
           console.log(err);
         });
     },
