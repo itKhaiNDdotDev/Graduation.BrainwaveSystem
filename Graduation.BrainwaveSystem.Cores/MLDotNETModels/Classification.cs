@@ -249,6 +249,10 @@ namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
 
         public static List<string> FastTreeTrain()
         {
+            string rootDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../../"));
+            string coreProjectDir = Path.Combine(rootDir, "Graduation.BrainwaveSystem.Cores");
+            string modelPath = Path.Combine(coreProjectDir, "TrainedModels", "AwakefulStateFastTreeMLNETBC.zip");
+
             // Khởi tạo MLContext
             var mlContext = new MLContext();
 
@@ -256,8 +260,8 @@ namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
             // Đọc dữ liệu từ các tệp CSV
             //var file1 = mlContext.Data.LoadFromTextFile<DataPoint>(AwakeDataPath, hasHeader: true, separatorChar: ',');
             //var file2 = mlContext.Data.LoadFromTextFile<DataPoint>(DrowsinessDataPath, hasHeader: true, separatorChar: ',');
-            var file1 = mlContext.Data.LoadFromTextFile<DataPoint>("K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\DataSets\\Awake.csv", separatorChar: ',');
-            var file2 = mlContext.Data.LoadFromTextFile<DataPoint>("K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\DataSets\\Drowsiness.csv", separatorChar: ',');
+            var file1 = mlContext.Data.LoadFromTextFile<DataPoint>(Path.Combine(coreProjectDir, "DataSets", "Awake.csv"), separatorChar: ',');
+            var file2 = mlContext.Data.LoadFromTextFile<DataPoint>(Path.Combine(coreProjectDir, "DataSets", "Drowsiness.csv"), separatorChar: ',');
             var labeledFile1 = mlContext.Data.CreateEnumerable<DataPoint>(file1, reuseRowObject: false)
                 .Select(x => new DataPoint
                 {
@@ -332,7 +336,7 @@ namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
             listMsg.Add($"******************************************************");
             listMsg.Add("");
             listMsg.Add("============= Saving the model to a file =============");
-            mlContext.Model.Save(trainedModel, trainTestSplit.TrainSet.Schema, "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\TrainedModels\\AwakefulStateFastTreeMLNETBC.zip");
+            mlContext.Model.Save(trainedModel, trainTestSplit.TrainSet.Schema, modelPath);
             listMsg.Add("");
             listMsg.Add("=================== Model Saved ===================== ");
 
