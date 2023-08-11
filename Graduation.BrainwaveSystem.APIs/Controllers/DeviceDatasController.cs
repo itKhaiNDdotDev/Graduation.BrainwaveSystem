@@ -12,6 +12,7 @@ using Graduation.BrainwaveSystem.Services.DeviceDataServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Graduation.BrainwaveSystem.APIs.Common;
+using Graduation.BrainwaveSystem.Models.DTOs.AIModels;
 
 namespace Graduation.BrainwaveSystem.APIs.Controllers
 {
@@ -58,6 +59,14 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
             var result = await _service.Create(deviceId, request);
             await hubContext.Clients.All.SendAsync("getChart", 0);
             return CreatedAtAction("Get", new { id = result }, result);
+        }
+
+        [HttpGet("{deviceId}/SSAPredict")]
+        [Authorize]
+        public async Task<ActionResult<TgamExtractionPredictResponse>> GetSSAPredictTrain(Guid deviceId)
+        {
+            var res = _service.GetTrainSSAPredictOutput(deviceId);
+            return Ok(res);
         }
 
         //// POST: api/DeviceDatas

@@ -39,7 +39,8 @@ export default {
     isShwoLegend: {
       type: Boolean,
       default: true 
-    }
+    },
+    fixScale: {}
   },
 
   data() {
@@ -97,6 +98,11 @@ export default {
         },
         responsive: true,
         maintainAspectRatio: true,
+        scales: {
+          y: {
+            ...(this.fixScale ? { min: this.fixScale.minY, max: this.fixScale.maxY } : {})
+          }
+        }
       },
     };
   },

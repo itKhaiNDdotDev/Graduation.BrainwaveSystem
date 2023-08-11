@@ -1,8 +1,10 @@
 <template>
   <div>
     <v-card class="mx-auto">
-      <v-card class="mx-auto" style="border-top: 1px solid #001664;">
-        <v-card style="width: 68%; float: left; border-right: 1px solid #001664;">
+      <v-card class="mx-auto" style="border-top: 1px solid #001664">
+        <v-card
+          style="width: 68%; float: left; border-right: 1px solid #001664"
+        >
           <KAreaChart
             v-if="tgamExtractions.generals[0].data"
             :propDatas="tgamExtractions.generals"
@@ -11,20 +13,21 @@
           />
           <div class="chart__info">
             <div>{{ currentFirstTime }}</div>
-            <div style="font-weight: 900;">Generals TGAM QC Results</div>
+            <div style="font-weight: 900">Generals TGAM QC Results</div>
             <div>{{ currentLastTime }}</div>
           </div>
         </v-card>
-        <v-card style="width: 32%; float: left">
+        <v-card style="width: 32%; float: left; position: relative;">
+          <!-- <VtfLoading v-if="isShowSSAPredictLoading" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;" /> -->
           <KAreaChart
-            v-if="tgamExtractions.generals[0].data"
-            :propDatas="tgamExtractions.generals"
-            :propLabels="timeStampList"
+            v-if="ssaPredictTgamExtractions.generals[0].data"
+            :propDatas="ssaPredictTgamExtractions.generals"
+            :propLabels="timeStampPredictList"
             :isShwoLegend="false"
-            @onLoadData="getTGAMExtractionData"
+            @onLoadData="getTGAMExtractionSSAPredictData"
           />
           <v-spacer></v-spacer>
-          <b>&nbsp;&nbsp;Prediction SSA: </b> - RMSE: 213.11 - MAE: 201
+          <b>&nbsp;&nbsp;Prediction SSA: </b> - RMSE: {{ssaPredictTgamExtractions.rmseGeneral}} - MAE: {{ssaPredictTgamExtractions.maeGeneral}}
         </v-card>
         <v-divider style="width: 32%; float: left"></v-divider>
         <v-card style="width: 32%; float: left">
@@ -41,9 +44,9 @@
       </v-card>
     </v-card>
     <v-divider class="pa-2"></v-divider>
-   
-    <v-card class="mx-auto" style="border-top: 1px solid #001664;">
-      <v-card style="width: 68%; float: left; border-right: 1px solid #001664;">
+
+    <v-card class="mx-auto" style="border-top: 1px solid #001664">
+      <v-card style="width: 68%; float: left; border-right: 1px solid #001664">
         <KLineChart
           v-if="tgamExtractions.data8Bands[0].data"
           :propDatas="tgamExtractions.data8Bands"
@@ -52,20 +55,21 @@
         />
         <div class="chart__info">
           <div>{{ currentFirstTime }}</div>
-          <div style="font-weight: 900;">8 Bands EEG</div>
+          <div style="font-weight: 900">8 Bands EEG</div>
           <div>{{ currentLastTime }}</div>
         </div>
       </v-card>
-      <v-card style="width: 32%; float: left">
+      <v-card style="width: 32%; float: left; position: relative;">
+        <!-- <VtfLoading v-if="isShowSSAPredictLoading" style="position: absolute !important ; top: 0; left: 0; right: 0; bottom: 0;" /> -->
         <KLineChart
-          v-if="tgamExtractions.data8Bands[0].data"
-          :propDatas="tgamExtractions.data8Bands"
-          :propLabels="timeStampList"
+          v-if="ssaPredictTgamExtractions.data8Bands[0].data"
+          :propDatas="ssaPredictTgamExtractions.data8Bands"
+          :propLabels="timeStampPredictList"
           :isShwoLegend="false"
-          @onLoadData="getTGAMExtractionData"
+          @onLoadData="getTGAMExtractionSSAPredictData"
         />
         <!-- <v-spacer></v-spacer> -->
-        <b>&nbsp;&nbsp;Prediction SSA: </b> - RMSE: 213.11 - MAE: 201
+        <b>&nbsp;&nbsp;Prediction SSA: </b> - RMSE: {{ssaPredictTgamExtractions.rmseFor8Band}} - MAE: {{ssaPredictTgamExtractions.maeFor8Band}}
       </v-card>
       <v-divider style="width: 32%; float: left"></v-divider>
       <v-card style="width: 32%; float: left">
@@ -80,12 +84,15 @@
         <b>&nbsp;&nbsp;Prediction LSTM: </b> - RMSE: 213.11 - MAE: 201
       </v-card>
     </v-card>
+
+    <VtfLoading v-if="isShowLoading" />
   </div>
 </template>
 
 <script>
 import KAreaChart from "@/components/KAreaChart.vue";
 import KLineChart from "@/components/KLineChart.vue";
+import VtfLoading from "@/components/VtfLoading.vue";
 import axios from "axios";
 import moment from "moment";
 
@@ -93,6 +100,7 @@ export default {
   components: {
     KAreaChart,
     KLineChart,
+    VtfLoading,
   },
 
   data() {
@@ -123,6 +131,13 @@ export default {
         generals: [{}, {}, {}],
         data8Bands: [{}, {}, {}, {}, {}, {}, {}, {}],
       },
+      timeStampPredictList: [],
+      ssaPredictTgamExtractions: {
+        generals: [{}, {}, {}],
+        data8Bands: [{}, {}, {}, {}, {}, {}, {}, {}]
+      },
+      isShowLoading: true,
+      // isShowSSAPredictLoading: false
     };
   },
   props: ["deviceId"],
@@ -139,12 +154,18 @@ export default {
           var tmp8Bands = [[], [], [], [], [], [], [], []];
           var tmpTimeStamp = [];
           var tmpGenerals = [[], [], []];
-          res.data.generals.forEach((record, index) => {         
+          res.data.generals.forEach((record, index) => {
             if (index == 0) {
-              this.currentFirstTime = moment.utc(record.createdTime).local().format("hh:mm A - MMM DD, YYYY");
+              this.currentFirstTime = moment
+                .utc(record.createdTime)
+                .local()
+                .format("hh:mm A - MMM DD, YYYY");
             }
             if (index == res.data.generals.length - 1) {
-              this.currentLastTime = moment.utc(record.createdTime).local().format("hh:mm A - MMM DD, YYYY");
+              this.currentLastTime = moment
+                .utc(record.createdTime)
+                .local()
+                .format("hh:mm A - MMM DD, YYYY");
             }
             tmpTimeStamp.push(
               moment.utc(record.createdTime).local().format("mm:ss")
@@ -162,8 +183,8 @@ export default {
             tmp8Bands[3].push(record.lowBeta);
             tmp8Bands[4].push(record.midBeta);
             tmp8Bands[5].push(record.highBeta);
-            tmp8Bands[6].push(record.gama);
-            tmp8Bands[7].push(record.uhfGama);
+            tmp8Bands[6].push(record.gamma);
+            tmp8Bands[7].push(record.uhfGamma);
           });
 
           this.timeStampList = tmpTimeStamp;
@@ -178,10 +199,11 @@ export default {
 
           this.configGeneralsChart();
           this.config8BandsChart();
-          console.log(this.timeStampList);
+          this.isShowLoading = false;
         })
         .catch((err) => {
           console.log(err);
+          this.isShowLoading = false;
         });
     },
 
@@ -219,18 +241,108 @@ export default {
       this.tgamExtractions.data8Bands[5].bgColor = "#0220AA";
       this.tgamExtractions.data8Bands[5].lineThickness = 2;
 
-      this.tgamExtractions.data8Bands[6].lblName = "Gmaa";
+      this.tgamExtractions.data8Bands[6].lblName = "Gmama";
       this.tgamExtractions.data8Bands[6].bgColor = "#000044";
       this.tgamExtractions.data8Bands[6].lineThickness = 2;
 
-      this.tgamExtractions.data8Bands[7].lblName = "UHF Gama";
+      this.tgamExtractions.data8Bands[7].lblName = "UHF Gamma";
       this.tgamExtractions.data8Bands[7].bgColor = "#000000";
       this.tgamExtractions.data8Bands[7].lineThickness = 2;
+    },
+
+    getTGAMExtractionSSAPredictData() {
+      // this.isShowSSAPredictLoading = true;
+      axios
+        .get(this.apiBaseURL + "DeviceDatas/" + this.deviceId + "/SSAPredict", {
+          headers: {
+            Authorization: "Bearer " + this.token,
+          },
+        })
+        .then((res) => {
+          var tmpTimeStamp = [];
+          res.data.predictTimes.forEach((record) => {
+            tmpTimeStamp.push(
+              moment.utc(record).local().format("mm:ss")
+            );
+            //this.timeStampList.fill("", this.timeStampList.length, this.timeStampList.length + record.values.length - 1);
+          });
+          this.ssaPredictTgamExtractions.generals[0].data = res.data.attention;
+          this.ssaPredictTgamExtractions.generals[1].data = res.data.meditation;
+          this.ssaPredictTgamExtractions.generals[2].data = res.data.poorQuality;
+
+          this.ssaPredictTgamExtractions.data8Bands[0].data = res.data.delta;
+          this.ssaPredictTgamExtractions.data8Bands[1].data = res.data.theta;
+          this.ssaPredictTgamExtractions.data8Bands[2].data = res.data.alpha;
+          this.ssaPredictTgamExtractions.data8Bands[3].data = res.data.lowBeta;
+          this.ssaPredictTgamExtractions.data8Bands[4].data = res.data.midBeta;
+          this.ssaPredictTgamExtractions.data8Bands[5].data = res.data.highBeta;
+          this.ssaPredictTgamExtractions.data8Bands[6].data = res.data.gamma;
+          this.ssaPredictTgamExtractions.data8Bands[7].data = res.data.uhfGamma;
+
+          this.timeStampPredictList = tmpTimeStamp;
+          this.ssaPredictTgamExtractions.maeGeneral = res.data.maeGeneral.toFixed(2);
+          this.ssaPredictTgamExtractions.rmseGeneral = res.data.rmseGeneral.toFixed(2);
+          this.ssaPredictTgamExtractions.maeFor8Bands = res.data.maeFor8Band.toFixed(2);
+          this.ssaPredictTgamExtractions.rmseFor8Bands = res.data.rmseFor8Band.toFixed(2);
+
+          this.configGeneralsSSAPredictChart();
+          this.config8BandsSSAPredictChart();
+          // this.isShowSSAPredictLoading = false;
+        })
+        .catch((err) => {
+          console.log(err);
+          this.isShowLoading = false;
+          // this.isShowSSAPredictLoading = false;
+        });
+    },
+
+    configGeneralsSSAPredictChart() {
+      this.ssaPredictTgamExtractions.generals[0].lblName = "Attention";
+      this.ssaPredictTgamExtractions.generals[0].bgColor = "#008000";
+      this.ssaPredictTgamExtractions.generals[1].lblName = "Meditation";
+      this.ssaPredictTgamExtractions.generals[1].bgColor = "#CC0000";
+      this.ssaPredictTgamExtractions.generals[2].lblName = "Poor Quality";
+      this.ssaPredictTgamExtractions.generals[2].bgColor = "#FFFF00";
+    },
+
+    config8BandsSSAPredictChart() {
+      this.ssaPredictTgamExtractions.data8Bands[0].lblName = "Delta";
+      this.ssaPredictTgamExtractions.data8Bands[0].bgColor = "#880000";
+      this.ssaPredictTgamExtractions.data8Bands[0].lineThickness = 2;
+
+      this.ssaPredictTgamExtractions.data8Bands[1].lblName = "Theta";
+      this.ssaPredictTgamExtractions.data8Bands[1].bgColor = "#C71585";
+      this.ssaPredictTgamExtractions.data8Bands[1].lineThickness = 2;
+
+      this.ssaPredictTgamExtractions.data8Bands[2].lblName = "Alpha";
+      this.ssaPredictTgamExtractions.data8Bands[2].bgColor = "#CC8800";
+      this.ssaPredictTgamExtractions.data8Bands[2].lineThickness = 2;
+
+      this.ssaPredictTgamExtractions.data8Bands[3].lblName = "Low Beta";
+      this.ssaPredictTgamExtractions.data8Bands[3].bgColor = "#00AA00";
+      this.ssaPredictTgamExtractions.data8Bands[3].lineThickness = 2;
+
+      this.ssaPredictTgamExtractions.data8Bands[4].lblName = "Midle Beta";
+      this.ssaPredictTgamExtractions.data8Bands[4].bgColor = "#004400";
+      this.ssaPredictTgamExtractions.data8Bands[4].lineThickness = 2;
+
+      this.ssaPredictTgamExtractions.data8Bands[5].lblName = "High Beta";
+      this.ssaPredictTgamExtractions.data8Bands[5].bgColor = "#0220AA";
+      this.ssaPredictTgamExtractions.data8Bands[5].lineThickness = 2;
+
+      this.ssaPredictTgamExtractions.data8Bands[6].lblName = "Gamma";
+      this.ssaPredictTgamExtractions.data8Bands[6].bgColor = "#000044";
+      this.ssaPredictTgamExtractions.data8Bands[6].lineThickness = 2;
+
+      this.ssaPredictTgamExtractions.data8Bands[7].lblName = "UHF Gamma";
+      this.ssaPredictTgamExtractions.data8Bands[7].bgColor = "#000000";
+      this.ssaPredictTgamExtractions.data8Bands[7].lineThickness = 2;
     },
   },
 
   created() {
     this.getTGAMExtractionData();
+    this.getTGAMExtractionSSAPredictData();
   },
 };
 </script>
