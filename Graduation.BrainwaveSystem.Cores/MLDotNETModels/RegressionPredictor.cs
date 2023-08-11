@@ -85,7 +85,7 @@ namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
             //string coreProjectDir = Path.Combine(rootDir, "Graduation.BrainwaveSystem.Cores");
             //string modelPath = Path.Combine(coreProjectDir, "TrainedModels", "MLModel.zip");
             //Product===================
-            string modelPath = "D:\\home\\AITrainedModels\\MLModel.zip";
+            string modelPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot", "trainedmodels", "MLModel.zip");
             //string dbFilePath = Path.Combine(rootDir, "Data", "DailyDemand.mdf");
             //var connectionString = $"Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename={dbFilePath};Integrated Security=True;Connect Timeout=30;";
             //var connectionString = "Server=(localdb)\\mssqllocaldb;Database=Graduation.BrainwaveSystem;Trusted_Connection=True;MultipleActiveResultSets=true";
