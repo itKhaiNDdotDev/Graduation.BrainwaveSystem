@@ -345,9 +345,10 @@ namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
 
         public static AwakeStateFastTreeResponse FastTreeTest(AwakeState10Feature inputFeaturesData)
         {
-            string rootDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../../"));
-            string coreProjectDir = Path.Combine(rootDir, "Graduation.BrainwaveSystem.Cores");
-            string modelPath = Path.Combine(coreProjectDir, "TrainedModels", "AwakefulStateFastTreeMLNETBC.zip");
+            //string rootDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../../"));
+            //string coreProjectDir = Path.Combine(rootDir, "Graduation.BrainwaveSystem.Cores");
+            //string modelPath = Path.Combine(coreProjectDir, "TrainedModels", "AwakefulStateFastTreeMLNETBC.zip");
+            string modelPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot", "trainedmodels", "AwakefulStateFastTreeMLNETBC.zip");
             var mlContext = new MLContext();
             ITransformer trainedModel = mlContext.Model.Load(modelPath, out var modelInputSchema);
 
