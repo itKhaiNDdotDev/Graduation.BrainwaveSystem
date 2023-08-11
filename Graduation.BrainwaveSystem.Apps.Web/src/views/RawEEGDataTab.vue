@@ -23,6 +23,7 @@
             :propLabels="timeStampPredictList"
             :propDatas="rawPreictChartDatas"
             :isShwoLegend="false"
+            :fixScale="{minY: -600, maxY: 600}"
             @onLoadData="getSSAPredict"
           />
           <v-spacer></v-spacer>

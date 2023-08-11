@@ -108,15 +108,15 @@ namespace Graduation.BrainwaveSystem.Services.DataRawEEGServices
         public RawEEGPredictResponse GetTrainSSAPredictOutput(Guid deviceId)
         {
             var inputData = GetLastNDataRecords(deviceId, 3).Result;
-            var result = RegressionPredictor.TrainSSAWithSplitTrainTestDataSet(inputData.Values, 512);
+            var result = RegressionPredictor.TrainSSAWithSplitTrainTestDataSet(inputData.Values, 2*512);
 
             // Tính toán chuỗi thời gian tương lai gần
             var incrementsPerSecond = 512;
             var increment = TimeSpan.FromSeconds(1.0 / incrementsPerSecond);
-            var timeList = new List<DateTime>((int)(1 * incrementsPerSecond));
+            var timeList = new List<DateTime>((int)(2 * incrementsPerSecond));
             var startTime = inputData.RecivedTimes.Max().AddSeconds(1.0 / 2);
 
-            for (int i = 0; i < 1 * incrementsPerSecond; i++)
+            for (int i = 0; i < 2 * incrementsPerSecond; i++)
             {
                 timeList.Add(startTime.Add(increment * i));
             }
