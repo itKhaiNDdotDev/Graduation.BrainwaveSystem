@@ -77,14 +77,14 @@ namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
         //    Console.WriteLine("Giá trị tiếp theo được dự đoán là: " + nextValue);
         //}
 
-        public static (TimeSeriesPredictMetricsModel Evaluation, ModelOutput Prediction) TrainSSAWithSplitTrainTestDataSet(List<DataRawEEG> rawDatas)
+        public static (TimeSeriesPredictMetricsModel Evaluation, ModelOutput Prediction) TrainSSAWithSplitTrainTestDataSet(List<int> rawDatas, int predictSize, bool isBoundCanculation = true)
         {
             string rootDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../../"));
             string coreProjectDir = Path.Combine(rootDir, "Graduation.BrainwaveSystem.Cores");
-            //string dbFilePath = Path.Combine(rootDir, "Data", "DailyDemand.mdf");
             string modelPath = Path.Combine(coreProjectDir, "TrainedModels", "MLModel.zip");
+            //string dbFilePath = Path.Combine(rootDir, "Data", "DailyDemand.mdf");
             //var connectionString = $"Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename={dbFilePath};Integrated Security=True;Connect Timeout=30;";
-            var connectionString = "Server=(localdb)\\mssqllocaldb;Database=Graduation.BrainwaveSystem;Trusted_Connection=True;MultipleActiveResultSets=true";
+            //var connectionString = "Server=(localdb)\\mssqllocaldb;Database=Graduation.BrainwaveSystem;Trusted_Connection=True;MultipleActiveResultSets=true";
 
             MLContext mlContext = new MLContext();
 
@@ -94,27 +94,31 @@ namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
             //                                connectionString,
             //                                query);
             //IDataView dataView = loader.Load(dbSource);
-            DatabaseLoader loader = mlContext.Data.CreateDatabaseLoader<ModelInput>();
-            string query = "SELECT TOP 30720 CAST(Value AS REAL) AS Value, CreatedTime FROM DataRawEEGs ORDER BY CreatedTime DESC";
-            DatabaseSource dbSource = new DatabaseSource(SqlClientFactory.Instance,
-                                            connectionString,
-                                            query);
-            IDataView dataView = loader.Load(dbSource);
+            //DatabaseLoader loader = mlContext.Data.CreateDatabaseLoader<ModelInput>();
+            //string query = "SELECT TOP 30720 CAST(Value AS REAL) AS Value, CreatedTime FROM DataRawEEGs ORDER BY CreatedTime DESC";
+            //DatabaseSource dbSource = new DatabaseSource(SqlClientFactory.Instance,
+            //                                connectionString,
+            //                                query);
+            //IDataView dataView = loader.Load(dbSource);
             //TODO: Check lại xem - lỗi xảy ra ử đây do ML.NET không load được datatype Guid => hãy dùng DTO========================================
-            //var dataView = mlContext.Data.LoadFromEnumerable(rawDatas); //rawDatas là trainData từ data đang có trong Db
+            //rawDatas là trainData từ data đang có trong Db
+            var dataView = mlContext.Data.LoadFromEnumerable(rawDatas.Select(value => new ModelInput() { Value = (float)value }));
 
             //IDataView firstYearData = mlContext.Data.FilterRowsByColumn(dataView, "Year", upperBound: 1);
             //IDataView secondYearData = mlContext.Data.FilterRowsByColumn(dataView, "Year", lowerBound: 1);
             var trainTestSplit = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
 
-            var forecastingPipeline = mlContext.Forecasting.ForecastBySsa(
-                outputColumnName: "ForecastedValues",
-                inputColumnName: "Value",
-                windowSize: 256, // Cửa sổ trượt để capture features.
-                seriesLength: 512, // The length of series that is kept in buffer for modeling (parameter N).
-                trainSize: 1000,//30720, // Kích thước dtaa train => Nên lấy size của dta đầu vào.
-                horizon: 512, // số giá trị dự đoán đầu ra.
-                confidenceLevel: 0.95f,//Mức độ tin cậy của dự đoán.
+            SsaForecastingEstimator forecastingPipeline;
+            //if (isBoundCanculation)
+            //{
+                forecastingPipeline = mlContext.Forecasting.ForecastBySsa(
+                    outputColumnName: "ForecastedValues",
+                    inputColumnName: "Value",
+                    windowSize: rawDatas.Count / 3, // Cửa sổ trượt để capture features.
+                    seriesLength: rawDatas.Count / 2, // The length of series that is kept in buffer for modeling (parameter N).
+                    trainSize: rawDatas.Count, // Kích thước data train => Nên lấy size của dta đầu vào.
+                    horizon: predictSize, // số giá trị dự đoán đầu ra.
+                    confidenceLevel: 0.95f,//Mức độ tin cậy của dự đoán.
                                        //isAdaptive: Boolean - The flag determining whether the model is adaptive.
                                        //discountFactor: Single - The discount factor in [0, 1] used for online updates.
                                        //rankSelectionMethod: RankSelectionMethod - The rank selection method.
@@ -123,10 +127,23 @@ namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
                                        //shouldStabilize: Boolean - The flag determining whether the model should be stabilized.
                                        //shouldMaintainInfo: Boolean - The flag determining whether the meta information for the model needs to be maintained.
                                        //maxGrowth: Nullable <GrowthRatio> - The maximum growth on the exponential trend.
-                confidenceLowerBoundColumn: "LowerBoundValues",//The name of the confidence interval lower bound column. If not specified then confidence intervals will not be calculated.
-                confidenceUpperBoundColumn: "UpperBoundValues"
-                                        //variableHorizon: Boolean - Set this to true if horizon will change after training(at prediction time).
-            );//The name of the confidence interval upper bound column. If not specified then confidence intervals will not be calculated.
+                    confidenceLowerBoundColumn: "LowerBoundValues",//The name of the confidence interval lower bound column. If not specified then confidence intervals will not be calculated.
+                    confidenceUpperBoundColumn: "UpperBoundValues"
+                    //variableHorizon: Boolean - Set this to true if horizon will change after training(at prediction time).
+                );//The name of the confidence interval upper bound column. If not specified then confidence intervals will not be calculated.
+            //}
+            //else
+            //{
+            //    forecastingPipeline = mlContext.Forecasting.ForecastBySsa(
+            //        outputColumnName: "ForecastedValues",
+            //        inputColumnName: "Value",
+            //        windowSize: rawDatas.Count / 3,
+            //        seriesLength: rawDatas.Count / 2,
+            //        trainSize: rawDatas.Count,
+            //        horizon: predictSize,
+            //        confidenceLevel: 0.95f
+            //    );
+            //}
                 
             SsaForecastingTransformer forecaster = forecastingPipeline.Fit(trainTestSplit.TrainSet);
 
@@ -135,7 +152,8 @@ namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
             var forecastEngine = forecaster.CreateTimeSeriesEngine<ModelInput, ModelOutput>(mlContext);
             forecastEngine.CheckPoint(mlContext, modelPath);
 
-            var predictResult = Forecast(trainTestSplit.TestSet, 7, forecastEngine, mlContext);
+            //var predictResult = Forecast(trainTestSplit.TestSet, predictSize, forecastEngine, mlContext);
+            ModelOutput predictResult = forecastEngine.Predict();
 
             return (evalResult, predictResult);
         }
@@ -218,7 +236,7 @@ namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
 
         public class ModelInput
         {
-            public DateTime CreatedTime { get; set; }
+            //public DateTime CreatedTime { get; set; }
 
             public float Value { get; set; } // Dự đoán TimeSeries thường là float => Đã đổi hết qua int
         }

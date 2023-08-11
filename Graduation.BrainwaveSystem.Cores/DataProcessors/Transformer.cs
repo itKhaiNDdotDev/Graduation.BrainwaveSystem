@@ -4,8 +4,12 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using AForge.Math;
+using Graduation.BrainwaveSystem.Cores.MLDotNETModels;
+using Keras.Layers;
 using MathNet.Numerics;
 using MathNet.Numerics.IntegralTransforms;
+using Complex = AForge.Math.Complex;
 
 namespace Graduation.BrainwaveSystem.Cores.DataProcessors
 {
@@ -128,5 +132,79 @@ namespace Graduation.BrainwaveSystem.Cores.DataProcessors
             //}
             //return (frequencyAxis.ToList(), amplitudeSpectrum.ToList());
         }
+
+
+        public static (List<double> freqs, List<double> spectrums) TransformFFT(List<int> rawData)
+        {
+            //int Flm = 512;
+            //var complexInput = rawData.Select(x => new Complex(x, 0)).ToArray();
+            //Fourier.Forward(complexInput);
+
+            //int length = rawData.Count;
+            //return complexInput.Select(x =>  x.Real).Take(length / 2 + 1).ToList();
+
+            ////======= AForge ============
+            //int flm = 512;
+            //int L = rawData.Count;
+            //var complexInput = rawData.Select(y => new Complex(y, 0)).ToArray();
+            //FourierTransform.FFT(complexInput, FourierTransform.Direction.Forward);
+
+            //complexInput[0] = new Complex(0, 0);
+            //List<double> P2 = complexInput.Select(val => Math.Abs(val.Re/L)).ToList();
+            //List<double> P1 = P2.Take(L / 2 + 1).ToList();
+            //for (int i = 1; i < P1.Count - 1; i++)
+            //{
+            //    P1[i] *= 2;
+            //}
+
+            //// Calculate frequency values
+            //List<double> f1 = Enumerable.Range(0, P1.Count).Select(val => val * flm / ((double)P1.Count)).ToList();
+            //return(f1, P1);
+
+            //================FIX MathNetNumerics
+            int fs = 512;
+            int dataSize = rawData.Count;
+
+            Complex32[] complexData = new Complex32[dataSize];
+
+            for (int i = 0; i < dataSize; i++)
+            {
+                complexData[i] = new Complex32((float)rawData[i], 0);
+            }
+
+            Fourier.Forward(complexData, FourierOptions.Default);
+            complexData[0] = 0;
+
+            double[] P2 = new double[dataSize];
+            for (int i = 0; i < dataSize; i++)
+            {
+                P2[i] = (double)complexData[i].Magnitude / dataSize;
+            }
+
+            double[] P1 = new double[dataSize/2 + 1];
+            Array.Copy(P2, P1, dataSize/2 + 1);
+
+            for (int i = 1; i < P1.Length - 1; i++)
+            {
+                P1[i] = 2 * P1[i];
+            }
+
+            double[] f1 = new double[P1.Length];
+            for (int i = 0; i < f1.Length; i++)
+            {
+                f1[i] = (double)(i * fs/P1.Length)/2;
+            }
+
+            //PlotModel model = new PlotModel();
+            //LineSeries series = new LineSeries();
+            //for (int i = 0; i < f1.Length; i++)
+            //{
+            //    series.Points.Add(new DataPoint(f1[i], P1[i]));
+            //}
+            //model.Series.Add(series);
+
+            return (f1.ToList(), P1.ToList());
+        }
+
     }
 }
