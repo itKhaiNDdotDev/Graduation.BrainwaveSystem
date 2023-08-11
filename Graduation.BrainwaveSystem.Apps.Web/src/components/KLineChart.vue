@@ -1,6 +1,6 @@
 <template>
   <Line id="my-chart-id" :options="chartOptions" :data="chartData" />
-  <v-btn @click="onClickRefresh">Refresh</v-btn>
+  <!-- <v-btn @click="onClickRefresh">Refresh</v-btn> -->
 </template>
 
 <script>
@@ -16,6 +16,7 @@ import {
   CategoryScale,
   LinearScale,
 } from "chart.js";
+import realtime from "../realtime";
 
 ChartJS.register(
   Title,
@@ -34,9 +35,14 @@ export default {
 
   props: {
     propLabels: Array,
-    propDatas: Array
+    propDatas: Array,
+    isShwoLegend: {
+      type: Boolean,
+      default: true 
+    },
+    fixScale: {}
   },
-  
+
   data() {
     return {
       chartData: {
@@ -45,7 +51,7 @@ export default {
           {
             data: this.propDatas,
             label: "Hee hee",
-            backgroundColor: '#000000',
+            backgroundColor: "#000000",
             // backgroundColor: (ctx) => { // định màu area
             //   const canvas = ctx.chart.ctx;
             //   const gradient = canvas.createLinearGradient(0,0,0,160);
@@ -56,13 +62,13 @@ export default {
 
             //   return gradient;
             // },
-            pointBackgroundColor: 'transparent',
+            pointBackgroundColor: "transparent",
             borderColor: "#000000",
             borderWidth: 1,
             radius: 0,
             //pointBackgroundColor: "rgba(171, 71, 188, 1)",
             tension: 0.5,
-            pointBorderWidth: 0
+            pointBorderWidth: 0,
           },
           // {
           //   data: [
@@ -85,8 +91,18 @@ export default {
         ],
       },
       chartOptions: {
+        plugins: {
+          legend: {
+            display: this.isShwoLegend
+          },
+        },
         responsive: true,
-        maintainAspectRatio: true
+        maintainAspectRatio: true,
+        scales: {
+          y: {
+            ...(this.fixScale ? { min: this.fixScale.minY, max: this.fixScale.maxY } : {})
+          }
+        }
       },
     };
   },
@@ -115,14 +131,20 @@ export default {
       this.chartData = {
         ...this.chartData,
         datasets: tmpDatasets,
+        labels: this.propLabels,
       };
     },
   },
 
   mounted() {
+    realtime.client.on("getChart", (data) => {
+      console.log(data + " aaaa");
+      this.onClickRefresh();
+    });
+    realtime.start();
     //this.$emit("onLoadData");
     this.updateChartData();
-  }
+  },
 };
 </script>
 

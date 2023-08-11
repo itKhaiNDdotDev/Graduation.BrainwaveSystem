@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-layout>
+    <v-layout v-if="token !== null">
       <!-- <v-system-bar color="grey-darken-3"></v-system-bar> -->
 
       <!-- <v-navigation-drawer
@@ -52,6 +52,10 @@
         /></router-view>
       </v-main>
     </v-layout>
+    <v-layout v-else>
+      <VtfLogin> </VtfLogin>
+    </v-layout>
+
     <VtfFooter />
 
     <VtfLoading v-if="isShowLoading" />
@@ -64,6 +68,7 @@ import VtfAppBar from "./layouts/VtfAppBar.vue";
 import VtfSideBar from "./layouts/VtfSideBar.vue";
 import VtfFooter from "./layouts/VtfFooter.vue";
 import VtfLoading from "@/components/VtfLoading.vue";
+import VtfLogin from "./layouts/VtfLogin.vue";
 
 export default {
   name: "App",
@@ -73,16 +78,20 @@ export default {
     VtfSideBar,
     // VtfContent,
     VtfLoading,
+    VtfLogin,
   },
 
   data() {
     return {
+      token: localStorage.getItem("token"),
       sidebarKey: 0,
       mainViewKey: 0,
       isShowLoading: false,
-      appName: null
+      appName: null,
     };
   },
+
+  mounted() {},
 
   methods: {
     onRefresh() {
@@ -90,17 +99,43 @@ export default {
       // this.mainViewKey++;
     },
 
+    // async onReloadListDevice() {
+    //   console.log("emit");
+    //   if (typeof this.$refs.sideBar.getListActiveDevice === "function")
+    //   {
+    //     if(this.token === "admin")
+    //       await this.$refs.sideBar.getListActiveDevice();
+    //       else
+    //         await this.$refs.sideBar.getListActiveDeviceUser();
+    //   }
+    //   if (typeof this.$refs.mainContent.getListDevice === "function")
+    //   {
+    //     if(this.token === "admin")
+    //       await this.$refs.mainContent.getListDevice();
+    //       else
+    //         await this.$refs.mainContent.getListDeviceUser();
+    //   }
+    // },
     async onReloadListDevice() {
-      console.log("emit");
-      if (typeof this.$refs.sideBar.getListActiveDevice === "function")
-        await this.$refs.sideBar.getListActiveDevice();
-      if (typeof this.$refs.mainContent.getListDevice === "function")
-        await this.$refs.mainContent.getListDevice();
+      var logginToken = localStorage.getItem("token") || "";
+      var _extractedToken = logginToken.split(".")[1];
+      var _atobData = atob(_extractedToken.toString());
+      var _finaldata = JSON.parse(_atobData);
+      if (typeof this.$refs.sideBar.getListActiveDevice === "function") {
+        if (_finaldata.role === "admin")
+          await this.$refs.sideBar.getListActiveDevice();
+        else await this.$refs.sideBar.getListActiveDeviceUser();
+      }
+      if (typeof this.$refs.mainContent.getListDevice === "function") {
+        if (_finaldata.role === "admin")
+          await this.$refs.mainContent.getListDevice();
+        else await this.$refs.mainContent.getListDeviceUser();
+      }
     },
 
     onSetAppName(value) {
       this.appName = value;
-    }
+    },
   },
 };
 </script>

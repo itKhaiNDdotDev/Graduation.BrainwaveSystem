@@ -9,6 +9,8 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Drawing;
 using Graduation.BrainwaveSystem.Models;
+using Graduation.BrainwaveSystem.Cores.DataProcessors;
+using Graduation.BrainwaveSystem.Models.DTOs.AIModels;
 
 namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
 {
@@ -247,6 +249,10 @@ namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
 
         public static List<string> FastTreeTrain()
         {
+            string rootDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../../"));
+            string coreProjectDir = Path.Combine(rootDir, "Graduation.BrainwaveSystem.Cores");
+            string modelPath = Path.Combine(coreProjectDir, "TrainedModels", "AwakefulStateFastTreeMLNETBC.zip");
+
             // Khởi tạo MLContext
             var mlContext = new MLContext();
 
@@ -254,8 +260,8 @@ namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
             // Đọc dữ liệu từ các tệp CSV
             //var file1 = mlContext.Data.LoadFromTextFile<DataPoint>(AwakeDataPath, hasHeader: true, separatorChar: ',');
             //var file2 = mlContext.Data.LoadFromTextFile<DataPoint>(DrowsinessDataPath, hasHeader: true, separatorChar: ',');
-            var file1 = mlContext.Data.LoadFromTextFile<DataPoint>("K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\DataSets\\Awake.csv", separatorChar: ',');
-            var file2 = mlContext.Data.LoadFromTextFile<DataPoint>("K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\DataSets\\Drowsiness.csv", separatorChar: ',');
+            var file1 = mlContext.Data.LoadFromTextFile<DataPoint>(Path.Combine(coreProjectDir, "DataSets", "Awake.csv"), separatorChar: ',');
+            var file2 = mlContext.Data.LoadFromTextFile<DataPoint>(Path.Combine(coreProjectDir, "DataSets", "Drowsiness.csv"), separatorChar: ',');
             var labeledFile1 = mlContext.Data.CreateEnumerable<DataPoint>(file1, reuseRowObject: false)
                 .Select(x => new DataPoint
                 {
@@ -330,27 +336,45 @@ namespace Graduation.BrainwaveSystem.Cores.MLDotNETModels
             listMsg.Add($"******************************************************");
             listMsg.Add("");
             listMsg.Add("============= Saving the model to a file =============");
-            mlContext.Model.Save(trainedModel, trainTestSplit.TrainSet.Schema, "K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\TrainedModels\\AwakefulStateFastTreeMLNETBC.zip");
+            mlContext.Model.Save(trainedModel, trainTestSplit.TrainSet.Schema, modelPath);
             listMsg.Add("");
             listMsg.Add("=================== Model Saved ===================== ");
 
             return listMsg;
         }
 
-        public static List<string> FastTreeTest(DataPoint inputData)
+        public static AwakeStateFastTreeResponse FastTreeTest(AwakeState10Feature inputFeaturesData)
         {
+            //string rootDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../../"));
+            //string coreProjectDir = Path.Combine(rootDir, "Graduation.BrainwaveSystem.Cores");
+            //string modelPath = Path.Combine(coreProjectDir, "TrainedModels", "AwakefulStateFastTreeMLNETBC.zip");
+            string modelPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot", "trainedmodels", "AwakefulStateFastTreeMLNETBC.zip");
             var mlContext = new MLContext();
-            ITransformer trainedModel = mlContext.Model.Load("K:\\2022_2_DATN\\Graduation.BrainwaveSystem\\Graduation.BrainwaveSystem.Cores\\TrainedModels\\AwakefulStateFastTreeMLNETBC.zip", out var modelInputSchema);
+            ITransformer trainedModel = mlContext.Model.Load(modelPath, out var modelInputSchema);
 
             // Create prediction engine related to the loaded trained model
             var predictionEngine = mlContext.Model.CreatePredictionEngine<DataPoint, Prediction>(trainedModel);
 
-            var prediction = predictionEngine.Predict(inputData);
-            var listMsg = new List<string>();
-            listMsg.Add($"Prediction Value: {prediction.PredictedLabel} ");
-            listMsg.Add($"State: {(prediction.PredictedLabel ? "Awake" : "Drowsiness")} ");
-            listMsg.Add($"Probability: {prediction.Probability} ");
-            return listMsg;
+            var dataPoint = new DataPoint()
+            {
+                Delta = (float)inputFeaturesData.Delta,
+                Theta = (float)inputFeaturesData.Theta,
+                Alpha = (float)inputFeaturesData.Alpha,
+                Beta = (float)inputFeaturesData.Beta,
+                Abr = (float)inputFeaturesData.Abr,
+                Dbr = (float)inputFeaturesData.Dbr,
+                Tbr = (float)inputFeaturesData.Tbr,
+                Tar = (float)inputFeaturesData.Tar,
+                Dar = (float)inputFeaturesData.Dar,
+                Dtabr = (float)inputFeaturesData.Dtabr,
+            };
+            var prediction = predictionEngine.Predict(dataPoint);
+            return new AwakeStateFastTreeResponse()
+            {
+                PredictionValue = prediction.PredictedLabel,
+                StateLabel = prediction.PredictedLabel ? "Awake" : "Drowsiness",
+                Probability = prediction.Probability
+            };
         }
 
         ///// <summary>

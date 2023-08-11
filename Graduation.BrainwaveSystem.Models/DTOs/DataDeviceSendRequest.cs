@@ -22,5 +22,7 @@ namespace Graduation.BrainwaveSystem.Models.DTOs
 
         //public List<DataRawEEGRequest>? DataRawEEGs { get; set; }
         public List<int>? RawEEGs { get; set; }
+        public Guid? CreatedBy { get; set; }
+        public Guid? LastModifiedBy { get; set; }
     }
 }

@@ -11,6 +11,8 @@ using Graduation.BrainwaveSystem.Models.DTOs;
 using Graduation.BrainwaveSystem.Services.DataRawEEGServices;
 using Graduation.BrainwaveSystem.Cores.MLDotNETModels;
 using static Graduation.BrainwaveSystem.Cores.MLDotNETModels.RegressionPredictor;
+using Microsoft.AspNetCore.Authorization;
+using Graduation.BrainwaveSystem.Models.DTOs.AIModels;
 
 namespace Graduation.BrainwaveSystem.APIs.Controllers
 {
@@ -26,30 +28,42 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
         }
 
         [HttpGet("{deviceId}/Last5Mins")]
-        public async Task<ActionResult<DataRawEEGResponse[]>> GetLast5Mins(Guid deviceId)
+        [Authorize]
+        public async Task<ActionResult<DataRawEEGResponse>> GetLast5Mins(Guid deviceId)
         {
             return Ok(await _service.GetLastNDataRecords(deviceId, 300));
         }
 
         [HttpGet("{deviceId}/LastMin")]
-        public async Task<ActionResult<DataRawEEGResponse[]>> GetLastMin(Guid deviceId)
+        [Authorize]
+        public async Task<ActionResult<DataRawEEGResponse>> GetLastMin(Guid deviceId)
         {
             return Ok(await _service.GetLastNDataRecords(deviceId, 60));
         }
 
         [HttpGet("{deviceId}/Last")]
-        public async Task<ActionResult<DataRawEEGResponse[]>> GetLast(Guid deviceId)
+        [Authorize]
+        public async Task<ActionResult<DataRawEEGResponse>> GetLast(Guid deviceId)
         {
             return Ok(await _service.GetLastNDataRecords(deviceId));
         }
 
         [HttpGet("{deviceId}/Last15Secs")]
-        public async Task<ActionResult<DataRawEEGResponse[]>> GetLast15Secs(Guid deviceId)
+        [Authorize]
+        public async Task<ActionResult<DataRawEEGResponse>> GetLast15Secs(Guid deviceId)
         {
             return Ok(await _service.GetLastNDataRecords(deviceId, 15));
         }
 
+        [HttpGet("{deviceId}/Last10Secs")]
+        [Authorize]
+        public async Task<ActionResult<DataRawEEGResponse>> GetLast10Secs(Guid deviceId)
+        {
+            return Ok(await _service.GetLastNDataRecords(deviceId, 10));
+        }
+
         [HttpGet("{deviceId}/FFT")]
+        [Authorize]
         public async Task<ActionResult<(List<double> frequencyAxis, List<double> amplitudeSpectrum)>> GetFFTData(Guid deviceId)
         {
             var frequencyAxis = _service.GetFFTData(deviceId).frequencyAxis;
@@ -57,38 +71,43 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
             return Ok(new { FrequencyAxis = frequencyAxis, AmplitudeSpectrum = amplitudeSpectrum });
         }
 
+        [HttpGet("{deviceId}/FFTFix")]
+        [Authorize]
+        public async Task<ActionResult<(List<double> indexs, List<double> values)>> GetFFT15SecData(Guid deviceId)
+        {
+            var res = _service.GetFFT15SecData(deviceId);
+            var indexs = res.freqs;
+            var values = res.spectrums;
+            return Ok(new { Indexs = indexs, Values = values });
+        }
+
         [HttpGet("svm-classification")]
+        [Authorize]
         public async Task<ActionResult> GetTrainOutput()
         {
             return Ok(_service.GetTrainOutput());
         }
 
         [HttpGet("fasttree")]
+        [Authorize]
         public async Task<ActionResult> GetTrainFTOutput()
         {
             return Ok(_service.GetTrainFTOutput());
         }
 
-        [HttpPost("fasttree-test")]
-        public async Task<ActionResult> GetTrainFTOutput([FromBody] DataPoint inputData)
+        [HttpGet("{deviceId}/fasttree")]
+        [Authorize]
+        public async Task<ActionResult> GetTrainFTOutput(Guid deviceId)
         {
-            return Ok(_service.GetTrainFTOutput(inputData));
+            return Ok(_service.GetTrainFTOutput(deviceId));
         }
 
         [HttpGet("{deviceId}/SSAPredict")]
-        public async Task<ActionResult<PredictOutDTO>> GetSSAPredictTrain(Guid deviceId)
+        [Authorize]
+        public async Task<ActionResult<RawEEGPredictResponse>> GetSSAPredictTrain(Guid deviceId)
         {
             var res = _service.GetTrainSSAPredictOutput(deviceId);
-            var resShow = new PredictOutDTO();
-            resShow.Prediction = res.Prediction;
-            resShow.Evaluation = res.Evaluation;
-            return Ok(resShow);
-        }
-
-        public class PredictOutDTO
-        {
-            public TimeSeriesPredictMetricsModel Evaluation { get; set; }
-            public ModelOutput Prediction { get; set; }
+            return Ok(res);
         }
 
         //private readonly DataContext _context;

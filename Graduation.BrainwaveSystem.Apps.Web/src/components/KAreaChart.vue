@@ -1,6 +1,6 @@
 <template>
   <Line :options="chartOptions" :data="chartData" />
-  <v-btn @click="onClickRefresh">Refresh</v-btn>
+  <!-- <v-btn @click="onClickRefresh">Refresh</v-btn> -->
 </template>
 
 <script>
@@ -26,6 +26,7 @@ ChartJS.register(
   CategoryScale,
   LinearScale
 );
+import realtime from "../realtime";
 
 export default {
   name: "KAreaChart",
@@ -34,6 +35,10 @@ export default {
   props: {
     propLabels: Array,
     propDatas: Array,
+    isShwoLegend: {
+      type: Boolean,
+      default: true
+    }
   },
 
   data() {
@@ -84,7 +89,15 @@ export default {
         ],
       },
 
-      chartOptions: { responsive: true, maintainAspectRatio: true },
+      chartOptions: {
+        plugins: {
+          legend: {
+            display: this.isShwoLegend
+          },
+        },
+        responsive: true,
+        maintainAspectRatio: true,
+      },
     };
   },
 
@@ -113,6 +126,7 @@ export default {
       this.chartData = {
         ...this.chartData,
         datasets: tmpDatasets,
+        labels: this.propLabels,
       };
     },
   },
@@ -133,6 +147,13 @@ export default {
     // this.gradient2.addColorStop(0, "rgba(0, 231, 255, 0.9)");
     // this.gradient2.addColorStop(0.5, "rgba(0, 231, 255, 0.25)");
     // this.gradient2.addColorStop(1, "rgba(0, 231, 255, 0)");
+
+    realtime.client.on("getChart", (data) => {
+      console.log(data + " aaaa");
+      this.onClickRefresh();
+    });
+    realtime.start();
+
     var tmpDatasets = [];
     this.propDatas.forEach((propData) => {
       var tmp = {

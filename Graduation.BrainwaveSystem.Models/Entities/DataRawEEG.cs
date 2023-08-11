@@ -14,6 +14,7 @@ namespace Graduation.BrainwaveSystem.Models.Entities
     /// </summary>
     /// Author: KhaiND (20/04/2023).
     [Index(nameof(DeviceDataId))]
+    [Index(nameof(CreatedTime))]
     public class DataRawEEG : BaseEntity
     {
         public Guid Id { get; set; }

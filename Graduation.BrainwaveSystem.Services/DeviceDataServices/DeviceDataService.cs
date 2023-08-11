@@ -11,6 +11,8 @@ using Graduation.BrainwaveSystem.Services.BaseServices;
 using Graduation.BrainwaveSystem.Services.DeviceDataServices;
 using Graduation.BrainwaveSystem.Services.Data8BandsEEGServices;
 using Graduation.BrainwaveSystem.Services.DataRawEEGServices;
+using Graduation.BrainwaveSystem.Cores.MLDotNETModels;
+using Graduation.BrainwaveSystem.Models.DTOs.AIModels;
 
 namespace Graduation.BrainwaveSystem.Services.DeviceDataService;
 
@@ -25,25 +27,35 @@ public class DeviceDataService : BaseService<DeviceData, DeviceDataRequest>, IDe
 
     public async Task<(List<DeviceData> GeneralExtractions, List<Data8BandsEEG> Data8Bands)> GetLastNRecords(Guid deviceId, int n = 1)
     {
-        if (_context.DeviceDatas == null)
-            throw new Exception("Entity DeviceDatas is not exist. Please check and try again.");
-        var dataRecords = await _context.DeviceDatas.Where(x => x.DeviceId == deviceId)
-            .OrderByDescending(x => x.CreatedTime)
-            .Take(n).ToListAsync();
+        //if (_context.DeviceDatas == null)
+        //    throw new Exception("Entity DeviceDatas is not exist. Please check and try again.");
+        //var dataRecords = await _context.DeviceDatas.Where(x => x.DeviceId == deviceId)
+        //    .OrderByDescending(x => x.CreatedTime)
+        //    .Take(n).ToListAsync();
 
-        if (_context.Data8BandsEEGs == null)
-            throw new Exception("Entity Data8BandsEEGs is not exist. Please check and try again.");
-        var data8Bands = new List<Data8BandsEEG>();
-        foreach(var record in dataRecords)
-        {
-            var item = await _context.Data8BandsEEGs.Where(d => d.DeviceDataId == record.Id)
-                .FirstOrDefaultAsync();
-            data8Bands.Add(item ?? new Data8BandsEEG());
-        }
+        //if (_context.Data8BandsEEGs == null)
+        //    throw new Exception("Entity Data8BandsEEGs is not exist. Please check and try again.");
+        //var data8Bands = new List<Data8BandsEEG>();
+        //foreach(var record in dataRecords)
+        //{
+        //    var item = await _context.Data8BandsEEGs.Where(d => d.DeviceDataId == record.Id)
+        //        .FirstOrDefaultAsync();
+        //    data8Bands.Add(item ?? new Data8BandsEEG());
+        //}
 
-        dataRecords = dataRecords.OrderBy(d => d.CreatedTime).ToList();
-        data8Bands = data8Bands.OrderBy(d => d.CreatedTime).ToList();
-        return (dataRecords, data8Bands);
+        if (_context.DeviceDatas == null || _context.Data8BandsEEGs == null)
+            throw new Exception("Entity DeviceDatas or Data8BandsEEGs does not exist. Please check and try again.");
+        var dataRecords = await (from deviceData in _context.DeviceDatas
+                                 join data8BandsEEG in _context.Data8BandsEEGs
+                                 on deviceData.Id equals data8BandsEEG.DeviceDataId into Details
+                                 from data8BandEEG in Details.DefaultIfEmpty()
+                                 where deviceData.DeviceId == deviceId
+                                 orderby deviceData.CreatedTime descending
+                                 select new { deviceData, data8BandEEG }).Take(n).ToListAsync();
+
+        var deviceDatas = dataRecords.Select(data => data.deviceData).OrderBy(d => d.CreatedTime).ToList();
+        var data8Bands = dataRecords.Select(data => data.data8BandEEG).OrderBy(d => d.CreatedTime).ToList();
+        return (deviceDatas, data8Bands);
     }
 
     public async Task<Guid> Create(Guid deviceId, DataDeviceSendRequest request)
@@ -69,7 +81,9 @@ public class DeviceDataService : BaseService<DeviceData, DeviceDataRequest>, IDe
             HighBeta = request.HighBeta,
             Gamma = request.Gamma,
             UHFGamma = request.UHFGamma,
-            DeviceDataId = dataId
+            DeviceDataId = dataId,
+            CreatedBy = request.CreatedBy,
+            LastModifiedBy = request.LastModifiedBy,
         };
         //if (eeg8BandsRequest != null)
         //{
@@ -89,7 +103,9 @@ public class DeviceDataService : BaseService<DeviceData, DeviceDataRequest>, IDe
                 var eegRaw = new DataRawEEGRequest
                 {
                     Value = RawValue,
-                    DeviceDataId = dataId
+                    DeviceDataId = dataId,
+                    LastModifiedBy = request.LastModifiedBy,
+                    CreatedBy = request.CreatedBy,
                 };
                 // Nên cân nhắc thay thế thành AddRange và 1 lần SaveChange duy nhất (viết method add List Raw trong RawService)
                 var eegRawId = await eegRawService.Create(eegRaw);
@@ -259,4 +275,68 @@ public class DeviceDataService : BaseService<DeviceData, DeviceDataRequest>, IDe
     //{
     //    return (_context.DeviceDatas?.Any(e => e.Id == id)).GetValueOrDefault();
     //}
+
+    public TgamExtractionPredictResponse GetTrainSSAPredictOutput(Guid deviceId)
+    {
+        var inputData = GetLastNRecords(deviceId, 120).Result;
+
+        var inputPoorQualities = inputData.GeneralExtractions.Select(x => x.PoorQuality ?? 0).ToList();
+        var resultPoorQualities = RegressionPredictor.TrainSSAWithSplitTrainTestDataSet(inputPoorQualities, 30, false);
+        var inputAttendtions = inputData.GeneralExtractions.Select(x => x.Attention ?? 0).ToList();
+        var resultAttendtions = RegressionPredictor.TrainSSAWithSplitTrainTestDataSet(inputAttendtions, 30, false);
+        var inputMediations = inputData.GeneralExtractions.Select(x => x.Meditation ?? 0).ToList();
+        var resultMediations = RegressionPredictor.TrainSSAWithSplitTrainTestDataSet(inputMediations, 30, false);
+
+        var inputDeltas = inputData.Data8Bands.Select(x => x.Delta ?? 0).ToList();
+        var resultDeltas = RegressionPredictor.TrainSSAWithSplitTrainTestDataSet(inputDeltas, 30, false);;
+        var inputThetas = inputData.Data8Bands.Select(x => x.Theta ?? 0).ToList();
+        var resultThetas = RegressionPredictor.TrainSSAWithSplitTrainTestDataSet(inputThetas, 30, false);
+        var inputAlphas = inputData.Data8Bands.Select(x => x.Alpha ?? 0).ToList();
+        var resultAlphas = RegressionPredictor.TrainSSAWithSplitTrainTestDataSet(inputAlphas, 30, false);
+        var inputLowBetas = inputData.Data8Bands.Select(x => x.LowBeta ?? 0).ToList();
+        var resultLowBetas = RegressionPredictor.TrainSSAWithSplitTrainTestDataSet(inputLowBetas, 30, false);
+        var inputMidBetas = inputData.Data8Bands.Select(x => x.MidBeta ?? 0).ToList();
+        var resultMidBetas = RegressionPredictor.TrainSSAWithSplitTrainTestDataSet(inputMidBetas, 30, false);
+        var inputHighBetas = inputData.Data8Bands.Select(x => x.HighBeta ?? 0).ToList();
+        var resultHighBetas = RegressionPredictor.TrainSSAWithSplitTrainTestDataSet(inputHighBetas, 30, false);
+        var inputGammas = inputData.Data8Bands.Select(x => x.Gamma ?? 0).ToList();
+        var resultGammas = RegressionPredictor.TrainSSAWithSplitTrainTestDataSet(inputGammas, 30, false);
+        var inputUHFGammas = inputData.Data8Bands.Select(x => x.UHFGamma ?? 0).ToList();
+        var resultUHFGammas = RegressionPredictor.TrainSSAWithSplitTrainTestDataSet(inputUHFGammas, 30, false);
+
+        var timeList = new List<DateTime>(30);
+        var startTime = inputData.GeneralExtractions.Max(x => x.CreatedTime).AddSeconds(1);
+        for (int i = 0; i < 30; i++)
+        {
+            timeList.Add(startTime.AddSeconds(i));
+        }
+
+        return new TgamExtractionPredictResponse()
+        {
+            PoorQuality = resultPoorQualities.Prediction.ForecastedValues,
+            Attention = resultAttendtions.Prediction.ForecastedValues,
+            Meditation = resultMediations.Prediction.ForecastedValues,
+            Delta = resultDeltas.Prediction.ForecastedValues,
+            Theta = resultThetas.Prediction.ForecastedValues,
+            Alpha = resultAlphas.Prediction.ForecastedValues,
+            LowBeta = resultLowBetas.Prediction.ForecastedValues,
+            MidBeta = resultMidBetas.Prediction.ForecastedValues,
+            HighBeta = resultHighBetas.Prediction.ForecastedValues,
+            Gamma = resultGammas.Prediction.ForecastedValues,
+            UHFGamma = resultUHFGammas.Prediction.ForecastedValues,
+            PredictTimes = timeList,
+            MAEGeneral = (resultPoorQualities.Evaluation.MAE + resultAttendtions.Evaluation.MAE
+                    + resultMediations.Evaluation.MAE) / 3,
+            RMSEGeneral = (resultPoorQualities.Evaluation.RMSE + resultAttendtions.Evaluation.RMSE
+                    + resultMediations.Evaluation.RMSE) / 3,
+            MAEFor8Band = (resultDeltas.Evaluation.MAE + resultThetas.Evaluation.MAE
+                    + resultAlphas.Evaluation.MAE + resultLowBetas.Evaluation.MAE
+                    + resultMidBetas.Evaluation.MAE + resultHighBetas.Evaluation.MAE
+                    + resultGammas.Evaluation.MAE + resultUHFGammas.Evaluation.MAE) / 8,
+            RMSEFor8Band = (resultDeltas.Evaluation.RMSE + resultThetas.Evaluation.RMSE
+                    + resultAlphas.Evaluation.RMSE + resultLowBetas.Evaluation.RMSE
+                    + resultMidBetas.Evaluation.RMSE + resultHighBetas.Evaluation.RMSE
+                    + resultGammas.Evaluation.RMSE + resultUHFGammas.Evaluation.RMSE) / 8
+        };
+    }
 }

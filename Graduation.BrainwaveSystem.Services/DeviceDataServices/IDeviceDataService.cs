@@ -1,4 +1,5 @@
 ﻿using Graduation.BrainwaveSystem.Models.DTOs;
+using Graduation.BrainwaveSystem.Models.DTOs.AIModels;
 using Graduation.BrainwaveSystem.Models.Entities;
 using Graduation.BrainwaveSystem.Services.BaseServices;
 using System;
@@ -20,5 +21,7 @@ namespace Graduation.BrainwaveSystem.Services.DeviceDataServices
         public Task<(List<DeviceData> GeneralExtractions, List<Data8BandsEEG> Data8Bands)> GetLastNRecords(Guid deviceId, int n = 1);
 
         public Task<Guid> Create(Guid deviceId, DataDeviceSendRequest request);
+
+        public TgamExtractionPredictResponse GetTrainSSAPredictOutput(Guid deviceId);
     }
 }

@@ -9,6 +9,10 @@ using Graduation.BrainwaveSystem.Models;
 using Graduation.BrainwaveSystem.Models.Entities;
 using Graduation.BrainwaveSystem.Models.DTOs;
 using Graduation.BrainwaveSystem.Services.DeviceDataServices;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
+using Graduation.BrainwaveSystem.APIs.Common;
+using Graduation.BrainwaveSystem.Models.DTOs.AIModels;
 
 namespace Graduation.BrainwaveSystem.APIs.Controllers
 {
@@ -17,13 +21,15 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
     public class DeviceDatasController : BasesController<DeviceData, DeviceDataRequest>//ControllerBase
     {
         private readonly IDeviceDataService _service;
-
-        public DeviceDatasController(IDeviceDataService service) : base(service)
+        private readonly IHubContext<NotificationHub> hubContext;
+        public DeviceDatasController(IHubContext<NotificationHub> hub,IDeviceDataService service) : base(service)
         {
+            hubContext = hub;
             _service = service;
         }
 
         [HttpGet("{deviceId}/Last5Mins")]
+        [Authorize]
         public async Task<ActionResult<TgamExtractionList>> GetLast5MinsRecords(Guid deviceId)
         {
             var result = await _service.GetLastNRecords(deviceId, 300);
@@ -31,6 +37,7 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
         }
 
         [HttpGet("{deviceId}/LastMin")]
+        [Authorize]
         public async Task<ActionResult<TgamExtractionList>> GetLastMinRecords(Guid deviceId)
         {
             var result = await _service.GetLastNRecords(deviceId, 60);
@@ -38,6 +45,7 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
         }
 
         [HttpGet("{deviceId}/LastSec")]
+        [Authorize]
         public async Task<ActionResult<TgamExtractionList>> GetLastSecRecords(Guid deviceId)
         {
             var result = await _service.GetLastNRecords(deviceId);
@@ -45,10 +53,20 @@ namespace Graduation.BrainwaveSystem.APIs.Controllers
         }
 
         [HttpPost("{deviceId}")]
+        [Authorize]
         public async Task<ActionResult<DeviceData>> Post([FromRoute] Guid deviceId, DataDeviceSendRequest request)
         {
             var result = await _service.Create(deviceId, request);
+            await hubContext.Clients.All.SendAsync("getChart", 0);
             return CreatedAtAction("Get", new { id = result }, result);
+        }
+
+        [HttpGet("{deviceId}/SSAPredict")]
+        [Authorize]
+        public async Task<ActionResult<TgamExtractionPredictResponse>> GetSSAPredictTrain(Guid deviceId)
+        {
+            var res = _service.GetTrainSSAPredictOutput(deviceId);
+            return Ok(res);
         }
 
         //// POST: api/DeviceDatas

@@ -9,6 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\trainedmodels\AwakefulStateFastTreeMLNETBC.zip" />
+    <Content Remove="wwwroot\trainedmodels\MLModel.zip" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="1" Version="1.0.0" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.15">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -20,6 +28,15 @@
   <ItemGroup>
     <ProjectReference Include="..\Graduation.BrainwaveSystem.Models\Graduation.BrainwaveSystem.Models.csproj" />
     <ProjectReference Include="..\Graduation.BrainwaveSystem.Services\Graduation.BrainwaveSystem.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\datasets\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\trainedmodels\AwakefulStateFastTreeMLNETBC.zip" />
+    <None Include="wwwroot\trainedmodels\MLModel.zip" />
   </ItemGroup>
 
 </Project>
