@@ -4,12 +4,12 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using AForge.Math;
+//using AForge.Math;
 using Graduation.BrainwaveSystem.Cores.MLDotNETModels;
 using Keras.Layers;
 using MathNet.Numerics;
 using MathNet.Numerics.IntegralTransforms;
-using Complex = AForge.Math.Complex;
+//using Complex = AForge.Math.Complex;
 
 namespace Graduation.BrainwaveSystem.Cores.DataProcessors
 {
