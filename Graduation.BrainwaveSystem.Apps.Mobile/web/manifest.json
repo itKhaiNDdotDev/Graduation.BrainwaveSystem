@@ -1,6 +1,6 @@
 {
-    "name": "init_app",
-    "short_name": "init_app",
+    "name": "mind_monitoring_application",
+    "short_name": "mind_monitoring_application",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

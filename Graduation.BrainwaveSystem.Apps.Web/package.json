@@ -8,12 +8,22 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@kyvg/vue3-notification": "^2.9.1",
+    "@mdi/font": "^7.2.96",
+    "axios": "^1.4.0",
+    "chart.js": "^4.3.0",
     "core-js": "^3.8.3",
-    "vue": "^3.2.13"
+    "moment": "^2.29.4",
+    "vue": "^3.2.13",
+    "vue-chartjs": "^5.2.0",
+    "vue-router": "^4.2.4",
+    "vuetify": "^3.1.14"
   },
   "devDependencies": {
+    "@aspnet/signalr": "^1.0.27",
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
+    "@fortawesome/fontawesome-free": "^6.4.0",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",

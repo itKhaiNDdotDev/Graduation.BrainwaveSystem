@@ -1,0 +1,111 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Graduation.BrainwaveSystem.Models;
+using Graduation.BrainwaveSystem.Models.Entities;
+using Graduation.BrainwaveSystem.Models.DTOs;
+using Graduation.BrainwaveSystem.Services.DeviceDataServices;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
+using Graduation.BrainwaveSystem.APIs.Common;
+using Graduation.BrainwaveSystem.Models.DTOs.AIModels;
+
+namespace Graduation.BrainwaveSystem.APIs.Controllers
+{
+    //[Route("api/[controller]")]
+    [ApiController]
+    public class DeviceDatasController : BasesController<DeviceData, DeviceDataRequest>//ControllerBase
+    {
+        private readonly IDeviceDataService _service;
+        private readonly IHubContext<NotificationHub> hubContext;
+        public DeviceDatasController(IHubContext<NotificationHub> hub,IDeviceDataService service) : base(service)
+        {
+            hubContext = hub;
+            _service = service;
+        }
+
+        [HttpGet("{deviceId}/Last5Mins")]
+        [Authorize]
+        public async Task<ActionResult<TgamExtractionList>> GetLast5MinsRecords(Guid deviceId)
+        {
+            var result = await _service.GetLastNRecords(deviceId, 300);
+            return Ok(new TgamExtractionList() { Generals = result.GeneralExtractions, Data8Bands = result.Data8Bands });
+        }
+
+        [HttpGet("{deviceId}/LastMin")]
+        [Authorize]
+        public async Task<ActionResult<TgamExtractionList>> GetLastMinRecords(Guid deviceId)
+        {
+            var result = await _service.GetLastNRecords(deviceId, 60);
+            return Ok(new TgamExtractionList() { Generals = result.GeneralExtractions, Data8Bands = result.Data8Bands });
+        }
+
+        [HttpGet("{deviceId}/LastSec")]
+        [Authorize]
+        public async Task<ActionResult<TgamExtractionList>> GetLastSecRecords(Guid deviceId)
+        {
+            var result = await _service.GetLastNRecords(deviceId);
+            return Ok(new TgamExtractionList() { Generals = result.GeneralExtractions, Data8Bands = result.Data8Bands });
+        }
+
+        [HttpPost("{deviceId}")]
+        [Authorize]
+        public async Task<ActionResult<DeviceData>> Post([FromRoute] Guid deviceId, DataDeviceSendRequest request)
+        {
+            var result = await _service.Create(deviceId, request);
+            await hubContext.Clients.All.SendAsync("getChart", 0);
+            return CreatedAtAction("Get", new { id = result }, result);
+        }
+
+        [HttpGet("{deviceId}/SSAPredict")]
+        [Authorize]
+        public async Task<ActionResult<TgamExtractionPredictResponse>> GetSSAPredictTrain(Guid deviceId)
+        {
+            var res = _service.GetTrainSSAPredictOutput(deviceId);
+            return Ok(res);
+        }
+
+        //// POST: api/DeviceDatas
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPost]
+        //public async Task<ActionResult<DeviceData>> PostDeviceData(DeviceDataRequest request)
+        //{
+        //    var result = await _service.Create(request);
+        //    if (result == Guid.Empty)
+        //        return Problem("Insert failed! Please contact KhaiND to check problem.");
+
+        //    return CreatedAtAction("Get", new { id = result }, result);
+        //}
+
+        //// PUT: api/DeviceDatas/5
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutDeviceData(Guid id, DeviceDataRequest request)
+        //{
+        //    var result = await _service.Update(id, request);
+        //    if (result == 0)
+        //        return Problem("Update failed! Please contact KhaiND to check problem.");
+
+        //    return Ok(new
+        //    {
+        //        Message = "Updated " + result + (result > 1 ? " records." : " record."),
+        //        UpdatedRecord = await _service.GetById(id)
+        //    });
+        //}
+
+        //// DELETE: api/DeviceDatas/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteDeviceData(Guid id)
+        //{
+        //    var result = await _service.Delete(id);
+        //    if (result == 0)
+        //        return Problem("Update failed! Please contact KhaiND to check problem.");
+
+        //    return Ok("Deleted " + result + (result > 1 ? " records." : " record.") + " in system.");
+        //}
+    }
+}
